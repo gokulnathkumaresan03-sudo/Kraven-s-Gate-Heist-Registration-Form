@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>KGH // Organizer Portal</title>
+
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    body {
+      min-height: 100vh;
+    }
+
+    .organizer-wrap {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 70px 20px 100px;
+    }
+
+    .organizer-card {
+      background: #101725;
+      border: 1px solid #28364d;
+      padding: 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+
+    .organizer-title {
+      margin-bottom: 28px;
+    }
+
+    .organizer-title .number {
+      color: #ff7a00;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+    }
+
+    .organizer-title h1 {
+      margin: 8px 0 6px;
+      font-size: 28px;
+      color: #eef2f7;
+      letter-spacing: .04em;
+    }
+
+    .organizer-title p {
+      margin: 0;
+      color: #718096;
+      font-size: 12px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .field label {
+      display: block;
+      color: #c6cfdb;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+    }
+
+    .field input {
+      width: 100%;
+      box-sizing: border-box;
+      background: #090e18;
+      border: 1px solid #2a364d;
+      color: #eef2f7;
+      padding: 14px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .field input:focus {
+      border-color: #ff7a00;
+    }
+
+    .login-btn {
+      width: 100%;
+      border: 0;
+      cursor: pointer;
+      background: #ff7a00;
+      color: #080b10;
+      padding: 15px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      margin-top: 5px;
+    }
+
+    .login-btn:hover {
+      opacity: .9;
+    }
+
+    .message {
+      margin-top: 15px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .message.error {
+      color: #ff6b6b;
+    }
+
+    .message.success {
+      color: #65d48a;
+    }
+
+    .dashboard {
+      display: none;
+    }
+
+    .profile {
+      border: 1px solid #28364d;
+      background: #0b111d;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .profile-label {
+      color: #718096;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+
+    .profile-name {
+      color: #eef2f7;
+      font-size: 20px;
+      font-weight: 900;
+      margin-top: 6px;
+    }
+
+    .profile-email {
+      color: #8e9cb1;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .role-badge {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 6px 10px;
+      border: 1px solid #ff7a00;
+      color: #ff7a00;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .dashboard-item {
+      border: 1px solid #28364d;
+      background: #101725;
+      padding: 20px;
+      min-height: 80px;
+    }
+
+    .dashboard-item small {
+      display: block;
+      color: #718096;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      margin-bottom: 10px;
+    }
+
+    .dashboard-item strong {
+      color: #eef2f7;
+      font-size: 15px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      color: #8e9cb1;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .back-link:hover {
+      color: #ff7a00;
+    }
+
+    @media (max-width: 600px) {
+      .organizer-wrap {
+        padding-top: 35px;
+      }
+
+      .organizer-card {
+        padding: 22px;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="noise"></div>
+  <div class="web-pattern"></div>
+
+  <main class="organizer-wrap">
+
+    <!-- =====================================================
+         LOGIN
+    ====================================================== -->
+
+    <section id="loginCard" class="organizer-card">
+
+      <div class="section-kicker">
+        <span>HQ</span> KRAVEN'S GATE HEIST // ORGANIZER PORTAL
+      </div>
+
+      <div class="organizer-title">
+
+        <div class="number">01 // AUTHENTICATION</div>
+
+        <h1>ORGANIZER LOGIN</h1>
+
+        <p>
+          Authorized organizers only.
+          Your account must be approved before access is granted.
+        </p>
+
+      </div>
+
+
+      <form id="loginForm">
+
+        <div class="field">
+
+          <label for="email">
+            ORGANIZER EMAIL
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            placeholder="Enter your organizer email"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="password">
+            PASSWORD
+          </label>
+
+          <input
+            id="password"
+            type="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+          >
+
+        </div>
+
+
+        <button
+          id="loginBtn"
+          class="login-btn"
+          type="submit"
+        >
+          OPEN ORGANIZER PORTAL →
+        </button>
+
+      </form>
+
+
+      <div
+        id="loginMessage"
+        class="message"
+        aria-live="polite"
+      ></div>
+
+
+      <a
+        href="/"
+        class="back-link"
+      >
+        ← Back to registration
+      </a>
+
+    </section>
+
+
+    <!-- =====================================================
+         DASHBOARD
+    ====================================================== -->
+
+    <section
+      id="dashboard"
+      class="dashboard"
+    >
+
+      <div class="section-kicker">
+        <span>HQ</span> ORGANIZER // MISSION CONTROL
+      </div>
+
+
+      <div class="organizer-card" style="margin-top:24px">
+
+        <div class="organizer-title">
+
+          <div class="number">02 // AUTHENTICATED</div>
+
+          <h1>WELCOME, ORGANIZER</h1>
+
+          <p>
+            Your organizer account has been authenticated.
+          </p>
+
+        </div>
+
+
+        <!-- PROFILE -->
+
+        <div class="profile">
+
+          <div class="profile-label">
+            ORGANIZER ACCOUNT
+          </div>
+
+          <div
+            id="profileName"
+            class="profile-name"
+          >
+            —
+          </div>
+
+          <div
+            id="profileEmail"
+            class="profile-email"
+          >
+            —
+          </div>
+
+          <div
+            id="profileRole"
+            class="role-badge"
+          >
+            —
+          </div>
+
+        </div>
+
+
+        <!-- DASHBOARD OPTIONS -->
+
+        <div class="dashboard-grid">
+
+          <div class="dashboard-item">
+
+            <small>
+              REGISTRATIONS
+            </small>
+
+            <strong>
+              Mission Control
+            </strong>
+
+          </div>
+
+
+          <div class="dashboard-item">
+
+            <small>
+              TEAMS
+            </small>
+
+            <strong>
+              View Teams
+            </strong>
+
+          </div>
+
+
+          <div class="dashboard-item">
+
+            <small>
+              STATUS
+            </small>
+
+            <strong>
+              AUTHORIZED
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="dashboardMessage"
+          class="message success"
+          style="margin-top:20px"
+        >
+          Organizer authentication successful.
+        </div>
+
+
+        <a
+          href="/admin"
+          class="back-link"
+        >
+          → Open Mission Control
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+
+    const $ = id =>
+      document.getElementById(id);
+
+
+    /* =====================================================
+       CHECK EXISTING SESSION
+    ====================================================== */
+
+    async function checkSession() {
+
+      try {
+
+        const response =
+          await fetch('/api/organizer/me', {
+            method: 'GET',
+            credentials: 'same-origin'
+          });
+
+
+        if (!response.ok) {
+          return;
+        }
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          data.ok &&
+          data.organizer
+        ) {
+
+          showDashboard(
+            data.organizer
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          'Session check failed:',
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       LOGIN
+    ====================================================== */
+
+    $('loginForm').addEventListener(
+      'submit',
+      async event => {
+
+        event.preventDefault();
+
+
+        const email =
+          $('email').value.trim();
+
+        const password =
+          $('password').value;
+
+
+        const message =
+          $('loginMessage');
+
+        const button =
+          $('loginBtn');
+
+
+        message.textContent =
+          'Authenticating...';
+
+        message.className =
+          'message';
+
+
+        button.disabled = true;
+
+        button.textContent =
+          'AUTHENTICATING...';
+
+
+        try {
+
+          const response =
+            await fetch(
+              '/api/organizer/login',
+              {
+                method: 'POST',
+
+                headers: {
+                  'Content-Type':
+                    'application/json'
+                },
+
+                credentials:
+                  'same-origin',
+
+                body: JSON.stringify({
+                  email,
+                  password
+                })
+              }
+            );
+
+
+          const data =
+            await response.json();
+
+
+          if (!response.ok) {
+
+            message.textContent =
+              data.error ||
+              'Login failed. Please try again.';
+
+            message.className =
+              'message error';
+
+            return;
+
+          }
+
+
+          message.textContent =
+            'Login successful.';
+
+          message.className =
+            'message success';
+
+
+          showDashboard(
+            data.organizer
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            'Login error:',
+            error
+          );
+
+
+          message.textContent =
+            'Could not connect to the server. Please try again.';
+
+          message.className =
+            'message error';
+
+        } finally {
+
+          button.disabled = false;
+
+          button.textContent =
+            'OPEN ORGANIZER PORTAL →';
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       SHOW DASHBOARD
+    ====================================================== */
+
+    function showDashboard(
+      organizer
+    ) {
+
+      $('loginCard').style.display =
+        'none';
+
+      $('dashboard').style.display =
+        'block';
+
+
+      $('profileName').textContent =
+        organizer?.name || 'Organizer';
+
+
+      $('profileEmail').textContent =
+        organizer?.email || '';
+
+
+      $('profileRole').textContent =
+        formatRole(
+          organizer?.role
+        );
+
+    }
+
+
+    /* =====================================================
+       ROLE FORMAT
+    ====================================================== */
+
+    function formatRole(role) {
+
+      if (!role) {
+        return 'ORGANIZER';
+      }
+
+
+      if (
+        role === 'sub_organizer'
+      ) {
+
+        return 'SUB ORGANIZER';
+
+      }
+
+
+      if (
+        role === 'organizer_head'
+      ) {
+
+        return 'ORGANIZER HEAD';
+
+      }
+
+
+      if (
+        role === 'organizer'
+      ) {
+
+        return 'ORGANIZER';
+
+      }
+
+
+      return String(role)
+        .replaceAll('_', ' ')
+        .toUpperCase();
+
+    }
+
+
+    /* =====================================================
+       START
+    ====================================================== */
+
+    checkSession();
+
+  </script>
+
+</body>
+</html>

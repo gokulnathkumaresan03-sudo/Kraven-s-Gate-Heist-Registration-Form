@@ -13,7 +13,8 @@ const PORT = Number(process.env.PORT || 3000);
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY;
 const ADMIN_KEY = process.env.ADMIN_KEY;
-
+const MAIN_ORGANIZER_EMAIL =
+  'gokulnathkumaresan03@gmail.com';
 /*
   Main organizer email.
 
@@ -1445,7 +1446,195 @@ const server =
             );
 
           }
+        /* ===============================================
+  	 ORGANIZER HEAD CHECK
+	=============================================== */
 
+	const isOrganizerHead =
+  	organizer.email.toLowerCase() ===
+  	MAIN_ORGANIZER_EMAIL.toLowerCase();
+
+
+	/* =============================================
+   APPROVE ORGANIZER
+============================================= */
+
+if (
+  req.method === 'POST' &&
+  /^\/api\/admin\/organizers\/[^/]+\/approve$/.test(p)
+) {
+
+  if (!isOrganizerHead) {
+
+    return json(
+      res,
+      403,
+      {
+        error:
+          'Only the Organizer Head can approve organizers.'
+      }
+    );
+
+  }
+
+
+  const id =
+    p.split('/')[4];
+
+
+  const response =
+    await fetch(
+      `${ORGANIZERS_URL}?id=eq.${encodeURIComponent(id)}`,
+      {
+        method: 'PATCH',
+
+        headers:
+          supabaseHeaders({
+            Prefer:
+              'return=representation'
+          }),
+
+        body:
+          JSON.stringify({
+
+            approval_status:
+              'approved',
+
+            approved_by:
+              organizer.email,
+
+            approved_at:
+              new Date().toISOString()
+
+          })
+      }
+    );
+
+
+  if (!response.ok) {
+
+    console.error(
+      'Organizer approval error:',
+      await response.text()
+    );
+
+
+    return json(
+      res,
+      500,
+      {
+        error:
+          'Could not approve organizer.'
+      }
+    );
+
+  }
+
+
+  return json(
+    res,
+    200,
+    {
+      ok:
+        true,
+
+      message:
+        'Organizer approved successfully.'
+    }
+  );
+
+}
+
+
+/* =============================================
+   REJECT ORGANIZER
+============================================= */
+
+if (
+  req.method === 'POST' &&
+  /^\/api\/admin\/organizers\/[^/]+\/reject$/.test(p)
+) {
+
+  if (!isOrganizerHead) {
+
+    return json(
+      res,
+      403,
+      {
+        error:
+          'Only the Organizer Head can reject organizers.'
+      }
+    );
+
+  }
+
+
+  const id =
+    p.split('/')[4];
+
+
+  const response =
+    await fetch(
+      `${ORGANIZERS_URL}?id=eq.${encodeURIComponent(id)}`,
+      {
+        method: 'PATCH',
+
+        headers:
+          supabaseHeaders({
+            Prefer:
+              'return=representation'
+          }),
+
+        body:
+          JSON.stringify({
+
+            approval_status:
+              'rejected',
+
+            approved_by:
+              organizer.email,
+
+            approved_at:
+              new Date().toISOString()
+
+          })
+      }
+    );
+
+
+  if (!response.ok) {
+
+    console.error(
+      'Organizer rejection error:',
+      await response.text()
+    );
+
+
+    return json(
+      res,
+      500,
+      {
+        error:
+          'Could not reject organizer.'
+      }
+    );
+
+  }
+
+
+  return json(
+    res,
+    200,
+    {
+      ok:
+        true,
+
+      message:
+        'Organizer request rejected.'
+    }
+  );
+
+}
 
           /* =============================================
              STATS
@@ -1708,7 +1897,14 @@ const server =
             );
 
           }
+if (p === '/organizer') {
 
+    return serve(
+      res,
+      'organizer.html'
+    );
+
+}
 
           const safe =
             p === '/'

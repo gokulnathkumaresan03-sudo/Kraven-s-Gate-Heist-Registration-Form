@@ -5,6 +5,116 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>KGH // Mission Control</title>
 <link rel="stylesheet" href="/styles.css">
+
+<style>
+.organizer-panel {
+  margin-top: 25px;
+}
+
+.organizer-card {
+  background: #0d1421;
+  border: 1px solid #26344a;
+  padding: 20px;
+  margin-top: 15px;
+}
+
+.organizer-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #202b3e;
+}
+
+.organizer-row:last-child {
+  border-bottom: none;
+}
+
+.organizer-info {
+  flex: 1;
+}
+
+.organizer-name {
+  color: #eef2f7;
+  font-weight: 900;
+  font-size: 14px;
+}
+
+.organizer-email {
+  color: #8e9cb1;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.organizer-role {
+  color: #ff7a00;
+  font-size: 10px;
+  font-weight: 900;
+  margin-top: 6px;
+  text-transform: uppercase;
+}
+
+.organizer-status {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-top: 5px;
+}
+
+.status-pending {
+  color: #ffc107;
+}
+
+.status-approved {
+  color: #35d07f;
+}
+
+.status-rejected {
+  color: #ff5c5c;
+}
+
+.organizer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.approve-btn,
+.reject-btn {
+  border: none;
+  padding: 10px 14px;
+  font-size: 10px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.approve-btn {
+  background: #35d07f;
+  color: #07100b;
+}
+
+.reject-btn {
+  background: #ff5c5c;
+  color: white;
+}
+
+.approve-btn:hover,
+.reject-btn:hover {
+  opacity: .85;
+}
+
+.empty-message {
+  color: #718096;
+  padding: 20px 0;
+  font-size: 11px;
+}
+
+.organizer-message {
+  margin-top: 12px;
+  font-size: 11px;
+  color: #8e9cb1;
+}
+</style>
 </head>
 
 <body>
@@ -15,45 +125,89 @@
 <main class="shell" style="padding:50px 0 80px">
 
   <div class="section-kicker">
-    <span>HQ</span> MASTER ORGANIZER // MISSION CONTROL
+    <span>HQ</span>
+    MASTER ORGANIZER // MISSION CONTROL
   </div>
 
+
   <!-- LOGIN -->
-  <div id="loginBox"
-       class="form-card"
-       style="margin-top:24px;padding:28px;max-width:520px">
+
+  <div
+    id="loginBox"
+    class="form-card"
+    style="margin-top:24px;padding:28px;max-width:520px"
+  >
 
     <div class="form-title">
       <span>00</span>
+
       <div>
         <b>ORGANIZER ACCESS</b>
         <small>Private dashboard</small>
       </div>
     </div>
 
-    <label style="display:block;color:#c6cfdb;font-size:10px;font-weight:900;letter-spacing:.04em">
+
+    <label
+      style="
+        display:block;
+        color:#c6cfdb;
+        font-size:10px;
+        font-weight:900;
+        letter-spacing:.04em
+      "
+    >
+
       ORGANIZER EMAIL
 
       <input
         id="organizerEmail"
         type="email"
         placeholder="Enter organizer email"
-        autocomplete="email"
-        style="width:100%;margin-top:8px;background:#090e18;border:1px solid #2a364d;color:#eef2f7;padding:13px;outline:none"
+        style="
+          width:100%;
+          margin-top:8px;
+          background:#090e18;
+          border:1px solid #2a364d;
+          color:#eef2f7;
+          padding:13px;
+          outline:none
+        "
       >
+
     </label>
 
-    <label style="display:block;color:#c6cfdb;font-size:10px;font-weight:900;letter-spacing:.04em;margin-top:15px">
+
+    <label
+      style="
+        display:block;
+        color:#c6cfdb;
+        font-size:10px;
+        font-weight:900;
+        letter-spacing:.04em;
+        margin-top:15px
+      "
+    >
+
       PASSWORD
 
       <input
         id="organizerPassword"
         type="password"
         placeholder="Enter organizer password"
-        autocomplete="current-password"
-        style="width:100%;margin-top:8px;background:#090e18;border:1px solid #2a364d;color:#eef2f7;padding:13px;outline:none"
+        style="
+          width:100%;
+          margin-top:8px;
+          background:#090e18;
+          border:1px solid #2a364d;
+          color:#eef2f7;
+          padding:13px;
+          outline:none
+        "
       >
+
     </label>
+
 
     <button
       id="login"
@@ -63,6 +217,7 @@
       <span>OPEN MISSION CONTROL</span>
       <b>→</b>
     </button>
+
 
     <div
       id="loginMsg"
@@ -74,10 +229,14 @@
 
 
   <!-- DASHBOARD -->
+
   <section
     id="dashboard"
     style="display:none;margin-top:25px"
   >
+
+
+    <!-- STATS -->
 
     <div
       class="hero-strip"
@@ -107,40 +266,58 @@
     </div>
 
 
-    <!-- ORGANIZER INFORMATION -->
-    <div
-      class="register-head"
-      style="margin-top:25px"
+    <!-- ORGANIZER MANAGEMENT -->
+
+    <section
+      id="organizerPanel"
+      class="organizer-panel"
     >
 
-      <div>
-        <h2>
-          ORGANIZER <em>MISSION CONTROL</em>
-        </h2>
+      <div class="register-head">
 
-        <p id="organizerInfo">
-          Authenticated organizer
-        </p>
+        <div>
+
+          <h2>
+            ORGANIZER <em>MANAGEMENT</em>
+          </h2>
+
+          <p>
+            Approve or reject organizer access requests.
+          </p>
+
+        </div>
+
       </div>
 
-      <button
-        id="logout"
-        class="nav-chip"
-        type="button"
-      >
-        LOGOUT
-      </button>
 
-    </div>
+      <div
+        id="organizerList"
+        class="form-card organizer-card"
+      >
+
+        <div class="empty-message">
+          Loading organizer requests...
+        </div>
+
+      </div>
+
+      <div
+        id="organizerMessage"
+        class="organizer-message"
+      ></div>
+
+    </section>
 
 
     <!-- REGISTERED TEAMS -->
+
     <div
       class="register-head"
-      style="margin-top:25px"
+      style="margin-top:35px"
     >
 
       <div>
+
         <h2>
           REGISTERED <em>TEAMS</em>
         </h2>
@@ -148,6 +325,7 @@
         <p>
           Master list for organizers.
         </p>
+
       </div>
 
       <a
@@ -168,13 +346,22 @@
 
       <table
         id="teams"
-        style="width:100%;border-collapse:collapse;font-size:11px;min-width:1050px"
+        style="
+          width:100%;
+          border-collapse:collapse;
+          font-size:11px;
+          min-width:1050px
+        "
       >
 
         <thead>
 
           <tr
-            style="background:#151e2e;color:#8e9cb1;text-align:left"
+            style="
+              background:#151e2e;
+              color:#8e9cb1;
+              text-align:left
+            "
           >
 
             <th style="padding:13px">TEAM ID</th>
@@ -205,14 +392,13 @@
 
 <script>
 
-let loaded = false;
+const $ = id =>
+  document.getElementById(id);
 
-const $ = id => document.getElementById(id);
 
-
-/* =====================================================
-   ORGANIZER LOGIN
-===================================================== */
+/* =========================================================
+   LOGIN
+========================================================= */
 
 $('login').onclick = async () => {
 
@@ -223,81 +409,68 @@ $('login').onclick = async () => {
     $('organizerPassword').value;
 
 
-  $('loginMsg').textContent = 'Authenticating...';
-
-
-  if (!email || !password) {
-
-    $('loginMsg').textContent =
-      'Please enter your organizer email and password.';
-
-    return;
-  }
+  $('loginMsg').textContent =
+    'Checking organizer account...';
 
 
   try {
 
-    const response = await fetch(
-      '/api/organizer/login',
-      {
-        method: 'POST',
+    const r =
+      await fetch(
+        '/api/organizer/login',
+        {
+          method: 'POST',
 
-        headers: {
-          'Content-Type': 'application/json'
-        },
+          headers: {
+            'Content-Type':
+              'application/json'
+          },
 
-        credentials: 'same-origin',
-
-        body: JSON.stringify({
-          email,
-          password
-        })
-      }
-    );
-
-
-    const data =
-      await response.json();
+          body:
+            JSON.stringify({
+              email,
+              password
+            })
+        }
+      );
 
 
-    if (!response.ok) {
+    const j =
+      await r.json();
+
+
+    if (!r.ok) {
 
       $('loginMsg').textContent =
-        data.error ||
-        'Organizer login failed.';
+        j.error ||
+        'Login failed.';
 
       return;
     }
 
 
-    $('loginBox').style.display = 'none';
+    $('loginBox').style.display =
+      'none';
 
-    $('dashboard').style.display = 'block';
-
-
-    $('organizerInfo').textContent =
-      `${data.organizer.name} • ${data.organizer.email} • ${data.organizer.role}`;
+    $('dashboard').style.display =
+      'block';
 
 
-    await load();
+    load();
 
-  }
-
-  catch (error) {
-
-    console.error(error);
+  } catch {
 
     $('loginMsg').textContent =
-      'Could not connect to the server. Please try again.';
+      'Could not connect to the server.';
 
   }
 
 };
 
 
-/* =====================================================
+/* =========================================================
    LOAD DASHBOARD
-===================================================== */
+========================================================= */
 
 async function load() {
 
@@ -305,37 +478,30 @@ async function load() {
 
     const [
       statsResponse,
-      teamsResponse
+      teamsResponse,
+      organizersResponse
     ] = await Promise.all([
 
-      fetch(
-        '/api/admin/stats',
-        {
-          credentials: 'same-origin'
-        }
-      ),
+      fetch('/api/admin/stats'),
 
-      fetch(
-        '/api/admin/teams',
-        {
-          credentials: 'same-origin'
-        }
-      )
+      fetch('/api/admin/teams'),
+
+      fetch('/api/admin/organizers')
 
     ]);
 
 
     if (
       !statsResponse.ok ||
-      !teamsResponse.ok
+      !teamsResponse.ok ||
+      !organizersResponse.ok
     ) {
 
-      $('loginBox').style.display = 'block';
+      alert(
+        'Your organizer session has expired.'
+      );
 
-      $('dashboard').style.display = 'none';
-
-      $('loginMsg').textContent =
-        'Organizer session expired. Please login again.';
+      location.reload();
 
       return;
     }
@@ -344,8 +510,11 @@ async function load() {
     const stats =
       await statsResponse.json();
 
-    const rows =
+    const teams =
       await teamsResponse.json();
+
+    const organizers =
+      await organizersResponse.json();
 
 
     $('total').textContent =
@@ -358,95 +527,15 @@ async function load() {
       stats.today;
 
 
-    const tbody =
-      document.querySelector(
-        '#teams tbody'
-      );
+    renderOrganizers(organizers);
 
+    renderTeams(teams);
 
-    tbody.innerHTML =
-      rows.map(row => {
-
-        const members = [
-
-          row.member2_name,
-
-          row.member3_name,
-
-          row.member4_name
-
-        ].filter(Boolean);
-
-
-        return `
-
-          <tr
-            style="border-top:1px solid #202b3e;color:#cbd3df"
-          >
-
-            <td
-              style="padding:12px;color:#ff7a00;font-weight:900"
-            >
-              ${esc(row.team_id)}
-            </td>
-
-            <td>
-              ${esc(row.team_name)}
-            </td>
-
-            <td>
-              ${esc(row.college)}
-            </td>
-
-            <td>
-              ${esc(row.program)}
-            </td>
-
-            <td>
-              ${esc(row.department)}
-            </td>
-
-            <td>
-              ${esc(row.year_level)}
-            </td>
-
-            <td>
-              ${esc(row.leader_name)}
-              <br>
-              <span style="color:#718096">
-                ${esc(row.leader_reg_no)}
-              </span>
-            </td>
-
-            <td>
-              ${esc(row.leader_email)}
-              <br>
-              ${esc(row.leader_phone)}
-            </td>
-
-            <td>
-              ${members.length + 1}
-            </td>
-
-            <td>
-              ${new Date(
-                row.created_at
-              ).toLocaleString()}
-            </td>
-
-          </tr>
-
-        `;
-
-      }).join('');
-
-  }
-
-  catch (error) {
+  } catch (error) {
 
     console.error(error);
 
-    $('loginMsg').textContent =
+    $('organizerMessage').textContent =
       'Could not load dashboard data.';
 
   }
@@ -454,38 +543,313 @@ async function load() {
 }
 
 
-/* =====================================================
-   LOGOUT
-===================================================== */
+/* =========================================================
+   ORGANIZERS
+========================================================= */
 
-$('logout').onclick = () => {
+function renderOrganizers(rows) {
 
-  /*
-    The current server does not have a logout endpoint.
-    Clearing the page is enough for now.
-    We can add a proper logout endpoint next.
-  */
-
-  location.reload();
-
-};
+  const box =
+    $('organizerList');
 
 
-/* =====================================================
+  if (!rows.length) {
+
+    box.innerHTML = `
+      <div class="empty-message">
+        No organizer accounts found.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  box.innerHTML =
+    rows.map(renderOrganizer).join('');
+
+}
+
+
+/* =========================================================
+   ORGANIZER ROW
+========================================================= */
+
+function renderOrganizer(r) {
+
+  const status =
+    String(
+      r.approval_status || 'pending'
+    ).toLowerCase();
+
+
+  let actions = '';
+
+
+  if (status === 'pending') {
+
+    actions = `
+
+      <div class="organizer-actions">
+
+        <button
+          class="approve-btn"
+          onclick="updateOrganizer(${Number(r.id)}, 'approve')"
+        >
+          APPROVE
+        </button>
+
+        <button
+          class="reject-btn"
+          onclick="updateOrganizer(${Number(r.id)}, 'reject')"
+        >
+          REJECT
+        </button>
+
+      </div>
+
+    `;
+
+  }
+
+
+  return `
+
+    <div class="organizer-row">
+
+      <div class="organizer-info">
+
+        <div class="organizer-name">
+          ${esc(r.name)}
+        </div>
+
+        <div class="organizer-email">
+          ${esc(r.email)}
+        </div>
+
+        <div class="organizer-role">
+          Requested:
+          ${esc(
+            r.requested_role ||
+            r.role ||
+            '—'
+          )}
+        </div>
+
+        <div
+          class="
+            organizer-status
+            status-${esc(status)}
+          "
+        >
+          Status:
+          ${esc(status)}
+        </div>
+
+      </div>
+
+
+      ${actions}
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   APPROVE / REJECT
+========================================================= */
+
+async function updateOrganizer(id, action) {
+
+  const actionText =
+    action === 'approve'
+      ? 'approve'
+      : 'reject';
+
+
+  const confirmed =
+    confirm(
+      `Are you sure you want to ${actionText} this organizer?`
+    );
+
+
+  if (!confirmed) {
+
+    return;
+
+  }
+
+
+  $('organizerMessage').textContent =
+    `Processing ${actionText} request...`;
+
+
+  try {
+
+    const response =
+      await fetch(
+        `/api/admin/organizers/${id}/${action}`,
+        {
+          method: 'POST'
+        }
+      );
+
+
+    const result =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      $('organizerMessage').textContent =
+        result.error ||
+        `Could not ${actionText} organizer.`;
+
+      return;
+
+    }
+
+
+    $('organizerMessage').textContent =
+      result.message ||
+      `Organizer ${actionText}d successfully.`;
+
+
+    await load();
+
+  } catch {
+
+    $('organizerMessage').textContent =
+      `Could not ${actionText} organizer.`;
+
+  }
+
+}
+
+
+/* =========================================================
+   TEAMS
+========================================================= */
+
+function renderTeams(rows) {
+
+  const tb =
+    document.querySelector(
+      '#teams tbody'
+    );
+
+
+  tb.innerHTML =
+    rows.map(r => {
+
+      const members = [
+
+        r.member2_name,
+
+        r.member3_name,
+
+        r.member4_name
+
+      ].filter(Boolean);
+
+
+      return `
+
+        <tr
+          style="
+            border-top:1px solid #202b3e;
+            color:#cbd3df
+          "
+        >
+
+          <td
+            style="
+              padding:12px;
+              color:#ff7a00;
+              font-weight:900
+            "
+          >
+            ${esc(r.team_id)}
+          </td>
+
+          <td>
+            ${esc(r.team_name)}
+          </td>
+
+          <td>
+            ${esc(r.college)}
+          </td>
+
+          <td>
+            ${esc(r.program)}
+          </td>
+
+          <td>
+            ${esc(r.department)}
+          </td>
+
+          <td>
+            ${esc(r.year_level)}
+          </td>
+
+          <td>
+            ${esc(r.leader_name)}
+            <br>
+            <span style="color:#718096">
+              ${esc(r.leader_reg_no)}
+            </span>
+          </td>
+
+          <td>
+            ${esc(r.leader_email)}
+            <br>
+            ${esc(r.leader_phone)}
+          </td>
+
+          <td>
+            ${members.length + 1}
+          </td>
+
+          <td>
+            ${new Date(
+              r.created_at
+            ).toLocaleString()}
+          </td>
+
+        </tr>
+
+      `;
+
+    }).join('');
+
+}
+
+
+/* =========================================================
    ESCAPE HTML
-===================================================== */
+========================================================= */
 
 function esc(s) {
 
   return String(s ?? '')
     .replace(
-      /[&<>\"]/g,
+      /[&<>"]/g,
       c => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '\\': '&#92;',
-        '"': '&quot;'
+        '&':
+          '&amp;',
+
+        '<':
+          '&lt;',
+
+        '>':
+          '&gt;',
+
+        '"':
+          '&quot;'
+
       }[c])
     );
 
