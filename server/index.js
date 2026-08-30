@@ -748,6 +748,66 @@ async function requestOrganizer(payload) {
    ORGANIZER LOGIN
 ========================================================= */
 
+async function resetMainOrganizerPassword(payload) {
+  const email = clean(payload.email, 160).toLowerCase();
+  const key = String(payload.key || '');
+
+  if (!email || !key) {
+    throw {
+      status: 400,
+      message: 'Email and admin key are required.'
+    };
+  }
+
+  if (key !== ADMIN_KEY) {
+    throw {
+      status: 401,
+      message: 'Invalid admin key.'
+    };
+  }
+
+  const organizer = await getOrganizer(email);
+
+  if (!organizer) {
+    throw {
+      status: 404,
+      message: 'Organizer account not found.'
+    };
+  }
+
+  const passwordHash = hashPassword(key);
+
+  const response = await fetch(
+    `${ORGANIZERS_URL}?email=eq.${encodeURIComponent(email)}`,
+    {
+      method: 'PATCH',
+      headers: supabaseHeaders({
+        Prefer: 'return=representation'
+      }),
+      body: JSON.stringify({
+        password_hash: passwordHash,
+        approval_status: 'approved'
+      })
+    }
+  );
+
+  if (!response.ok) {
+    console.error(
+      'Password reset error:',
+      await response.text()
+    );
+
+    throw {
+      status: 500,
+      message: 'Could not reset organizer password.'
+    };
+  }
+
+  return {
+    ok: true,
+    message: 'Organizer password reset successfully.'
+  };
+}
 async function organizerLogin(payload) {
 
   const email =
