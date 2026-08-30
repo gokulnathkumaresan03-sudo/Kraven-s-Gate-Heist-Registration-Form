@@ -13,9 +13,7 @@ const PORT = Number(process.env.PORT || 3000);
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY;
 const ADMIN_KEY = process.env.ADMIN_KEY;
-const MAIN_ORGANIZER_EMAIL =
-  'gokulnathkumaresan03@gmail.com';
-/*
+
   Main organizer email.
 
   The existing ADMIN_KEY can be used as the password
