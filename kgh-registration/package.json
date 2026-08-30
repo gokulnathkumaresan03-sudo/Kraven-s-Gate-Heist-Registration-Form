@@ -1,0 +1,9 @@
+{
+  "name": "kravens-gate-heist-registration",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kraven's Gate Heist symposium registration website",
+  "type": "module",
+  "scripts": {"start":"node server/index.js","dev":"node --watch server/index.js"},
+  "engines": {"node": ">=22.5"}
+}

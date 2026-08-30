@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#090b13" />
+  <meta name="description" content="Kraven's Gate Heist — symposium registration portal." />
+  <title>KRAVEN'S GATE HEIST | Registration</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader-grid"></div>
+    <div class="gate-wrap">
+      <div class="gate-line gate-left"></div><div class="gate-line gate-right"></div>
+      <div class="lock">🔒</div>
+    </div>
+    <div class="preloader-copy"><span>SECURE GATE // KGH-01</span><strong>BREACHING THE REGISTRATION GATE</strong></div>
+  </div>
+
+  <div class="web-pattern"></div>
+  <div class="noise"></div>
+
+  <header class="hero" id="top">
+    <nav class="nav shell">
+      <div class="brand"><span class="brand-mark">✦</span> ECE // SYMPOSIUM</div>
+      <a class="nav-chip" href="#register">REGISTRATION <span>↘</span></a>
+    </nav>
+
+    <div class="hero-inner shell">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse-dot"></span> FLAGSHIP SYMPOSIUM HEIST PROTOCOL</div>
+        <h1>KRAVEN'S<br><em>GATE HEIST</em></h1>
+        <p class="tagline">HUNT THE CLUES. CRACK THE GATES. <b>CLAIM THE TREASURE.</b></p>
+        <p class="intro">A high-stakes technical treasure hunt built around logic, deduction and digital infiltration. Assemble your squad and enter the gate.</p>
+        <div class="hero-actions">
+          <a class="primary-btn" href="#register"><span>ENTER THE REGISTRATION</span><b>→</b></a>
+          <div class="microcopy"><span>ZERO HARDWARE</span><i></i><span>BROWSER-BASED</span><i></i><span>TEAM HEIST</span></div>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-label="Original comic-inspired hunter and gate artwork">
+        <div class="target-ring ring-1"></div><div class="target-ring ring-2"></div><div class="target-ring ring-3"></div>
+        <div class="gate-arch"><span></span><span></span></div>
+        <div class="hunter">
+          <div class="hunter-head"></div><div class="hunter-body"></div><div class="hunter-cloak"></div>
+          <div class="hunter-spear"></div><div class="hunter-glow"></div>
+        </div>
+        <div class="spider-sigil">✣</div>
+        <div class="key-float">⚿</div>
+        <div class="coord coord-a">KGH / 2026</div><div class="coord coord-b">TARGET // GATE</div>
+      </div>
+    </div>
+
+    <div class="hero-strip shell">
+      <div><small>TARGET SQUAD</small><strong>2nd / 3rd / 4th YEAR + PG</strong></div>
+      <div><small>ELIGIBLE STREAMS</small><strong>ECE · CSE · IT · EEE · OTHERS</strong></div>
+      <div><small>SQUAD SIZE</small><strong>UP TO 4 MEMBERS</strong></div>
+      <div><small>MISSION MODE</small><strong>BROWSER / ZERO HARDWARE</strong></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="brief shell">
+      <div class="section-kicker"><span>01</span> MISSION BRIEF</div>
+      <div class="brief-grid">
+        <div>
+          <h2>THE GATE IS LOCKED.<br><em>YOUR TEAM HAS THE KEY.</em></h2>
+          <p>Registration is intentionally simple. Tell us who your team is, choose your academic profile, add your squad, and receive a unique Team ID instantly.</p>
+        </div>
+        <div class="feature-card red"><span>01</span><b>DETECT</b><p>Observe the trail and identify the hidden logic.</p></div>
+        <div class="feature-card cyan"><span>02</span><b>BUILD</b><p>Construct the right digital path and beat the clock.</p></div>
+        <div class="feature-card gold"><span>03</span><b>DEFEND</b><p>Patch the sabotage and protect your solution.</p></div>
+      </div>
+    </section>
+
+    <section class="register-section shell" id="register">
+      <div class="section-kicker"><span>02</span> REGISTRATION GATE</div>
+      <div class="register-head">
+        <div><h2>ENTER YOUR <em>SQUAD.</em></h2><p>One form. One Team ID. Your entry to the heist.</p></div>
+        <div class="gate-status"><span class="status-dot"></span> GATE ONLINE</div>
+      </div>
+
+      <form id="registrationForm" class="form-card" novalidate>
+        <div class="form-section">
+          <div class="form-title"><span>01</span><div><b>TEAM DETAILS</b><small>Build your crew profile</small></div></div>
+          <div class="fields two">
+            <label>Team Name <sup>*</sup><input name="teamName" required maxlength="80" placeholder="e.g. Logic Raiders" /></label>
+            <label>College / Institution <sup>*</sup><input name="college" required maxlength="160" placeholder="Your college / institution" /></label>
+            <label>Program / Degree <sup>*</sup>
+              <select name="program" required><option value="">Select program</option><option>B.E.</option><option>B.Tech.</option><option>B.Sc.</option><option>BCA</option><option>MCA</option><option>MBA</option><option>M.E.</option><option>M.Tech.</option><option>M.Sc.</option><option>Other</option></select>
+            </label>
+            <label>Department / Specialization <sup>*</sup><input name="department" required maxlength="100" placeholder="ECE / CSE / MBA / etc." /></label>
+            <label>Year / Academic Level <sup>*</sup>
+              <select name="yearLevel" required><option value="">Select level</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option><option>Final Year</option><option>Postgraduate — 1st Year</option><option>Postgraduate — 2nd Year</option><option>Other</option></select>
+            </label>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="form-section">
+          <div class="form-title"><span>02</span><div><b>TEAM LEADER</b><small>Primary point of contact</small></div></div>
+          <div class="fields two">
+            <label>Full Name <sup>*</sup><input name="leaderName" required maxlength="100" placeholder="Leader's full name" /></label>
+            <label>College ID / Register Number <sup>*</sup><input name="leaderRegNo" required maxlength="60" placeholder="Register / ID number" /></label>
+            <label>Email <sup>*</sup><input type="email" name="leaderEmail" required maxlength="160" placeholder="teamleader@email.com" /></label>
+            <label>Mobile Number <sup>*</sup><input type="tel" name="leaderPhone" required maxlength="25" placeholder="10-digit mobile number" /></label>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="form-section">
+          <div class="form-title"><span>03</span><div><b>TEAM MEMBERS</b><small>Optional — up to 4 members total</small></div></div>
+          <div class="member-grid">
+            <div class="member-row"><div class="member-badge">02</div><label>Full Name<input name="member2Name" maxlength="100" placeholder="Member 2" /></label><label>College ID / Register Number<input name="member2RegNo" maxlength="60" placeholder="ID / Register No." /></label></div>
+            <div class="member-row"><div class="member-badge">03</div><label>Full Name<input name="member3Name" maxlength="100" placeholder="Member 3" /></label><label>College ID / Register Number<input name="member3RegNo" maxlength="60" placeholder="ID / Register No." /></label></div>
+            <div class="member-row"><div class="member-badge">04</div><label>Full Name<input name="member4Name" maxlength="100" placeholder="Member 4" /></label><label>College ID / Register Number<input name="member4RegNo" maxlength="60" placeholder="ID / Register No." /></label></div>
+          </div>
+        </div>
+
+        <div class="declaration">
+          <label class="check"><input type="checkbox" name="consent" required /><span></span><p>I confirm that the information provided is accurate and agree to follow the rules and instructions announced by the organizers.</p></label>
+        </div>
+        <div class="submit-row"><div id="formMessage" class="form-message" role="status"></div><button class="primary-btn submit-btn" type="submit"><span>SUBMIT REGISTRATION — ENTER THE HEIST</span><b>↗</b></button></div>
+      </form>
+    </section>
+
+    <section class="aftercare shell">
+      <div class="after-card"><span class="tiny-icon">⚿</span><div><b>AFTER YOU REGISTER</b><p>Your Team ID is your entry token. Save it and show it to the organizers on event day.</p></div><strong>KGH-XXXX</strong></div>
+    </section>
+  </main>
+
+  <div class="success-overlay" id="successOverlay" aria-hidden="true">
+    <div class="success-grid"></div>
+    <div class="success-card">
+      <div class="unlock">🔓</div><div class="success-kicker">GATE ACCESS GRANTED</div>
+      <h2>REGISTRATION<br><em>COMPLETE</em></h2>
+      <p>Welcome to Kraven's Gate Heist.</p>
+      <div class="team-id-label">YOUR TEAM ID</div><div class="team-id" id="teamId">KGH-1047</div>
+      <div class="save-note">SAVE THIS ID. IT WILL BE USED FOR EVENT-DAY ENTRY.</div>
+      <button id="closeSuccess" class="secondary-btn">RETURN TO GATE</button>
+    </div>
+  </div>
+
+  <footer class="footer shell"><span>DEPARTMENT OF ECE • KRAVEN'S GATE HEIST</span><span>FILE // REGISTRATION</span></footer>
+  <script src="/app.js"></script>
+</body>
+</html>

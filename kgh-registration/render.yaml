@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: kravens-gate-heist-registration
+    runtime: docker
+    plan: starter
+    envVars:
+      - key: ADMIN_KEY
+        sync: false
+      - key: DB_PATH
+        value: /var/data/kgh.sqlite
+    disk:
+      name: kgh-data
+      mountPath: /var/data
+      sizeGB: 1

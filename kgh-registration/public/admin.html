@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KGH // Mission Control</title><link rel="stylesheet" href="/styles.css"></head>
+<body>
+<div class="noise"></div><div class="web-pattern"></div>
+<main class="shell" style="padding:50px 0 80px">
+  <div class="section-kicker"><span>HQ</span> MASTER ORGANIZER // MISSION CONTROL</div>
+  <div id="loginBox" class="form-card" style="margin-top:24px;padding:28px;max-width:520px">
+    <div class="form-title"><span>00</span><div><b>ORGANIZER ACCESS</b><small>Private dashboard</small></div></div>
+    <label style="display:block;color:#c6cfdb;font-size:10px;font-weight:900;letter-spacing:.04em">ADMIN KEY<input id="adminKey" type="password" placeholder="Enter organizer key" style="width:100%;margin-top:8px;background:#090e18;border:1px solid #2a364d;color:#eef2f7;padding:13px;outline:none"></label>
+    <button id="login" class="primary-btn" style="margin-top:18px"><span>OPEN MISSION CONTROL</span><b>→</b></button><div id="loginMsg" class="form-message" style="margin-top:12px"></div>
+  </div>
+  <section id="dashboard" style="display:none;margin-top:25px">
+    <div class="hero-strip" id="stats"><div><small>TOTAL TEAMS</small><strong id="total">—</strong></div><div><small>COLLEGES</small><strong id="colleges">—</strong></div><div><small>TODAY</small><strong id="today">—</strong></div><div><small>DATABASE</small><strong>LIVE</strong></div></div>
+    <div class="register-head" style="margin-top:25px"><div><h2>REGISTERED <em>TEAMS</em></h2><p>Master list for organizers.</p></div><a id="export" class="nav-chip" href="/api/admin/export.csv">EXPORT CSV ↗</a></div>
+    <div class="form-card" style="overflow:auto"><table id="teams" style="width:100%;border-collapse:collapse;font-size:11px;min-width:1050px"><thead><tr style="background:#151e2e;color:#8e9cb1;text-align:left"><th style="padding:13px">TEAM ID</th><th>TEAM</th><th>COLLEGE</th><th>PROGRAM</th><th>DEPT</th><th>YEAR</th><th>LEADER</th><th>CONTACT</th><th>MEMBERS</th><th>REGISTERED</th></tr></thead><tbody></tbody></table></div>
+  </section>
+</main>
+<script>
+let loaded=false;
+const $=id=>document.getElementById(id);
+$('login').onclick=async()=>{const key=$('adminKey').value;const r=await fetch('/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key})});const j=await r.json();if(!r.ok){$('loginMsg').textContent=j.error;return;} $('loginBox').style.display='none';$('dashboard').style.display='block';load();};
+async function load(){const [s,t]=await Promise.all([fetch('/api/admin/stats'),fetch('/api/admin/teams')]);if(!s.ok||!t.ok){location.reload();return;}const stats=await s.json(), rows=await t.json();$('total').textContent=stats.total;$('colleges').textContent=stats.colleges;$('today').textContent=stats.today;const tb=document.querySelector('#teams tbody');tb.innerHTML=rows.map(r=>{const members=[r.member2_name,r.member3_name,r.member4_name].filter(Boolean);return `<tr style="border-top:1px solid #202b3e;color:#cbd3df"><td style="padding:12px;color:#ff7a00;font-weight:900">${esc(r.team_id)}</td><td>${esc(r.team_name)}</td><td>${esc(r.college)}</td><td>${esc(r.program)}</td><td>${esc(r.department)}</td><td>${esc(r.year_level)}</td><td>${esc(r.leader_name)}<br><span style="color:#718096">${esc(r.leader_reg_no)}</span></td><td>${esc(r.leader_email)}<br>${esc(r.leader_phone)}</td><td>${members.length+1}</td><td>${new Date(r.created_at).toLocaleString()}</td></tr>`}).join('');}
+function esc(s){return String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\\':'&#92;','"':'&quot;'}[c]));}
+</script></body></html>
