@@ -4,37 +4,64 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(__dirname, '..');
-const PUBLIC = path.join(ROOT, 'public');
 
-const PORT = Number(process.env.PORT || 3000);
+/* =========================================================
+   BASIC CONFIGURATION
+========================================================= */
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY;
-const ADMIN_KEY = process.env.ADMIN_KEY;
+const __dirname =
+  path.dirname(fileURLToPath(import.meta.url));
 
-  Main organizer email.
+const ROOT =
+  path.resolve(__dirname, '..');
 
-  The existing ADMIN_KEY can be used as the password
-  for this approved organizer account.
-*/
-const MAIN_ORGANIZER_EMAIL =
-  'gokulnathkumaresan03@gmail.com';
+const PUBLIC =
+  path.join(ROOT, 'public');
 
+const PORT =
+  Number(process.env.PORT || 3000);
+
+
+/* =========================================================
+   ENVIRONMENT VARIABLES
+========================================================= */
+
+const SUPABASE_URL =
+  process.env.SUPABASE_URL;
+
+const SUPABASE_SECRET_KEY =
+  process.env.SUPABASE_SECRET_KEY;
+
+const ADMIN_KEY =
+  process.env.ADMIN_KEY;
+
+
+/* =========================================================
+   REQUIRED ENVIRONMENT CHECK
+========================================================= */
 
 if (!SUPABASE_URL) {
-  throw new Error('SUPABASE_URL environment variable is missing.');
+  throw new Error(
+    'SUPABASE_URL environment variable is missing.'
+  );
 }
 
 if (!SUPABASE_SECRET_KEY) {
-  throw new Error('SUPABASE_SECRET_KEY environment variable is missing.');
+  throw new Error(
+    'SUPABASE_SECRET_KEY environment variable is missing.'
+  );
 }
 
 if (!ADMIN_KEY) {
-  throw new Error('ADMIN_KEY environment variable is missing.');
+  throw new Error(
+    'ADMIN_KEY environment variable is missing.'
+  );
 }
 
+
+/* =========================================================
+   SUPABASE TABLE URLs
+========================================================= */
 
 const SUPABASE_TABLE_URL =
   `${SUPABASE_URL}/rest/v1/teams`;
@@ -60,6 +87,7 @@ function supabaseHeaders(extra = {}) {
 
     ...extra
   };
+
 }
 
 
@@ -99,24 +127,41 @@ const organizerRoles = new Set([
 ]);
 
 
-function clean(v, max = 200) {
+/* =========================================================
+   CLEAN INPUT
+========================================================= */
 
-  return String(v ?? '')
+function clean(value, max = 200) {
+
+  return String(value ?? '')
     .trim()
     .replace(/\s+/g, ' ')
     .slice(0, max);
+
 }
 
 
-function emailOk(v) {
+/* =========================================================
+   EMAIL VALIDATION
+========================================================= */
 
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+function emailOk(value) {
+
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    .test(value);
+
 }
 
 
-function phoneOk(v) {
+/* =========================================================
+   PHONE VALIDATION
+========================================================= */
 
-  return /^[0-9+()\-\s]{7,20}$/.test(v);
+function phoneOk(value) {
+
+  return /^[0-9+()\-\s]{7,20}$/
+    .test(value);
+
 }
 
 
@@ -137,15 +182,29 @@ function hashPassword(password) {
     ).toString('hex');
 
   return `${salt}:${hash}`;
+
 }
 
 
-function verifyPassword(password, stored) {
+/* =========================================================
+   PASSWORD VERIFICATION
+========================================================= */
+
+function verifyPassword(
+  password,
+  stored
+) {
 
   try {
 
-    const [salt, storedHash] =
+    const parts =
       String(stored).split(':');
+
+    const salt =
+      parts[0];
+
+    const storedHash =
+      parts[1];
 
     if (!salt || !storedHash) {
       return false;
@@ -158,22 +217,36 @@ function verifyPassword(password, stored) {
         64
       ).toString('hex');
 
-    const a =
-      Buffer.from(hash, 'hex');
+    const actual =
+      Buffer.from(
+        hash,
+        'hex'
+      );
 
-    const b =
-      Buffer.from(storedHash, 'hex');
+    const expected =
+      Buffer.from(
+        storedHash,
+        'hex'
+      );
 
-    if (a.length !== b.length) {
+    if (
+      actual.length !==
+      expected.length
+    ) {
       return false;
     }
 
-    return crypto.timingSafeEqual(a, b);
+    return crypto.timingSafeEqual(
+      actual,
+      expected
+    );
 
   } catch {
 
     return false;
+
   }
+
 }
 
 
@@ -184,9 +257,15 @@ function verifyPassword(password, stored) {
 function organizerToken(email) {
 
   return crypto
-    .createHmac('sha256', ADMIN_KEY)
-    .update(`organizer:${email}`)
+    .createHmac(
+      'sha256',
+      ADMIN_KEY
+    )
+    .update(
+      `organizer:${email}`
+    )
     .digest('hex');
+
 }
 
 
@@ -201,24 +280,33 @@ function parseCookies(req) {
     (req.headers.cookie || '')
       .split(';')
       .filter(Boolean)
-      .map(x => {
+      .map(cookie => {
 
-        const i =
-          x.indexOf('=');
+        const index =
+          cookie.indexOf('=');
+
+        if (index === -1) {
+          return ['', ''];
+        }
 
         return [
           decodeURIComponent(
-            x.slice(0, i).trim()
+            cookie
+              .slice(0, index)
+              .trim()
           ),
 
           decodeURIComponent(
-            x.slice(i + 1).trim()
+            cookie
+              .slice(index + 1)
+              .trim()
           )
         ];
 
       })
 
   );
+
 }
 
 
@@ -234,6 +322,7 @@ async function getOrganizer(email) {
     `&email=eq.${encodeURIComponent(email)}` +
     `&limit=1`;
 
+
   const response =
     await fetch(
       url,
@@ -246,32 +335,39 @@ async function getOrganizer(email) {
 
   if (!response.ok) {
 
+    const error =
+      await response.text();
+
     console.error(
       'Organizer lookup error:',
-      await response.text()
+      error
     );
 
     throw new Error(
       'Could not check organizer account.'
     );
+
   }
 
 
   const rows =
     await response.json();
 
+
   return rows[0] || null;
+
 }
 
 
 /* =========================================================
-   ORGANIZER AUTHORIZATION
+   AUTHORIZED ORGANIZER
 ========================================================= */
 
 async function authorizedOrganizer(req) {
 
   const cookies =
     parseCookies(req);
+
 
   const email =
     cookies.kgh_organizer_email;
@@ -285,11 +381,11 @@ async function authorizedOrganizer(req) {
   }
 
 
-  if (
-    token !==
-    organizerToken(email)
-  ) {
+  const expectedToken =
+    organizerToken(email);
 
+
+  if (token !== expectedToken) {
     return null;
   }
 
@@ -307,12 +403,12 @@ async function authorizedOrganizer(req) {
     organizer.approval_status !==
     'approved'
   ) {
-
     return null;
   }
 
 
   return organizer;
+
 }
 
 
@@ -324,7 +420,10 @@ async function body(req) {
 
   let data = '';
 
-  for await (const chunk of req) {
+
+  for await (
+    const chunk of req
+  ) {
 
     data += chunk;
 
@@ -340,9 +439,22 @@ async function body(req) {
   }
 
 
-  return JSON.parse(
-    data || '{}'
-  );
+  try {
+
+    return JSON.parse(
+      data || '{}'
+    );
+
+  } catch {
+
+    throw {
+      status: 400,
+      message:
+        'Invalid JSON request.'
+    };
+
+  }
+
 }
 
 
@@ -360,6 +472,7 @@ function json(
   const responseBody =
     JSON.stringify(obj);
 
+
   res.writeHead(
     status,
     {
@@ -373,12 +486,16 @@ function json(
     }
   );
 
-  res.end(responseBody);
+
+  res.end(
+    responseBody
+  );
+
 }
 
 
 /* =========================================================
-   STATIC FILE SERVING
+   STATIC FILE CONTENT TYPE
 ========================================================= */
 
 function contentType(file) {
@@ -409,12 +526,22 @@ function contentType(file) {
     '.webp':
       'image/webp'
 
-  }[path.extname(file)] ||
+  }[
+    path.extname(file)
+  ] ||
   'application/octet-stream';
+
 }
 
 
-function serve(res, file) {
+/* =========================================================
+   STATIC FILE SERVING
+========================================================= */
+
+function serve(
+  res,
+  file
+) {
 
   try {
 
@@ -426,7 +553,10 @@ function serve(res, file) {
 
 
     if (
-      !abs.startsWith(PUBLIC)
+      abs !== PUBLIC &&
+      !abs.startsWith(
+        PUBLIC + path.sep
+      )
     ) {
 
       return res
@@ -461,11 +591,12 @@ function serve(res, file) {
       .end('Not found');
 
   }
+
 }
 
 
 /* =========================================================
-   TEAM ID
+   TEAM ID GENERATION
 ========================================================= */
 
 function randomTeamId() {
@@ -474,37 +605,61 @@ function randomTeamId() {
     .randomInt(0, 10000)
     .toString()
     .padStart(4, '0')}`;
+
 }
 
 
 /* =========================================================
-   CREATE TEAM
+   CREATE STUDENT TEAM REGISTRATION
 ========================================================= */
 
-async function createTeam(payload) {
+async function createTeam(
+  payload
+) {
 
   const vals = {
 
     team_name:
-      clean(payload.teamName, 80),
+      clean(
+        payload.teamName,
+        80
+      ),
 
     college:
-      clean(payload.college, 160),
+      clean(
+        payload.college,
+        160
+      ),
 
     program:
-      clean(payload.program, 40),
+      clean(
+        payload.program,
+        40
+      ),
 
     department:
-      clean(payload.department, 100),
+      clean(
+        payload.department,
+        100
+      ),
 
     year_level:
-      clean(payload.yearLevel, 80),
+      clean(
+        payload.yearLevel,
+        80
+      ),
 
     leader_name:
-      clean(payload.leaderName, 100),
+      clean(
+        payload.leaderName,
+        100
+      ),
 
     leader_reg_no:
-      clean(payload.leaderRegNo, 60),
+      clean(
+        payload.leaderRegNo,
+        60
+      ),
 
     leader_email:
       clean(
@@ -521,8 +676,11 @@ async function createTeam(payload) {
   };
 
 
+  /* Required fields */
+
   if (
-    !Object.values(vals)
+    !Object
+      .values(vals)
       .every(Boolean)
   ) {
 
@@ -535,8 +693,12 @@ async function createTeam(payload) {
   }
 
 
+  /* Program */
+
   if (
-    !programs.has(vals.program)
+    !programs.has(
+      vals.program
+    )
   ) {
 
     throw {
@@ -548,8 +710,12 @@ async function createTeam(payload) {
   }
 
 
+  /* Academic year */
+
   if (
-    !years.has(vals.year_level)
+    !years.has(
+      vals.year_level
+    )
   ) {
 
     throw {
@@ -561,8 +727,12 @@ async function createTeam(payload) {
   }
 
 
+  /* Email */
+
   if (
-    !emailOk(vals.leader_email)
+    !emailOk(
+      vals.leader_email
+    )
   ) {
 
     throw {
@@ -574,8 +744,12 @@ async function createTeam(payload) {
   }
 
 
+  /* Phone */
+
   if (
-    !phoneOk(vals.leader_phone)
+    !phoneOk(
+      vals.leader_phone
+    )
   ) {
 
     throw {
@@ -586,6 +760,8 @@ async function createTeam(payload) {
 
   }
 
+
+  /* Consent */
 
   if (
     !(
@@ -603,23 +779,33 @@ async function createTeam(payload) {
   }
 
 
+  /* Members */
+
   const members =
-    [2, 3, 4].map(n => ({
+    [2, 3, 4].map(
+      number => ({
 
-      name:
-        clean(
-          payload[`member${n}Name`],
-          100
-        ),
+        name:
+          clean(
+            payload[
+              `member${number}Name`
+            ],
+            100
+          ),
 
-      reg:
-        clean(
-          payload[`member${n}RegNo`],
-          60
-        )
+        reg:
+          clean(
+            payload[
+              `member${number}RegNo`
+            ],
+            60
+          )
 
-    }));
+      })
+    );
 
+
+  /* Validate member pairs */
 
   for (
     let i = 0;
@@ -632,13 +818,15 @@ async function createTeam(payload) {
 
 
     if (
-      (member.name && !member.reg) ||
-      (!member.name && member.reg)
+      (member.name &&
+        !member.reg) ||
+
+      (!member.name &&
+        member.reg)
     ) {
 
       throw {
         status: 400,
-
         message:
           `Member ${i + 2}: provide both name and College ID / Register Number, or leave both blank.`
       };
@@ -647,6 +835,8 @@ async function createTeam(payload) {
 
   }
 
+
+  /* Generate ID and insert */
 
   for (
     let attempt = 0;
@@ -721,9 +911,7 @@ async function createTeam(payload) {
       await fetch(
         SUPABASE_TABLE_URL,
         {
-
-          method:
-            'POST',
+          method: 'POST',
 
           headers:
             supabaseHeaders({
@@ -733,7 +921,6 @@ async function createTeam(payload) {
 
           body:
             JSON.stringify(row)
-
         }
       );
 
@@ -795,6 +982,7 @@ async function createTeam(payload) {
     message:
       'Unable to generate a unique Team ID. Please try again.'
   };
+
 }
 
 
@@ -802,7 +990,9 @@ async function createTeam(payload) {
    ORGANIZER REQUEST
 ========================================================= */
 
-async function requestOrganizer(payload) {
+async function requestOrganizer(
+  payload
+) {
 
   const name =
     clean(
@@ -846,7 +1036,9 @@ async function requestOrganizer(payload) {
   }
 
 
-  if (!emailOk(email)) {
+  if (
+    !emailOk(email)
+  ) {
 
     throw {
       status: 400,
@@ -893,6 +1085,8 @@ async function requestOrganizer(payload) {
     hashPassword(password);
 
 
+  /* Existing account */
+
   if (existing) {
 
     if (
@@ -913,9 +1107,7 @@ async function requestOrganizer(payload) {
       await fetch(
         `${ORGANIZERS_URL}?email=eq.${encodeURIComponent(email)}`,
         {
-
-          method:
-            'PATCH',
+          method: 'PATCH',
 
           headers:
             supabaseHeaders({
@@ -947,16 +1139,19 @@ async function requestOrganizer(payload) {
                 null
 
             })
-
         }
       );
 
 
     if (!response.ok) {
 
+      const error =
+        await response.text();
+
+
       console.error(
         'Organizer update error:',
-        await response.text()
+        error
       );
 
 
@@ -966,15 +1161,17 @@ async function requestOrganizer(payload) {
 
     }
 
-  } else {
+  }
+
+  /* New account */
+
+  else {
 
     const response =
       await fetch(
         ORGANIZERS_URL,
         {
-
-          method:
-            'POST',
+          method: 'POST',
 
           headers:
             supabaseHeaders({
@@ -1002,16 +1199,19 @@ async function requestOrganizer(payload) {
                 'pending'
 
             })
-
         }
       );
 
 
     if (!response.ok) {
 
+      const error =
+        await response.text();
+
+
       console.error(
         'Organizer request error:',
-        await response.text()
+        error
       );
 
 
@@ -1026,13 +1226,13 @@ async function requestOrganizer(payload) {
 
   return {
 
-    ok:
-      true,
+    ok: true,
 
     message:
       'Organizer request submitted. Please wait for Organizer Head approval.'
 
   };
+
 }
 
 
@@ -1040,7 +1240,9 @@ async function requestOrganizer(payload) {
    ORGANIZER LOGIN
 ========================================================= */
 
-async function organizerLogin(payload) {
+async function organizerLogin(
+  payload
+) {
 
   const email =
     clean(
@@ -1084,10 +1286,6 @@ async function organizerLogin(payload) {
   }
 
 
-  /*
-    The organizer must be approved.
-  */
-
   if (
     organizer.approval_status !==
     'approved'
@@ -1102,38 +1300,12 @@ async function organizerLogin(payload) {
   }
 
 
-  /*
-    MAIN ORGANIZER LOGIN
-
-    Your existing Render ADMIN_KEY can be used
-    as the password for the main organizer email.
-
-    The ADMIN_KEY itself is never sent to the browser.
-  */
-
-  const mainOrganizerLogin =
-    email ===
-      MAIN_ORGANIZER_EMAIL &&
-    password ===
-      ADMIN_KEY;
-
-
-  /*
-    Normal organizer accounts use their
-    Supabase password hash.
-  */
-
-  const normalOrganizerLogin =
-    organizer.password_hash &&
-    verifyPassword(
+  if (
+    !organizer.password_hash ||
+    !verifyPassword(
       password,
       organizer.password_hash
-    );
-
-
-  if (
-    !mainOrganizerLogin &&
-    !normalOrganizerLogin
+    )
   ) {
 
     throw {
@@ -1145,22 +1317,20 @@ async function organizerLogin(payload) {
   }
 
 
-  const token =
-    organizerToken(email);
-
-
   return {
 
     organizer,
 
-    token
+    token:
+      organizerToken(email)
 
   };
+
 }
 
 
 /* =========================================================
-   GET TEAMS
+   GET ALL TEAMS
 ========================================================= */
 
 async function getTeams() {
@@ -1177,9 +1347,13 @@ async function getTeams() {
 
   if (!response.ok) {
 
+    const error =
+      await response.text();
+
+
     console.error(
       'Supabase teams error:',
-      await response.text()
+      error
     );
 
 
@@ -1191,46 +1365,7 @@ async function getTeams() {
 
 
   return await response.json();
-}
 
-
-/* =========================================================
-   GET ORGANIZERS
-========================================================= */
-
-async function getOrganizers() {
-
-  const response =
-    await fetch(
-
-      `${ORGANIZERS_URL}` +
-      `?select=id,name,email,role,requested_role,approval_status,approved_by,approved_at,created_at` +
-      `&order=id.desc`,
-
-      {
-        headers:
-          supabaseHeaders()
-      }
-
-    );
-
-
-  if (!response.ok) {
-
-    console.error(
-      'Supabase organizers error:',
-      await response.text()
-    );
-
-
-    throw new Error(
-      'Could not load organizers.'
-    );
-
-  }
-
-
-  return await response.json();
 }
 
 
@@ -1255,9 +1390,9 @@ const server =
           url.pathname;
 
 
-        /* ===============================================
+        /* =================================================
            STUDENT REGISTRATION
-        =============================================== */
+        ================================================= */
 
         if (
           req.method === 'POST' &&
@@ -1281,9 +1416,9 @@ const server =
         }
 
 
-        /* ===============================================
+        /* =================================================
            ORGANIZER REQUEST
-        =============================================== */
+        ================================================= */
 
         if (
           req.method === 'POST' &&
@@ -1307,9 +1442,9 @@ const server =
         }
 
 
-        /* ===============================================
+        /* =================================================
            ORGANIZER LOGIN
-        =============================================== */
+        ================================================= */
 
         if (
           req.method === 'POST' &&
@@ -1328,9 +1463,7 @@ const server =
             res,
             200,
             {
-
-              ok:
-                true,
+              ok: true,
 
               organizer: {
 
@@ -1346,7 +1479,6 @@ const server =
               }
 
             },
-
             {
 
               'Set-Cookie': [
@@ -1360,15 +1492,14 @@ const server =
               ]
 
             }
-
           );
 
         }
 
 
-        /* ===============================================
+        /* =================================================
            ORGANIZER SESSION
-        =============================================== */
+        ================================================= */
 
         if (
           req.method === 'GET' &&
@@ -1398,8 +1529,7 @@ const server =
             200,
             {
 
-              ok:
-                true,
+              ok: true,
 
               organizer: {
 
@@ -1420,9 +1550,9 @@ const server =
         }
 
 
-        /* ===============================================
-           PROTECTED ORGANIZER API
-        =============================================== */
+        /* =================================================
+           PROTECTED ORGANIZER / ADMIN APIs
+        ================================================= */
 
         if (
           p.startsWith('/api/admin/')
@@ -1444,199 +1574,11 @@ const server =
             );
 
           }
-        /* ===============================================
-  	 ORGANIZER HEAD CHECK
-	=============================================== */
-
-	const isOrganizerHead =
-  	organizer.email.toLowerCase() ===
-  	MAIN_ORGANIZER_EMAIL.toLowerCase();
 
 
-	/* =============================================
-   APPROVE ORGANIZER
-============================================= */
-
-if (
-  req.method === 'POST' &&
-  /^\/api\/admin\/organizers\/[^/]+\/approve$/.test(p)
-) {
-
-  if (!isOrganizerHead) {
-
-    return json(
-      res,
-      403,
-      {
-        error:
-          'Only the Organizer Head can approve organizers.'
-      }
-    );
-
-  }
-
-
-  const id =
-    p.split('/')[4];
-
-
-  const response =
-    await fetch(
-      `${ORGANIZERS_URL}?id=eq.${encodeURIComponent(id)}`,
-      {
-        method: 'PATCH',
-
-        headers:
-          supabaseHeaders({
-            Prefer:
-              'return=representation'
-          }),
-
-        body:
-          JSON.stringify({
-
-            approval_status:
-              'approved',
-
-            approved_by:
-              organizer.email,
-
-            approved_at:
-              new Date().toISOString()
-
-          })
-      }
-    );
-
-
-  if (!response.ok) {
-
-    console.error(
-      'Organizer approval error:',
-      await response.text()
-    );
-
-
-    return json(
-      res,
-      500,
-      {
-        error:
-          'Could not approve organizer.'
-      }
-    );
-
-  }
-
-
-  return json(
-    res,
-    200,
-    {
-      ok:
-        true,
-
-      message:
-        'Organizer approved successfully.'
-    }
-  );
-
-}
-
-
-/* =============================================
-   REJECT ORGANIZER
-============================================= */
-
-if (
-  req.method === 'POST' &&
-  /^\/api\/admin\/organizers\/[^/]+\/reject$/.test(p)
-) {
-
-  if (!isOrganizerHead) {
-
-    return json(
-      res,
-      403,
-      {
-        error:
-          'Only the Organizer Head can reject organizers.'
-      }
-    );
-
-  }
-
-
-  const id =
-    p.split('/')[4];
-
-
-  const response =
-    await fetch(
-      `${ORGANIZERS_URL}?id=eq.${encodeURIComponent(id)}`,
-      {
-        method: 'PATCH',
-
-        headers:
-          supabaseHeaders({
-            Prefer:
-              'return=representation'
-          }),
-
-        body:
-          JSON.stringify({
-
-            approval_status:
-              'rejected',
-
-            approved_by:
-              organizer.email,
-
-            approved_at:
-              new Date().toISOString()
-
-          })
-      }
-    );
-
-
-  if (!response.ok) {
-
-    console.error(
-      'Organizer rejection error:',
-      await response.text()
-    );
-
-
-    return json(
-      res,
-      500,
-      {
-        error:
-          'Could not reject organizer.'
-      }
-    );
-
-  }
-
-
-  return json(
-    res,
-    200,
-    {
-      ok:
-        true,
-
-      message:
-        'Organizer request rejected.'
-    }
-  );
-
-}
-
-          /* =============================================
+          /* ===============================================
              STATS
-          ============================================= */
+          =============================================== */
 
           if (
             req.method === 'GET' &&
@@ -1690,9 +1632,9 @@ if (
           }
 
 
-          /* =============================================
+          /* ===============================================
              TEAM LIST
-          ============================================= */
+          =============================================== */
 
           if (
             req.method === 'GET' &&
@@ -1712,17 +1654,51 @@ if (
           }
 
 
-          /* =============================================
+          /* ===============================================
              ORGANIZER LIST
-          ============================================= */
+          =============================================== */
 
           if (
             req.method === 'GET' &&
             p === '/api/admin/organizers'
           ) {
 
+            const response =
+              await fetch(
+
+                `${ORGANIZERS_URL}` +
+                `?select=id,name,email,role,requested_role,approval_status,approved_by,approved_at,created_at` +
+                `&order=id.desc`,
+
+                {
+                  headers:
+                    supabaseHeaders()
+                }
+
+              );
+
+
+            if (!response.ok) {
+
+              const error =
+                await response.text();
+
+
+              console.error(
+                'Organizer list error:',
+                error
+              );
+
+
+              throw new Error(
+                'Could not load organizers.'
+              );
+
+            }
+
+
             const organizers =
-              await getOrganizers();
+              await response.json();
 
 
             return json(
@@ -1734,9 +1710,9 @@ if (
           }
 
 
-          /* =============================================
+          /* ===============================================
              CSV EXPORT
-          ============================================= */
+          =============================================== */
 
           if (
             req.method === 'GET' &&
@@ -1877,13 +1853,29 @@ if (
         }
 
 
-        /* ===============================================
+        /* =================================================
            STATIC PAGES
-        =============================================== */
+        ================================================= */
 
         if (
           req.method === 'GET'
         ) {
+
+          /* Student homepage */
+
+          if (
+            p === '/'
+          ) {
+
+            return serve(
+              res,
+              'index.html'
+            );
+
+          }
+
+
+          /* Admin / Mission Control */
 
           if (
             p === '/admin'
@@ -1895,19 +1887,28 @@ if (
             );
 
           }
-if (p === '/organizer') {
 
-    return serve(
-      res,
-      'organizer.html'
-    );
 
-}
+          /* Separate Organizer Login */
+
+          if (
+            p === '/organizer'
+          ) {
+
+            return serve(
+              res,
+              'organizer.html'
+            );
+
+          }
+
+
+          /* Other public files */
 
           const safe =
-            p === '/'
-              ? 'index.html'
-              : p.slice(1);
+            p.startsWith('/')
+              ? p.slice(1)
+              : p;
 
 
           return serve(
@@ -1918,6 +1919,10 @@ if (p === '/organizer') {
         }
 
 
+        /* =================================================
+           404
+        ================================================= */
+
         res
           .writeHead(404)
           .end('Not found');
@@ -1925,7 +1930,9 @@ if (p === '/organizer') {
 
       } catch (error) {
 
-        console.error(error);
+        console.error(
+          error
+        );
 
 
         if (
@@ -1965,8 +1972,11 @@ if (p === '/organizer') {
 
 server.listen(
   PORT,
-  () =>
+  () => {
+
     console.log(
       `KGH registration running on port ${PORT}`
-    )
+    );
+
+  }
 );
