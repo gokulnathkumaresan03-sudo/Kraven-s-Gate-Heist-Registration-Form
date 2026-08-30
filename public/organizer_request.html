@@ -1,635 +1,436 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <title>KGH // Organizer Access Request</title>
+<meta charset="utf-8">
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
 
-  <link rel="stylesheet" href="/styles.css">
+<title>KGH // Organizer Request</title>
 
-  <style>
-    body {
-      min-height: 100vh;
-    }
+<link
+  rel="stylesheet"
+  href="/styles.css"
+>
 
-    .request-wrap {
-      max-width: 620px;
-      margin: 0 auto;
-      padding: 70px 20px 100px;
-    }
+<style>
 
-    .request-card {
-      background: #101725;
-      border: 1px solid #28364d;
-      padding: 32px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.25);
-    }
+.request-wrap {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 70px 20px 100px;
+}
 
-    .request-title {
-      margin: 28px 0;
-    }
+.request-card {
+  background: #101725;
+  border: 1px solid #28364d;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
 
-    .request-title .number {
-      color: #ff7a00;
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: .12em;
-    }
+.request-title {
+  margin: 25px 0;
+}
 
-    .request-title h1 {
-      margin: 8px 0 6px;
-      font-size: 28px;
-      color: #eef2f7;
-      letter-spacing: .04em;
-    }
+.request-title .number {
+  color: #ff7a00;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
 
-    .request-title p {
-      margin: 0;
-      color: #718096;
-      font-size: 12px;
-      line-height: 1.6;
-    }
+.request-title h1 {
+  font-size: 30px;
+  margin: 8px 0;
+}
 
-    .field {
-      margin-bottom: 18px;
-    }
+.request-title p {
+  color: #718096;
+  font-size: 12px;
+  line-height: 1.6;
+}
 
-    .field label {
-      display: block;
-      color: #c6cfdb;
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: .08em;
-      margin-bottom: 8px;
-    }
+.field {
+  margin-bottom: 18px;
+}
 
-    .field input,
-    .field select {
-      width: 100%;
-      box-sizing: border-box;
-      background: #090e18;
-      border: 1px solid #2a364d;
-      color: #eef2f7;
-      padding: 14px;
-      outline: none;
-      font-size: 14px;
-    }
+.field label {
+  display: block;
+  color: #c6cfdb;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  margin-bottom: 8px;
+}
 
-    .field input:focus,
-    .field select:focus {
-      border-color: #ff7a00;
-    }
+.field input,
+.field select {
+  width: 100%;
+  box-sizing: border-box;
+  background: #090e18;
+  border: 1px solid #2a364d;
+  color: #eef2f7;
+  padding: 14px;
+  outline: none;
+  font-size: 13px;
+}
 
-    .field select {
-      cursor: pointer;
-    }
+.field input:focus,
+.field select:focus {
+  border-color: #ff7a00;
+}
 
-    .hint {
-      margin-top: 6px;
-      color: #59677c;
-      font-size: 10px;
-      line-height: 1.5;
-    }
+.request-btn {
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+  background: linear-gradient(
+    105deg,
+    #f30b4d,
+    #ff7a00
+  );
+  color: white;
+  padding: 15px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
 
-    .request-btn {
-      width: 100%;
-      border: 0;
-      cursor: pointer;
-      background: #ff7a00;
-      color: #080b10;
-      padding: 15px;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .08em;
-      margin-top: 5px;
-    }
+.request-btn:disabled {
+  opacity: .6;
+  cursor: wait;
+}
 
-    .request-btn:hover {
-      opacity: .9;
-    }
+.message {
+  margin-top: 16px;
+  font-size: 12px;
+  line-height: 1.6;
+}
 
-    .request-btn:disabled {
-      opacity: .55;
-      cursor: not-allowed;
-    }
+.error {
+  color: #ff6b6b;
+}
 
-    .message {
-      margin-top: 15px;
-      font-size: 12px;
-      line-height: 1.6;
-    }
+.success {
+  color: #65d48a;
+}
 
-    .message.error {
-      color: #ff6b6b;
-    }
+.links {
+  margin-top: 25px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
 
-    .message.success {
-      color: #65d48a;
-    }
+.links a {
+  color: #8e9cb1;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
 
-    .success-box {
-      display: none;
-      margin-top: 25px;
-      padding: 22px;
-      background: #0b111d;
-      border: 1px solid #35d07f;
-    }
+.links a:hover {
+  color: #ff7a00;
+}
 
-    .success-box .success-title {
-      color: #65d48a;
-      font-size: 13px;
-      font-weight: 900;
-      letter-spacing: .08em;
-      margin-bottom: 10px;
-    }
+</style>
 
-    .success-box p {
-      color: #8e9cb1;
-      font-size: 11px;
-      line-height: 1.7;
-      margin: 0;
-    }
-
-    .links {
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-      margin-top: 25px;
-    }
-
-    .back-link {
-      color: #8e9cb1;
-      text-decoration: none;
-      font-size: 11px;
-    }
-
-    .back-link:hover {
-      color: #ff7a00;
-    }
-
-    @media (max-width: 600px) {
-
-      .request-wrap {
-        padding-top: 35px;
-      }
-
-      .request-card {
-        padding: 22px;
-      }
-
-      .request-title h1 {
-        font-size: 23px;
-      }
-
-    }
-  </style>
 </head>
 
 <body>
 
-  <div class="noise"></div>
-  <div class="web-pattern"></div>
+<div class="noise"></div>
+<div class="web-pattern"></div>
 
-  <main class="request-wrap">
+<main class="request-wrap">
 
-    <section class="request-card">
+  <section class="request-card">
 
-      <div class="section-kicker">
-        <span>HQ</span>
-        KRAVEN'S GATE HEIST // ORGANIZER ACCESS
+    <div class="section-kicker">
+      <span>HQ</span>
+      KRAVEN'S GATE HEIST // ORGANIZER
+    </div>
+
+
+    <div class="request-title">
+
+      <div class="number">
+        01 // ACCESS REQUEST
       </div>
 
+      <h1>
+        REQUEST ORGANIZER ACCESS
+      </h1>
 
-      <div class="request-title">
+      <p>
+        Submit your organizer details.
+        Your account must be reviewed and approved
+        by the Organizer Head before Mission Control
+        access is granted.
+      </p>
 
-        <div class="number">
-          01 // REQUEST ACCESS
-        </div>
-
-        <h1>
-          BECOME AN ORGANIZER
-        </h1>
-
-        <p>
-          Submit your organizer access request.
-          Your account will remain pending until it is reviewed
-          and approved by the Organizer Head.
-        </p>
-
-      </div>
+    </div>
 
 
-      <form id="requestForm">
+    <form id="requestForm">
 
-        <!-- NAME -->
+      <div class="field">
 
-        <div class="field">
+        <label>
+          FULL NAME
+        </label>
 
-          <label for="name">
-            FULL NAME
-          </label>
-
-          <input
-            id="name"
-            name="name"
-            type="text"
-            placeholder="Enter your full name"
-            maxlength="100"
-            autocomplete="name"
-            required
-          >
-
-        </div>
-
-
-        <!-- EMAIL -->
-
-        <div class="field">
-
-          <label for="email">
-            ORGANIZER EMAIL
-          </label>
-
-          <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="Enter your email address"
-            maxlength="160"
-            autocomplete="email"
-            required
-          >
-
-        </div>
-
-
-        <!-- PASSWORD -->
-
-        <div class="field">
-
-          <label for="password">
-            PASSWORD
-          </label>
-
-          <input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="Create your organizer password"
-            minlength="8"
-            maxlength="100"
-            autocomplete="new-password"
-            required
-          >
-
-          <div class="hint">
-            Password must contain at least 8 characters.
-          </div>
-
-        </div>
-
-
-        <!-- CONFIRM PASSWORD -->
-
-        <div class="field">
-
-          <label for="confirmPassword">
-            CONFIRM PASSWORD
-          </label>
-
-          <input
-            id="confirmPassword"
-            type="password"
-            placeholder="Re-enter your password"
-            minlength="8"
-            maxlength="100"
-            autocomplete="new-password"
-            required
-          >
-
-        </div>
-
-
-        <!-- ROLE -->
-
-        <div class="field">
-
-          <label for="requestedRole">
-            REQUESTED ROLE
-          </label>
-
-          <select
-            id="requestedRole"
-            name="requestedRole"
-            required
-          >
-
-            <option value="">
-              Select organizer role
-            </option>
-
-            <option value="organizer">
-              Organizer
-            </option>
-
-            <option value="sub_organizer">
-              Sub Organizer
-            </option>
-
-          </select>
-
-          <div class="hint">
-            Organizer Head approval is required before you can log in.
-          </div>
-
-        </div>
-
-
-        <!-- SUBMIT -->
-
-        <button
-          id="submitBtn"
-          class="request-btn"
-          type="submit"
+        <input
+          id="name"
+          type="text"
+          placeholder="Enter your full name"
+          required
+          maxlength="100"
         >
-          SUBMIT ORGANIZER REQUEST →
-        </button>
+
+      </div>
 
 
-      </form>
+      <div class="field">
+
+        <label>
+          ORGANIZER EMAIL
+        </label>
+
+        <input
+          id="email"
+          type="email"
+          placeholder="Enter your email"
+          autocomplete="email"
+          required
+          maxlength="160"
+        >
+
+      </div>
 
 
-      <div
-        id="message"
-        class="message"
-        aria-live="polite"
-      ></div>
+      <div class="field">
+
+        <label>
+          PASSWORD
+        </label>
+
+        <input
+          id="password"
+          type="password"
+          placeholder="Create a password"
+          autocomplete="new-password"
+          minlength="8"
+          required
+        >
+
+      </div>
 
 
-      <!-- SUCCESS -->
+      <div class="field">
 
-      <div
-        id="successBox"
-        class="success-box"
+        <label>
+          REQUESTED ROLE
+        </label>
+
+        <select
+          id="requestedRole"
+          required
+        >
+
+          <option value="">
+            Select role
+          </option>
+
+          <option value="organizer">
+            Organizer
+          </option>
+
+          <option value="sub_organizer">
+            Sub Organizer
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <button
+        id="submitBtn"
+        class="request-btn"
+        type="submit"
       >
+        SUBMIT ORGANIZER REQUEST →
+      </button>
 
-        <div class="success-title">
-          REQUEST SUBMITTED
-        </div>
-
-        <p>
-          Your organizer access request has been submitted successfully.
-          Please wait for the Organizer Head to approve your account.
-          Once approved, you can use the Organizer Login page to access
-          Mission Control.
-        </p>
-
-      </div>
+    </form>
 
 
-      <div class="links">
-
-        <a
-          href="/organizer"
-          class="back-link"
-        >
-          → Organizer Login
-        </a>
-
-        <a
-          href="/"
-          class="back-link"
-        >
-          ← Back to Registration
-        </a>
-
-      </div>
-
-    </section>
-
-  </main>
+    <div
+      id="message"
+      class="message"
+      aria-live="polite"
+    ></div>
 
 
-  <script>
+    <div class="links">
 
-    const $ = id =>
-      document.getElementById(id);
+      <a href="/">
+        ← PARTICIPANT REGISTRATION
+      </a>
 
+      <a href="/organizer">
+        ORGANIZER LOGIN →
+      </a>
 
-    /* =====================================================
-       ORGANIZER REQUEST
-    ====================================================== */
+    </div>
 
-    $('requestForm').addEventListener(
-      'submit',
-      async event => {
+  </section>
 
-        event.preventDefault();
-
-
-        const name =
-          $('name').value.trim();
-
-        const email =
-          $('email').value.trim().toLowerCase();
-
-        const password =
-          $('password').value;
-
-        const confirmPassword =
-          $('confirmPassword').value;
-
-        const requestedRole =
-          $('requestedRole').value;
+</main>
 
 
-        const message =
-          $('message');
+<script>
 
-        const button =
-          $('submitBtn');
+const form =
+  document.getElementById(
+    'requestForm'
+  );
 
+const message =
+  document.getElementById(
+    'message'
+  );
 
-        /* -----------------------------------------------
-           PASSWORD MATCH
-        ------------------------------------------------ */
-
-        if (
-          password !==
-          confirmPassword
-        ) {
-
-          message.textContent =
-            'Passwords do not match.';
-
-          message.className =
-            'message error';
-
-          return;
-
-        }
+const button =
+  document.getElementById(
+    'submitBtn'
+  );
 
 
-        /* -----------------------------------------------
-           PASSWORD LENGTH
-        ------------------------------------------------ */
+form.addEventListener(
+  'submit',
+  async event => {
 
-        if (
-          password.length < 8
-        ) {
-
-          message.textContent =
-            'Password must contain at least 8 characters.';
-
-          message.className =
-            'message error';
-
-          return;
-
-        }
+    event.preventDefault();
 
 
-        /* -----------------------------------------------
-           ROLE
-        ------------------------------------------------ */
+    const payload = {
 
-        if (
-          requestedRole !== 'organizer' &&
-          requestedRole !== 'sub_organizer'
-        ) {
+      name:
+        document
+          .getElementById('name')
+          .value
+          .trim(),
 
-          message.textContent =
-            'Please select a valid organizer role.';
+      email:
+        document
+          .getElementById('email')
+          .value
+          .trim(),
 
-          message.className =
-            'message error';
+      password:
+        document
+          .getElementById('password')
+          .value,
 
-          return;
+      requestedRole:
+        document
+          .getElementById('requestedRole')
+          .value
 
-        }
+    };
 
 
-        /* -----------------------------------------------
-           LOADING
-        ------------------------------------------------ */
+    message.textContent =
+      'Submitting organizer request...';
+
+    message.className =
+      'message';
+
+
+    button.disabled = true;
+
+    button.textContent =
+      'SUBMITTING...';
+
+
+    try {
+
+      const response =
+        await fetch(
+          '/api/organizer/request',
+          {
+            method: 'POST',
+
+            headers: {
+              'Content-Type':
+                'application/json'
+            },
+
+            body:
+              JSON.stringify(
+                payload
+              )
+          }
+        );
+
+
+      const result =
+        await response.json();
+
+
+      if (!response.ok) {
 
         message.textContent =
-          'Submitting organizer request...';
+          result.error ||
+          'Could not submit request.';
 
         message.className =
-          'message';
+          'message error';
 
-
-        button.disabled =
-          true;
-
-        button.textContent =
-          'SUBMITTING REQUEST...';
-
-
-        try {
-
-          const response =
-            await fetch(
-              '/api/organizer/request',
-              {
-                method: 'POST',
-
-                headers: {
-                  'Content-Type':
-                    'application/json'
-                },
-
-                credentials:
-                  'same-origin',
-
-                body:
-                  JSON.stringify({
-
-                    name,
-
-                    email,
-
-                    password,
-
-                    requestedRole
-
-                  })
-
-              }
-            );
-
-
-          const data =
-            await response.json();
-
-
-          /* ---------------------------------------------
-             ERROR
-          --------------------------------------------- */
-
-          if (!response.ok) {
-
-            message.textContent =
-              data.error ||
-              'Could not submit organizer request.';
-
-            message.className =
-              'message error';
-
-            return;
-
-          }
-
-
-          /* ---------------------------------------------
-             SUCCESS
-          --------------------------------------------- */
-
-          message.textContent =
-            data.message ||
-            'Organizer request submitted successfully.';
-
-          message.className =
-            'message success';
-
-
-          $('successBox').style.display =
-            'block';
-
-
-          $('requestForm').reset();
-
-
-        } catch (error) {
-
-          console.error(
-            'Organizer request error:',
-            error
-          );
-
-
-          message.textContent =
-            'Could not connect to the server. Please try again.';
-
-          message.className =
-            'message error';
-
-        } finally {
-
-          button.disabled =
-            false;
-
-          button.textContent =
-            'SUBMIT ORGANIZER REQUEST →';
-
-        }
+        return;
 
       }
-    );
 
-  </script>
+
+      message.textContent =
+        result.message ||
+        'Organizer request submitted successfully.';
+
+      message.className =
+        'message success';
+
+
+      form.reset();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      message.textContent =
+        'Could not connect to the server. Please try again.';
+
+      message.className =
+        'message error';
+
+    } finally {
+
+      button.disabled = false;
+
+      button.textContent =
+        'SUBMIT ORGANIZER REQUEST →';
+
+    }
+
+  }
+);
+
+</script>
 
 </body>
 </html>
