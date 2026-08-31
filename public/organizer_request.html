@@ -2,435 +2,620 @@
 <html lang="en">
 <head>
 
-<meta charset="utf-8">
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1"
->
-
-<title>KGH // Organizer Request</title>
-
-<link
-  rel="stylesheet"
-  href="/styles.css"
->
-
-<style>
-
-.request-wrap {
-  max-width: 650px;
-  margin: 0 auto;
-  padding: 70px 20px 100px;
-}
-
-.request-card {
-  background: #101725;
-  border: 1px solid #28364d;
-  padding: 32px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.25);
-}
-
-.request-title {
-  margin: 25px 0;
-}
-
-.request-title .number {
-  color: #ff7a00;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: .12em;
-}
-
-.request-title h1 {
-  font-size: 30px;
-  margin: 8px 0;
-}
-
-.request-title p {
-  color: #718096;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.field {
-  margin-bottom: 18px;
-}
-
-.field label {
-  display: block;
-  color: #c6cfdb;
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: .08em;
-  margin-bottom: 8px;
-}
-
-.field input,
-.field select {
-  width: 100%;
-  box-sizing: border-box;
-  background: #090e18;
-  border: 1px solid #2a364d;
-  color: #eef2f7;
-  padding: 14px;
-  outline: none;
-  font-size: 13px;
-}
-
-.field input:focus,
-.field select:focus {
-  border-color: #ff7a00;
-}
-
-.request-btn {
-  width: 100%;
-  border: 0;
-  cursor: pointer;
-  background: linear-gradient(
-    105deg,
-    #f30b4d,
-    #ff7a00
-  );
-  color: white;
-  padding: 15px;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: .08em;
-}
-
-.request-btn:disabled {
-  opacity: .6;
-  cursor: wait;
-}
-
-.message {
-  margin-top: 16px;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.error {
-  color: #ff6b6b;
-}
-
-.success {
-  color: #65d48a;
-}
-
-.links {
-  margin-top: 25px;
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.links a {
-  color: #8e9cb1;
-  text-decoration: none;
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: .08em;
-}
-
-.links a:hover {
-  color: #ff7a00;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="noise"></div>
-<div class="web-pattern"></div>
-
-<main class="request-wrap">
-
-  <section class="request-card">
-
-    <div class="section-kicker">
-      <span>HQ</span>
-      KRAVEN'S GATE HEIST // ORGANIZER
-    </div>
-
-
-    <div class="request-title">
-
-      <div class="number">
-        01 // ACCESS REQUEST
-      </div>
-
-      <h1>
-        REQUEST ORGANIZER ACCESS
-      </h1>
-
-      <p>
-        Submit your organizer details.
-        Your account must be reviewed and approved
-        by the Organizer Head before Mission Control
-        access is granted.
-      </p>
-
-    </div>
-
-
-    <form id="requestForm">
-
-      <div class="field">
-
-        <label>
-          FULL NAME
-        </label>
-
-        <input
-          id="name"
-          type="text"
-          placeholder="Enter your full name"
-          required
-          maxlength="100"
-        >
-
-      </div>
-
-
-      <div class="field">
-
-        <label>
-          ORGANIZER EMAIL
-        </label>
-
-        <input
-          id="email"
-          type="email"
-          placeholder="Enter your email"
-          autocomplete="email"
-          required
-          maxlength="160"
-        >
-
-      </div>
-
-
-      <div class="field">
-
-        <label>
-          PASSWORD
-        </label>
-
-        <input
-          id="password"
-          type="password"
-          placeholder="Create a password"
-          autocomplete="new-password"
-          minlength="8"
-          required
-        >
-
-      </div>
-
-
-      <div class="field">
-
-        <label>
-          REQUESTED ROLE
-        </label>
-
-        <select
-          id="requestedRole"
-          required
-        >
-
-          <option value="">
-            Select role
-          </option>
-
-          <option value="organizer">
-            Organizer
-          </option>
-
-          <option value="sub_organizer">
-            Sub Organizer
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <button
-        id="submitBtn"
-        class="request-btn"
-        type="submit"
-      >
-        SUBMIT ORGANIZER REQUEST →
-      </button>
-
-    </form>
-
-
-    <div
-      id="message"
-      class="message"
-      aria-live="polite"
-    ></div>
-
-
-    <div class="links">
-
-      <a href="/">
-        ← PARTICIPANT REGISTRATION
-      </a>
-
-      <a href="/organizer">
-        ORGANIZER LOGIN →
-      </a>
-
-    </div>
-
-  </section>
-
-</main>
-
-
-<script>
-
-const form =
-  document.getElementById(
-    'requestForm'
-  );
-
-const message =
-  document.getElementById(
-    'message'
-  );
-
-const button =
-  document.getElementById(
-    'submitBtn'
-  );
-
-
-form.addEventListener(
-  'submit',
-  async event => {
-
-    event.preventDefault();
-
-
-    const payload = {
-
-      name:
-        document
-          .getElementById('name')
-          .value
-          .trim(),
-
-      email:
-        document
-          .getElementById('email')
-          .value
-          .trim(),
-
-      password:
-        document
-          .getElementById('password')
-          .value,
-
-      requestedRole:
-        document
-          .getElementById('requestedRole')
-          .value
-
-    };
-
-
-    message.textContent =
-      'Submitting organizer request...';
-
-    message.className =
-      'message';
-
-
-    button.disabled = true;
-
-    button.textContent =
-      'SUBMITTING...';
-
-
-    try {
-
-      const response =
-        await fetch(
-          '/api/organizer/request',
-          {
-            method: 'POST',
-
-            headers: {
-              'Content-Type':
-                'application/json'
-            },
-
-            body:
-              JSON.stringify(
-                payload
-              )
-          }
-        );
-
-
-      const result =
-        await response.json();
-
-
-      if (!response.ok) {
-
-        message.textContent =
-          result.error ||
-          'Could not submit request.';
-
-        message.className =
-          'message error';
-
-        return;
-
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
+
+  <title>KGH // Organizer Request</title>
+
+  <link
+    rel="stylesheet"
+    href="/styles.css"
+  >
+
+  <style>
+
+    body {
+      min-height: 100vh;
+    }
+
+    .request-wrap {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 70px 20px 100px;
+    }
+
+    .request-card {
+      background: #101725;
+      border: 1px solid #28364d;
+      padding: 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+
+    .request-title {
+      margin-bottom: 28px;
+    }
+
+    .request-title .number {
+      color: #ff7a00;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+    }
+
+    .request-title h1 {
+      margin: 8px 0 6px;
+      font-size: 28px;
+      color: #eef2f7;
+      letter-spacing: .04em;
+    }
+
+    .request-title p {
+      margin: 0;
+      color: #718096;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .field label {
+      display: block;
+      color: #c6cfdb;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      box-sizing: border-box;
+      background: #090e18;
+      border: 1px solid #2a364d;
+      color: #eef2f7;
+      padding: 14px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: #ff7a00;
+    }
+
+    .request-btn {
+      width: 100%;
+      border: 0;
+      cursor: pointer;
+      background: #ff7a00;
+      color: #080b10;
+      padding: 15px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      margin-top: 5px;
+    }
+
+    .request-btn:hover {
+      opacity: .9;
+    }
+
+    .request-btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 15px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .message.error {
+      color: #ff6b6b;
+    }
+
+    .message.success {
+      color: #65d48a;
+    }
+
+    .info-box {
+      margin-top: 22px;
+      padding: 15px;
+      border: 1px solid #28364d;
+      background: #0b111d;
+      color: #8e9cb1;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .info-box strong {
+      color: #eef2f7;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      color: #8e9cb1;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .back-link:hover {
+      color: #ff7a00;
+    }
+
+    .password-note {
+      margin-top: 6px;
+      color: #718096;
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 600px) {
+
+      .request-wrap {
+        padding-top: 35px;
       }
 
-
-      message.textContent =
-        result.message ||
-        'Organizer request submitted successfully.';
-
-      message.className =
-        'message success';
-
-
-      form.reset();
-
-
-    } catch (error) {
-
-      console.error(error);
-
-      message.textContent =
-        'Could not connect to the server. Please try again.';
-
-      message.className =
-        'message error';
-
-    } finally {
-
-      button.disabled = false;
-
-      button.textContent =
-        'SUBMIT ORGANIZER REQUEST →';
+      .request-card {
+        padding: 22px;
+      }
 
     }
 
-  }
-);
+  </style>
 
-</script>
+</head>
+
+
+<body>
+
+  <div class="noise"></div>
+  <div class="web-pattern"></div>
+
+
+  <main class="request-wrap">
+
+
+    <section class="request-card">
+
+
+      <div class="section-kicker">
+        <span>HQ</span>
+        KRAVEN'S GATE HEIST // ORGANIZER ACCESS
+      </div>
+
+
+      <div class="request-title">
+
+        <div class="number">
+          01 // ACCESS REQUEST
+        </div>
+
+        <h1>
+          REQUEST ORGANIZER ACCESS
+        </h1>
+
+        <p>
+          Submit your organizer request.
+          Your account must be approved by the
+          Organizer Head before you can access
+          Mission Control.
+        </p>
+
+      </div>
+
+
+      <form id="requestForm">
+
+
+        <!-- NAME -->
+
+        <div class="field">
+
+          <label for="name">
+            FULL NAME
+          </label>
+
+          <input
+            id="name"
+            type="text"
+            placeholder="Enter your full name"
+            maxlength="100"
+            autocomplete="name"
+            required
+          >
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="field">
+
+          <label for="email">
+            ORGANIZER EMAIL
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            placeholder="Enter your email address"
+            maxlength="160"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div class="field">
+
+          <label for="password">
+            CREATE PASSWORD
+          </label>
+
+          <input
+            id="password"
+            type="password"
+            placeholder="Create your organizer password"
+            minlength="8"
+            maxlength="200"
+            autocomplete="new-password"
+            required
+          >
+
+          <div class="password-note">
+            Minimum 8 characters. Remember this password;
+            you will use it when logging into the Organizer Portal.
+          </div>
+
+        </div>
+
+
+        <!-- CONFIRM PASSWORD -->
+
+        <div class="field">
+
+          <label for="confirmPassword">
+            CONFIRM PASSWORD
+          </label>
+
+          <input
+            id="confirmPassword"
+            type="password"
+            placeholder="Re-enter your password"
+            minlength="8"
+            maxlength="200"
+            autocomplete="new-password"
+            required
+          >
+
+        </div>
+
+
+        <!-- ROLE -->
+
+        <div class="field">
+
+          <label for="requestedRole">
+            REQUESTED ROLE
+          </label>
+
+          <select
+            id="requestedRole"
+            required
+          >
+
+            <option value="">
+              Select organizer role
+            </option>
+
+            <option value="organizer">
+              Organizer
+            </option>
+
+            <option value="sub_organizer">
+              Sub Organizer
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- SUBMIT -->
+
+        <button
+          id="requestBtn"
+          class="request-btn"
+          type="submit"
+        >
+          SUBMIT ORGANIZER REQUEST →
+        </button>
+
+
+      </form>
+
+
+      <div
+        id="message"
+        class="message"
+        aria-live="polite"
+      ></div>
+
+
+      <div class="info-box">
+
+        <strong>IMPORTANT:</strong>
+
+        Your password is securely hashed by the
+        server before it is stored. The Organizer Head
+        will review your request before access is granted.
+
+      </div>
+
+
+      <a
+        href="/organizer"
+        class="back-link"
+      >
+        ← Back to Organizer Login
+      </a>
+
+
+      <br>
+
+
+      <a
+        href="/"
+        class="back-link"
+      >
+        ← Back to Registration
+      </a>
+
+
+    </section>
+
+
+  </main>
+
+
+  <script>
+
+    const $ =
+      id => document.getElementById(id);
+
+
+    $('requestForm').addEventListener(
+      'submit',
+      async event => {
+
+        event.preventDefault();
+
+
+        const name =
+          $('name').value.trim();
+
+        const email =
+          $('email').value.trim().toLowerCase();
+
+        const password =
+          $('password').value;
+
+        const confirmPassword =
+          $('confirmPassword').value;
+
+        const requestedRole =
+          $('requestedRole').value;
+
+
+        const message =
+          $('message');
+
+        const button =
+          $('requestBtn');
+
+
+        message.textContent = '';
+        message.className = 'message';
+
+
+        /* -----------------------------------------
+           CLIENT VALIDATION
+        ----------------------------------------- */
+
+        if (!name) {
+
+          message.textContent =
+            'Please enter your full name.';
+
+          message.className =
+            'message error';
+
+          return;
+
+        }
+
+
+        if (!email) {
+
+          message.textContent =
+            'Please enter your email address.';
+
+          message.className =
+            'message error';
+
+          return;
+
+        }
+
+
+        if (password.length < 8) {
+
+          message.textContent =
+            'Password must contain at least 8 characters.';
+
+          message.className =
+            'message error';
+
+          return;
+
+        }
+
+
+        if (password !== confirmPassword) {
+
+          message.textContent =
+            'Passwords do not match.';
+
+          message.className =
+            'message error';
+
+          return;
+
+        }
+
+
+        if (!requestedRole) {
+
+          message.textContent =
+            'Please select a requested role.';
+
+          message.className =
+            'message error';
+
+          return;
+
+        }
+
+
+        /* -----------------------------------------
+           SUBMIT
+        ----------------------------------------- */
+
+        button.disabled = true;
+
+        button.textContent =
+          'SUBMITTING REQUEST...';
+
+
+        message.textContent =
+          'Submitting organizer request...';
+
+        message.className =
+          'message';
+
+
+        try {
+
+          const response =
+            await fetch(
+              '/api/organizer/request',
+              {
+                method: 'POST',
+
+                headers: {
+                  'Content-Type':
+                    'application/json'
+                },
+
+                credentials:
+                  'same-origin',
+
+                body:
+                  JSON.stringify({
+
+                    name,
+
+                    email,
+
+                    password,
+
+                    requestedRole
+
+                  })
+
+              }
+            );
+
+
+          let data = {};
+
+          try {
+
+            data =
+              await response.json();
+
+          } catch {
+
+            data = {};
+
+          }
+
+
+          if (!response.ok) {
+
+            message.textContent =
+              data.error ||
+              'Could not submit organizer request.';
+
+            message.className =
+              'message error';
+
+            return;
+
+          }
+
+
+          message.textContent =
+            data.message ||
+            'Organizer request submitted successfully.';
+
+          message.className =
+            'message success';
+
+
+          $('requestForm').reset();
+
+
+        } catch (error) {
+
+          console.error(
+            'Organizer request error:',
+            error
+          );
+
+
+          message.textContent =
+            'Could not connect to the server. Please try again.';
+
+          message.className =
+            'message error';
+
+        } finally {
+
+          button.disabled = false;
+
+          button.textContent =
+            'SUBMIT ORGANIZER REQUEST →';
+
+        }
+
+      }
+    );
+
+  </script>
+
 
 </body>
 </html>
