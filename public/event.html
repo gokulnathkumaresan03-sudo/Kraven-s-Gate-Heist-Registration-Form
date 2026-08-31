@@ -1,15 +1,26 @@
 <!doctype html>
 
 <html lang="en">
+
 <head>
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1"
+
+>
 
   <title>KGH // Student Event</title>
 
-  <link rel="stylesheet" href="/styles.css">
+  <link
+    rel="stylesheet"
+    href="/styles.css"
+  >
 
   <style>
+
     body {
       min-height: 100vh;
     }
@@ -24,14 +35,14 @@
       background: #101725;
       border: 1px solid #28364d;
       padding: 34px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.28);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
     }
 
     .event-kicker {
       color: #8e9cb1;
       font-size: 10px;
       font-weight: 900;
-      letter-spacing: .12em;
+      letter-spacing: 0.12em;
       margin-bottom: 28px;
     }
 
@@ -43,15 +54,15 @@
       color: #ff7a00;
       font-size: 12px;
       font-weight: 900;
-      letter-spacing: .12em;
+      letter-spacing: 0.12em;
     }
 
     .event-title {
-      margin: 8px 0 8px;
+      margin: 8px 0;
       color: #eef2f7;
       font-size: 32px;
       font-weight: 900;
-      letter-spacing: .04em;
+      letter-spacing: 0.04em;
       line-height: 1.15;
     }
 
@@ -73,7 +84,7 @@
       display: block;
       color: #ff7a00;
       font-size: 11px;
-      letter-spacing: .08em;
+      letter-spacing: 0.08em;
       margin-bottom: 7px;
     }
 
@@ -93,7 +104,7 @@
       color: #c6cfdb;
       font-size: 10px;
       font-weight: 900;
-      letter-spacing: .08em;
+      letter-spacing: 0.08em;
       margin-bottom: 8px;
     }
 
@@ -125,16 +136,16 @@
       padding: 15px;
       font-size: 11px;
       font-weight: 900;
-      letter-spacing: .08em;
+      letter-spacing: 0.08em;
       margin-top: 5px;
     }
 
     .event-btn:hover {
-      opacity: .9;
+      opacity: 0.9;
     }
 
     .event-btn:disabled {
-      opacity: .55;
+      opacity: 0.55;
       cursor: not-allowed;
     }
 
@@ -162,7 +173,7 @@
       color: #c6cfdb;
       font-size: 10px;
       font-weight: 900;
-      letter-spacing: .08em;
+      letter-spacing: 0.08em;
       margin-bottom: 12px;
     }
 
@@ -202,7 +213,33 @@
       color: #ff7a00;
       font-size: 13px;
       font-weight: 900;
-      letter-spacing: .08em;
+      letter-spacing: 0.08em;
+    }
+
+    .team-details {
+      margin-top: 25px;
+      border-top: 1px solid #28364d;
+      border-bottom: 1px solid #28364d;
+      padding: 18px 0;
+      text-align: left;
+    }
+
+    .team-detail {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 7px 0;
+      font-size: 11px;
+    }
+
+    .team-detail-label {
+      color: #718096;
+      font-weight: 700;
+    }
+
+    .team-detail-value {
+      color: #c6cfdb;
+      text-align: right;
     }
 
     .continue-btn {
@@ -216,12 +253,30 @@
       padding: 15px;
       font-size: 11px;
       font-weight: 900;
-      letter-spacing: .08em;
+      letter-spacing: 0.08em;
       margin-top: 25px;
     }
 
     .continue-btn:hover {
-      opacity: .9;
+      opacity: 0.9;
+    }
+
+    .logout-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px solid #28364d;
+      color: #8e9cb1;
+      padding: 13px;
+      margin-top: 12px;
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .logout-btn:hover {
+      border-color: #ff7a00;
+      color: #ff7a00;
     }
 
     @media (max-width: 600px) {
@@ -238,7 +293,17 @@
         font-size: 26px;
       }
 
+      .team-detail {
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .team-detail-value {
+        text-align: left;
+      }
+
     }
+
   </style>
 
 </head>
@@ -246,6 +311,7 @@
 <body>
 
   <div class="noise"></div>
+
   <div class="web-pattern"></div>
 
   <main class="event-wrap">
@@ -255,25 +321,35 @@
      STUDENT EVENT LOGIN
 ====================================================== -->
 
-<section id="loginCard" class="event-card">
+<section
+  id="loginCard"
+  class="event-card"
+>
 
   <div class="event-kicker">
     <span>HQ</span>
     KRAVEN'S GATE HEIST // STUDENT EVENT
   </div>
 
+
   <div class="event-number">
     00 // EVENT ACCESS
   </div>
+
 
   <h1 class="event-title">
     THE HEIST BEGINS
   </h1>
 
+
   <div class="event-subtitle">
+
     Welcome to Kraven's Gate Heist.
-    Enter the Team ID and registered email used during
-    team registration to enter the event.
+
+    Enter the Team ID and registered leader
+    email used during team registration to
+    enter the event.
+
   </div>
 
 
@@ -286,9 +362,15 @@
     </strong>
 
     <p>
-      Your Team ID connects you to your registered team.
-      Your progress will be saved automatically during the event.
+
+      Your Team ID connects you to your
+      registered team.
+
+      Your progress will be saved automatically
+      during the event.
+
       Do not share your Team ID with another team.
+
     </p>
 
   </div>
@@ -298,6 +380,7 @@
 
   <form id="eventForm">
 
+
     <div class="field">
 
       <label for="teamId">
@@ -306,10 +389,13 @@
 
       <input
         id="teamId"
+        name="teamId"
         type="text"
         placeholder="Example: KGH-4821"
         autocomplete="off"
         autocapitalize="characters"
+        spellcheck="false"
+        maxlength="30"
         required
       >
 
@@ -324,9 +410,11 @@
 
       <input
         id="email"
+        name="email"
         type="email"
-        placeholder="Enter the email used during registration"
+        placeholder="Enter registered leader email"
         autocomplete="email"
+        maxlength="160"
         required
       >
 
@@ -338,8 +426,11 @@
       class="event-btn"
       type="submit"
     >
+
       ENTER THE HEIST →
+
     </button>
+
 
   </form>
 
@@ -370,7 +461,7 @@
       </li>
 
       <li>
-        Your answers and progress are saved automatically.
+        Your answers and progress will be saved automatically.
       </li>
 
       <li>
@@ -390,14 +481,17 @@
     href="/"
     class="back-link"
   >
+
     ← Back to registration
+
   </a>
 
 </section>
 
 
+
 <!-- =====================================================
-     ALREADY AUTHENTICATED
+     AUTHENTICATED TEAM
 ====================================================== -->
 
 <section
@@ -405,53 +499,176 @@
   class="event-card already-in"
 >
 
+
   <div class="event-kicker">
+
     <span>HQ</span>
+
     KRAVEN'S GATE HEIST // EVENT
+
   </div>
+
 
   <div class="event-number">
+
     01 // TEAM AUTHENTICATED
+
   </div>
 
+
   <h1 class="event-title">
+
     WELCOME, TEAM
+
   </h1>
+
 
   <div
     id="teamName"
     class="team-name"
   >
+
     —
+
   </div>
+
 
   <div
     id="teamIdDisplay"
     class="team-id"
   >
+
     —
+
   </div>
+
+
+  <div class="team-details">
+
+
+    <div class="team-detail">
+
+      <span class="team-detail-label">
+        COLLEGE
+      </span>
+
+      <span
+        id="collegeDisplay"
+        class="team-detail-value"
+      >
+        —
+      </span>
+
+    </div>
+
+
+    <div class="team-detail">
+
+      <span class="team-detail-label">
+        DEPARTMENT
+      </span>
+
+      <span
+        id="departmentDisplay"
+        class="team-detail-value"
+      >
+        —
+      </span>
+
+    </div>
+
+
+    <div class="team-detail">
+
+      <span class="team-detail-label">
+        PROGRAM
+      </span>
+
+      <span
+        id="programDisplay"
+        class="team-detail-value"
+      >
+        —
+      </span>
+
+    </div>
+
+
+    <div class="team-detail">
+
+      <span class="team-detail-label">
+        YEAR
+      </span>
+
+      <span
+        id="yearDisplay"
+        class="team-detail-value"
+      >
+        —
+      </span>
+
+    </div>
+
+
+    <div class="team-detail">
+
+      <span class="team-detail-label">
+        TEAM LEADER
+      </span>
+
+      <span
+        id="leaderDisplay"
+        class="team-detail-value"
+      >
+        —
+      </span>
+
+    </div>
+
+
+  </div>
+
 
   <div
     id="sessionMessage"
     class="message success"
   >
+
     Your team has been authenticated.
+
   </div>
+
 
   <a
     href="/round"
     class="continue-btn"
   >
+
     CONTINUE TO EVENT →
+
   </a>
+
+
+  <button
+    id="logoutBtn"
+    class="logout-btn"
+    type="button"
+  >
+
+    LOG OUT OF EVENT
+
+  </button>
+
 
   <a
     href="/"
     class="back-link"
   >
+
     ← Registration
+
   </a>
+
 
 </section>
 ```
@@ -460,8 +677,94 @@
 
   <script>
 
+    'use strict';
+
+
+    /* =====================================================
+       ELEMENT HELPER
+    ====================================================== */
+
     const $ = id =>
       document.getElementById(id);
+
+
+
+    /* =====================================================
+       SHOW MESSAGE
+    ====================================================== */
+
+    function showMessage(
+      element,
+      text,
+      type = ''
+    ) {
+
+      element.textContent = text;
+
+      element.className =
+        type
+          ? `message ${type}`
+          : 'message';
+
+    }
+
+
+
+    /* =====================================================
+       SHOW AUTHENTICATED TEAM
+    ====================================================== */
+
+    function showAuthenticatedTeam(team) {
+
+      if (!team) {
+        return;
+      }
+
+
+      $('loginCard').style.display =
+        'none';
+
+
+      $('alreadyIn').style.display =
+        'block';
+
+
+      $('teamName').textContent =
+        team.team_name ||
+        'REGISTERED TEAM';
+
+
+      $('teamIdDisplay').textContent =
+        team.team_id ||
+        '—';
+
+
+      $('collegeDisplay').textContent =
+        team.college ||
+        '—';
+
+
+      $('departmentDisplay').textContent =
+        team.department ||
+        '—';
+
+
+      $('programDisplay').textContent =
+        team.program ||
+        '—';
+
+
+      $('yearDisplay').textContent =
+        team.year_level ||
+        '—';
+
+
+      $('leaderDisplay').textContent =
+        team.leader_name ||
+        '—';
+
+    }
+
 
 
     /* =====================================================
@@ -478,13 +781,19 @@
             {
               method: 'GET',
               credentials: 'same-origin',
-              cache: 'no-store'
+              cache: 'no-store',
+              headers: {
+                'Accept':
+                  'application/json'
+              }
             }
           );
 
 
         if (!response.ok) {
+
           return;
+
         }
 
 
@@ -515,9 +824,10 @@
     }
 
 
+
     /* =====================================================
        EVENT LOGIN
-    ===================================================== */
+    ====================================================== */
 
     $('eventForm').addEventListener(
       'submit',
@@ -532,6 +842,7 @@
             .trim()
             .toUpperCase();
 
+
         const email =
           $('email')
             .value
@@ -542,15 +853,53 @@
         const message =
           $('loginMessage');
 
+
         const button =
           $('enterBtn');
 
 
-        message.textContent =
-          'Verifying team...';
+        /* -----------------------------------------------
+           CLIENT VALIDATION
+        ------------------------------------------------ */
 
-        message.className =
-          'message';
+        if (!teamId) {
+
+          showMessage(
+            message,
+            'Please enter your Team ID.',
+            'error'
+          );
+
+          $('teamId').focus();
+
+          return;
+
+        }
+
+
+        if (!email) {
+
+          showMessage(
+            message,
+            'Please enter the registered leader email.',
+            'error'
+          );
+
+          $('email').focus();
+
+          return;
+
+        }
+
+
+        /* -----------------------------------------------
+           START LOGIN
+        ------------------------------------------------ */
+
+        showMessage(
+          message,
+          'Verifying team...'
+        );
 
 
         button.disabled = true;
@@ -569,22 +918,30 @@
 
                 headers: {
                   'Content-Type':
+                    'application/json',
+
+                  'Accept':
                     'application/json'
                 },
 
                 credentials:
                   'same-origin',
 
+                cache:
+                  'no-store',
+
                 body:
                   JSON.stringify({
                     teamId,
                     email
                   })
+
               }
             );
 
 
           let data = {};
+
 
           try {
 
@@ -598,25 +955,49 @@
           }
 
 
+          /* ---------------------------------------------
+             LOGIN FAILED
+          ---------------------------------------------- */
+
           if (!response.ok) {
 
-            message.textContent =
+            showMessage(
+              message,
               data.error ||
-              'Team verification failed. Please check your Team ID and registered email.';
-
-            message.className =
-              'message error';
+              'Team verification failed. Please check your Team ID and registered email.',
+              'error'
+            );
 
             return;
 
           }
 
 
-          message.textContent =
-            'Team verified. Welcome to the heist.';
+          /* ---------------------------------------------
+             LOGIN SUCCESS
+          ---------------------------------------------- */
 
-          message.className =
-            'message success';
+          if (
+            !data.ok ||
+            !data.team
+          ) {
+
+            showMessage(
+              message,
+              'Invalid response from event server.',
+              'error'
+            );
+
+            return;
+
+          }
+
+
+          showMessage(
+            message,
+            'Team verified. Welcome to the heist.',
+            'success'
+          );
 
 
           showAuthenticatedTeam(
@@ -632,11 +1013,11 @@
           );
 
 
-          message.textContent =
-            'Could not connect to the event server. Please try again.';
-
-          message.className =
-            'message error';
+          showMessage(
+            message,
+            'Could not connect to the event server. Please try again.',
+            'error'
+          );
 
         } finally {
 
@@ -651,29 +1032,66 @@
     );
 
 
+
     /* =====================================================
-       SHOW AUTHENTICATED TEAM
+       LOGOUT
     ====================================================== */
 
-    function showAuthenticatedTeam(team) {
+    $('logoutBtn').addEventListener(
+      'click',
+      async () => {
 
-      $('loginCard').style.display =
-        'none';
-
-      $('alreadyIn').style.display =
-        'block';
-
-
-      $('teamName').textContent =
-        team?.team_name ||
-        'REGISTERED TEAM';
+        const button =
+          $('logoutBtn');
 
 
-      $('teamIdDisplay').textContent =
-        team?.team_id ||
-        '—';
+        button.disabled = true;
 
-    }
+        button.textContent =
+          'LOGGING OUT...';
+
+
+        try {
+
+          const response =
+            await fetch(
+              '/api/event/logout',
+              {
+                method: 'POST',
+                credentials: 'same-origin',
+                cache: 'no-store',
+                headers: {
+                  'Accept':
+                    'application/json'
+                }
+              }
+            );
+
+
+          if (!response.ok) {
+
+            console.error(
+              'Event logout failed.'
+            );
+
+          }
+
+        } catch (error) {
+
+          console.error(
+            'Event logout error:',
+            error
+          );
+
+        }
+
+
+        window.location.href =
+          '/event';
+
+      }
+    );
+
 
 
     /* =====================================================
@@ -685,4 +1103,5 @@
   </script>
 
 </body>
+
 </html>
