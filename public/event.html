@@ -1,0 +1,688 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>KGH // Student Event</title>
+
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    body {
+      min-height: 100vh;
+    }
+
+    .event-wrap {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 70px 20px 100px;
+    }
+
+    .event-card {
+      background: #101725;
+      border: 1px solid #28364d;
+      padding: 34px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.28);
+    }
+
+    .event-kicker {
+      color: #8e9cb1;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      margin-bottom: 28px;
+    }
+
+    .event-kicker span {
+      color: #ff7a00;
+    }
+
+    .event-number {
+      color: #ff7a00;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+    }
+
+    .event-title {
+      margin: 8px 0 8px;
+      color: #eef2f7;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      line-height: 1.15;
+    }
+
+    .event-subtitle {
+      color: #718096;
+      font-size: 12px;
+      line-height: 1.7;
+      margin-bottom: 30px;
+    }
+
+    .heist-message {
+      border: 1px solid #28364d;
+      background: #0b111d;
+      padding: 18px;
+      margin-bottom: 25px;
+    }
+
+    .heist-message strong {
+      display: block;
+      color: #ff7a00;
+      font-size: 11px;
+      letter-spacing: .08em;
+      margin-bottom: 7px;
+    }
+
+    .heist-message p {
+      margin: 0;
+      color: #aeb9c8;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .field label {
+      display: block;
+      color: #c6cfdb;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+    }
+
+    .field input {
+      width: 100%;
+      box-sizing: border-box;
+      background: #090e18;
+      border: 1px solid #2a364d;
+      color: #eef2f7;
+      padding: 14px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .field input:focus {
+      border-color: #ff7a00;
+    }
+
+    .field input::placeholder {
+      color: #536176;
+    }
+
+    .event-btn {
+      width: 100%;
+      border: 0;
+      cursor: pointer;
+      background: #ff7a00;
+      color: #080b10;
+      padding: 15px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      margin-top: 5px;
+    }
+
+    .event-btn:hover {
+      opacity: .9;
+    }
+
+    .event-btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 15px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .message.error {
+      color: #ff6b6b;
+    }
+
+    .message.success {
+      color: #65d48a;
+    }
+
+    .instructions {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid #28364d;
+    }
+
+    .instructions-title {
+      color: #c6cfdb;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      margin-bottom: 12px;
+    }
+
+    .instructions ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #718096;
+      font-size: 11px;
+      line-height: 1.9;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      color: #8e9cb1;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .back-link:hover {
+      color: #ff7a00;
+    }
+
+    .already-in {
+      display: none;
+      text-align: center;
+    }
+
+    .team-name {
+      color: #eef2f7;
+      font-size: 24px;
+      font-weight: 900;
+      margin: 10px 0;
+    }
+
+    .team-id {
+      color: #ff7a00;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .continue-btn {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      text-decoration: none;
+      background: #ff7a00;
+      color: #080b10;
+      padding: 15px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      margin-top: 25px;
+    }
+
+    .continue-btn:hover {
+      opacity: .9;
+    }
+
+    @media (max-width: 600px) {
+
+      .event-wrap {
+        padding-top: 35px;
+      }
+
+      .event-card {
+        padding: 22px;
+      }
+
+      .event-title {
+        font-size: 26px;
+      }
+
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="noise"></div>
+  <div class="web-pattern"></div>
+
+  <main class="event-wrap">
+
+```
+<!-- =====================================================
+     STUDENT EVENT LOGIN
+====================================================== -->
+
+<section id="loginCard" class="event-card">
+
+  <div class="event-kicker">
+    <span>HQ</span>
+    KRAVEN'S GATE HEIST // STUDENT EVENT
+  </div>
+
+  <div class="event-number">
+    00 // EVENT ACCESS
+  </div>
+
+  <h1 class="event-title">
+    THE HEIST BEGINS
+  </h1>
+
+  <div class="event-subtitle">
+    Welcome to Kraven's Gate Heist.
+    Enter the Team ID and registered email used during
+    team registration to enter the event.
+  </div>
+
+
+  <!-- EVENT MESSAGE -->
+
+  <div class="heist-message">
+
+    <strong>
+      SYMPOSIUM EVENT ACCESS
+    </strong>
+
+    <p>
+      Your Team ID connects you to your registered team.
+      Your progress will be saved automatically during the event.
+      Do not share your Team ID with another team.
+    </p>
+
+  </div>
+
+
+  <!-- LOGIN FORM -->
+
+  <form id="eventForm">
+
+    <div class="field">
+
+      <label for="teamId">
+        TEAM ID
+      </label>
+
+      <input
+        id="teamId"
+        type="text"
+        placeholder="Example: KGH-4821"
+        autocomplete="off"
+        autocapitalize="characters"
+        required
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="email">
+        REGISTERED LEADER EMAIL
+      </label>
+
+      <input
+        id="email"
+        type="email"
+        placeholder="Enter the email used during registration"
+        autocomplete="email"
+        required
+      >
+
+    </div>
+
+
+    <button
+      id="enterBtn"
+      class="event-btn"
+      type="submit"
+    >
+      ENTER THE HEIST →
+    </button>
+
+  </form>
+
+
+  <div
+    id="loginMessage"
+    class="message"
+    aria-live="polite"
+  ></div>
+
+
+  <!-- INSTRUCTIONS -->
+
+  <div class="instructions">
+
+    <div class="instructions-title">
+      BEFORE YOU ENTER
+    </div>
+
+    <ul>
+
+      <li>
+        Enter the exact Team ID given after registration.
+      </li>
+
+      <li>
+        Use the registered team leader's email address.
+      </li>
+
+      <li>
+        Your answers and progress are saved automatically.
+      </li>
+
+      <li>
+        Do not refresh repeatedly while submitting an answer.
+      </li>
+
+      <li>
+        Follow the instructions shown during each round.
+      </li>
+
+    </ul>
+
+  </div>
+
+
+  <a
+    href="/"
+    class="back-link"
+  >
+    ← Back to registration
+  </a>
+
+</section>
+
+
+<!-- =====================================================
+     ALREADY AUTHENTICATED
+====================================================== -->
+
+<section
+  id="alreadyIn"
+  class="event-card already-in"
+>
+
+  <div class="event-kicker">
+    <span>HQ</span>
+    KRAVEN'S GATE HEIST // EVENT
+  </div>
+
+  <div class="event-number">
+    01 // TEAM AUTHENTICATED
+  </div>
+
+  <h1 class="event-title">
+    WELCOME, TEAM
+  </h1>
+
+  <div
+    id="teamName"
+    class="team-name"
+  >
+    —
+  </div>
+
+  <div
+    id="teamIdDisplay"
+    class="team-id"
+  >
+    —
+  </div>
+
+  <div
+    id="sessionMessage"
+    class="message success"
+  >
+    Your team has been authenticated.
+  </div>
+
+  <a
+    href="/round"
+    class="continue-btn"
+  >
+    CONTINUE TO EVENT →
+  </a>
+
+  <a
+    href="/"
+    class="back-link"
+  >
+    ← Registration
+  </a>
+
+</section>
+```
+
+  </main>
+
+  <script>
+
+    const $ = id =>
+      document.getElementById(id);
+
+
+    /* =====================================================
+       CHECK EXISTING EVENT SESSION
+    ====================================================== */
+
+    async function checkEventSession() {
+
+      try {
+
+        const response =
+          await fetch(
+            '/api/event/me',
+            {
+              method: 'GET',
+              credentials: 'same-origin',
+              cache: 'no-store'
+            }
+          );
+
+
+        if (!response.ok) {
+          return;
+        }
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          data.ok &&
+          data.team
+        ) {
+
+          showAuthenticatedTeam(
+            data.team
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          'Event session check failed:',
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       EVENT LOGIN
+    ===================================================== */
+
+    $('eventForm').addEventListener(
+      'submit',
+      async event => {
+
+        event.preventDefault();
+
+
+        const teamId =
+          $('teamId')
+            .value
+            .trim()
+            .toUpperCase();
+
+        const email =
+          $('email')
+            .value
+            .trim()
+            .toLowerCase();
+
+
+        const message =
+          $('loginMessage');
+
+        const button =
+          $('enterBtn');
+
+
+        message.textContent =
+          'Verifying team...';
+
+        message.className =
+          'message';
+
+
+        button.disabled = true;
+
+        button.textContent =
+          'VERIFYING TEAM...';
+
+
+        try {
+
+          const response =
+            await fetch(
+              '/api/event/login',
+              {
+                method: 'POST',
+
+                headers: {
+                  'Content-Type':
+                    'application/json'
+                },
+
+                credentials:
+                  'same-origin',
+
+                body:
+                  JSON.stringify({
+                    teamId,
+                    email
+                  })
+              }
+            );
+
+
+          let data = {};
+
+          try {
+
+            data =
+              await response.json();
+
+          } catch {
+
+            data = {};
+
+          }
+
+
+          if (!response.ok) {
+
+            message.textContent =
+              data.error ||
+              'Team verification failed. Please check your Team ID and registered email.';
+
+            message.className =
+              'message error';
+
+            return;
+
+          }
+
+
+          message.textContent =
+            'Team verified. Welcome to the heist.';
+
+          message.className =
+            'message success';
+
+
+          showAuthenticatedTeam(
+            data.team
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            'Event login error:',
+            error
+          );
+
+
+          message.textContent =
+            'Could not connect to the event server. Please try again.';
+
+          message.className =
+            'message error';
+
+        } finally {
+
+          button.disabled = false;
+
+          button.textContent =
+            'ENTER THE HEIST →';
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       SHOW AUTHENTICATED TEAM
+    ====================================================== */
+
+    function showAuthenticatedTeam(team) {
+
+      $('loginCard').style.display =
+        'none';
+
+      $('alreadyIn').style.display =
+        'block';
+
+
+      $('teamName').textContent =
+        team?.team_name ||
+        'REGISTERED TEAM';
+
+
+      $('teamIdDisplay').textContent =
+        team?.team_id ||
+        '—';
+
+    }
+
+
+    /* =====================================================
+       START
+    ====================================================== */
+
+    checkEventSession();
+
+  </script>
+
+</body>
+</html>
