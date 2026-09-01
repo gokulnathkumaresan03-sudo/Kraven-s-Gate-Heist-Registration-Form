@@ -30,17 +30,24 @@ const PORT = Number(
    ENVIRONMENT VARIABLES
 ========================================================= */
 
-const SUPABASE_URL = String(
-  process.env.SUPABASE_URL || ''
-).trim();
+const SUPABASE_URL =
+  process.env.SUPABASE_URL;
 
-const SUPABASE_SECRET_KEY = String(
-  process.env.SUPABASE_SECRET_KEY || ''
-).trim();
+const SUPABASE_SECRET_KEY =
+  process.env.SUPABASE_SECRET_KEY;
 
-const ADMIN_KEY = String(
-  process.env.ADMIN_KEY || ''
-);
+const ADMIN_KEY =
+  process.env.ADMIN_KEY;
+
+/*
+   Organizer Head email.
+
+   You can change this through Render Environment
+   Variables if needed.
+
+   Default:
+   gokulnathkumaresan03@gmail.com
+*/
 
 const MAIN_ORGANIZER_EMAIL = (
   process.env.MAIN_ORGANIZER_EMAIL ||
@@ -50,18 +57,18 @@ const MAIN_ORGANIZER_EMAIL = (
   .toLowerCase();
 
 /*
+   Organizer Head password.
+
    IMPORTANT:
+   This is intentionally server-side only.
+   It is NEVER sent to the browser.
 
-   This password is stored in Render Environment Variables,
-   NOT in this source code.
-
-   It is used only to bootstrap the Organizer Head account
-   when its Supabase password_hash is missing or invalid.
+   No MAIN_ORGANIZER_PASSWORD environment
+   variable is required anymore.
 */
 
-const MAIN_ORGANIZER_PASSWORD = String(
-  process.env.MAIN_ORGANIZER_PASSWORD || ''
-);
+const MAIN_ORGANIZER_PASSWORD =
+  'Gowtham8*';
 
 /* =========================================================
    ENVIRONMENT CHECK
@@ -82,18 +89,6 @@ if (!SUPABASE_SECRET_KEY) {
 if (!ADMIN_KEY) {
   throw new Error(
     'ADMIN_KEY environment variable is missing.'
-  );
-}
-
-if (!MAIN_ORGANIZER_PASSWORD) {
-  throw new Error(
-    'MAIN_ORGANIZER_PASSWORD environment variable is missing.'
-  );
-}
-
-if (MAIN_ORGANIZER_PASSWORD.length < 8) {
-  throw new Error(
-    'MAIN_ORGANIZER_PASSWORD must be at least 8 characters.'
   );
 }
 
@@ -162,8 +157,13 @@ const organizerRoles = new Set([
    CLEAN INPUT
 ========================================================= */
 
-function clean(value, max = 200) {
-  return String(value ?? '')
+function clean(
+  value,
+  max = 200
+) {
+  return String(
+    value ?? ''
+  )
     .trim()
     .replace(/\s+/g, ' ')
     .slice(0, max);
@@ -214,7 +214,9 @@ function json(
 async function body(req) {
   const chunks = [];
 
-  for await (const chunk of req) {
+  for await (
+    const chunk of req
+  ) {
     chunks.push(chunk);
   }
 
@@ -241,7 +243,9 @@ async function body(req) {
    PASSWORD HASHING
 ========================================================= */
 
-function hashPassword(password) {
+function hashPassword(
+  password
+) {
   const salt =
     crypto
       .randomBytes(16)
@@ -256,12 +260,10 @@ function hashPassword(password) {
       )
       .toString('hex');
 
-  return `scrypt:${salt}:${hash}`;
+  return (
+    `scrypt:${salt}:${hash}`
+  );
 }
-
-/* =========================================================
-   PASSWORD VERIFICATION
-========================================================= */
 
 function verifyPassword(
   password,
@@ -315,7 +317,9 @@ function verifyPassword(
    TOKEN HELPERS
 ========================================================= */
 
-function createToken(prefix) {
+function createToken(
+  prefix
+) {
   return (
     `${prefix}_${crypto
       .randomBytes(32)
@@ -323,7 +327,9 @@ function createToken(prefix) {
   );
 }
 
-function organizerToken(email) {
+function organizerToken(
+  email
+) {
   return createToken(
     `org_${Buffer
       .from(email)
@@ -331,7 +337,9 @@ function organizerToken(email) {
   );
 }
 
-function eventToken(teamId) {
+function eventToken(
+  teamId
+) {
   return createToken(
     `evt_${Buffer
       .from(teamId)
@@ -340,7 +348,9 @@ function eventToken(teamId) {
 }
 
 function adminToken() {
-  return createToken('admin');
+  return createToken(
+    'admin'
+  );
 }
 
 /* =========================================================
@@ -374,7 +384,9 @@ function cookies(req) {
         .trim();
 
     result[key] =
-      decodeURIComponent(value);
+      decodeURIComponent(
+        value
+      );
   }
 
   return result;
@@ -394,11 +406,288 @@ const adminSessions =
   new Map();
 
 /* =========================================================
+   GET ORGANIZER
+========================================================= */
+
+async function getOrganizer(
+  email
+) {
+  const url =
+    `${ORGANIZERS_URL}` +
+    `?select=*` +
+    `&email=eq.${encodeURIComponent(
+      email
+    )}` +
+    `&limit=1`;
+
+  const response =
+    await fetch(
+      url,
+      {
+        headers:
+          supabaseHeaders()
+      }
+    );
+
+  if (!response.ok) {
+    console.error(
+      'Organizer lookup:',
+      await response.text()
+    );
+
+    throw new Error(
+      'Could not check organizer account.'
+    );
+  }
+
+  const rows =
+    await response.json();
+
+  return rows[0] || null;
+}
+
+/* =========================================================
+   ORGANIZER HEAD
+========================================================= */
+
+function isOrganizerHead(
+  organizer
+) {
+  if (!organizer) {
+    return false;
+  }
+
+  return (
+    String(
+      organizer.email || ''
+    )
+      .toLowerCase() ===
+    MAIN_ORGANIZER_EMAIL
+  );
+}
+
+/* =========================================================
+   ENSURE ORGANIZER HEAD
+========================================================= */
+
+/*
+   This is the important fix.
+
+   On every server start:
+
+   1. Look for the Organizer Head.
+   2. If the account does not exist,
+      create it.
+   3. If password_hash is null,
+      create a password hash.
+   4. If the stored password is different,
+      update it to the configured password.
+   5. Ensure the account is approved.
+
+   Therefore you do NOT need Render Shell.
+*/
+
+async function ensureMainOrganizer() {
+  console.log(
+    'Checking Organizer Head account...'
+  );
+
+  const existing =
+    await getOrganizer(
+      MAIN_ORGANIZER_EMAIL
+    );
+
+  const passwordHash =
+    hashPassword(
+      MAIN_ORGANIZER_PASSWORD
+    );
+
+  if (!existing) {
+    console.log(
+      'Organizer Head not found. Creating account...'
+    );
+
+    const response =
+      await fetch(
+        ORGANIZERS_URL,
+        {
+          method: 'POST',
+
+          headers:
+            supabaseHeaders({
+              Prefer:
+                'return=representation'
+            }),
+
+          body:
+            JSON.stringify({
+              name:
+                'Organizer Head',
+
+              email:
+                MAIN_ORGANIZER_EMAIL,
+
+              role:
+                'organizer',
+
+              requested_role:
+                'organizer',
+
+              password_hash:
+                passwordHash,
+
+              approval_status:
+                'approved',
+
+              approved_by:
+                MAIN_ORGANIZER_EMAIL,
+
+              approved_at:
+                new Date()
+                  .toISOString()
+            })
+        }
+      );
+
+    if (!response.ok) {
+      const errorText =
+        await response.text();
+
+      console.error(
+        'Organizer Head creation failed:',
+        errorText
+      );
+
+      throw new Error(
+        'Could not create Organizer Head account.'
+      );
+    }
+
+    console.log(
+      'Organizer Head account created successfully.'
+    );
+
+    return;
+  }
+
+  /*
+     Check whether the current stored password
+     matches the desired password.
+  */
+
+  const passwordCorrect =
+    existing.password_hash &&
+    verifyPassword(
+      MAIN_ORGANIZER_PASSWORD,
+      existing.password_hash
+    );
+
+  const needsPasswordUpdate =
+    !existing.password_hash ||
+    !passwordCorrect;
+
+  const needsApproval =
+    existing.approval_status !==
+    'approved';
+
+  const needsRole =
+    existing.role !==
+    'organizer';
+
+  if (
+    !needsPasswordUpdate &&
+    !needsApproval &&
+    !needsRole
+  ) {
+    console.log(
+      'Organizer Head account is already configured.'
+    );
+
+    return;
+  }
+
+  console.log(
+    'Updating Organizer Head account...'
+  );
+
+  const update = {};
+
+  if (needsPasswordUpdate) {
+    update.password_hash =
+      passwordHash;
+
+    console.log(
+      'Organizer Head password hash repaired.'
+    );
+  }
+
+  if (needsApproval) {
+    update.approval_status =
+      'approved';
+
+    update.approved_by =
+      MAIN_ORGANIZER_EMAIL;
+
+    update.approved_at =
+      new Date()
+        .toISOString();
+  }
+
+  if (needsRole) {
+    update.role =
+      'organizer';
+
+    update.requested_role =
+      'organizer';
+  }
+
+  const response =
+    await fetch(
+      `${ORGANIZERS_URL}?id=eq.${encodeURIComponent(
+        existing.id
+      )}`,
+      {
+        method: 'PATCH',
+
+        headers:
+          supabaseHeaders({
+            Prefer:
+              'return=representation'
+          }),
+
+        body:
+          JSON.stringify(update)
+      }
+    );
+
+  if (!response.ok) {
+    const errorText =
+      await response.text();
+
+    console.error(
+      'Organizer Head update failed:',
+      errorText
+    );
+
+    throw new Error(
+      'Could not repair Organizer Head account.'
+    );
+  }
+
+  console.log(
+    'Organizer Head account repaired successfully.'
+  );
+}
+
+/* =========================================================
    AUTH HELPERS
 ========================================================= */
 
-async function authorizedOrganizer(req) {
-  const c = cookies(req);
+async function authorizedOrganizer(
+  req
+) {
+  const c =
+    cookies(req);
 
   const token =
     c.kgh_organizer;
@@ -406,7 +695,10 @@ async function authorizedOrganizer(req) {
   const email =
     c.kgh_organizer_email;
 
-  if (!token || !email) {
+  if (
+    !token ||
+    !email
+  ) {
     return null;
   }
 
@@ -449,12 +741,11 @@ async function authorizedOrganizer(req) {
   return organizer;
 }
 
-/* =========================================================
-   AUTHORIZED ADMIN
-========================================================= */
-
-function authorizedAdmin(req) {
-  const c = cookies(req);
+function authorizedAdmin(
+  req
+) {
+  const c =
+    cookies(req);
 
   const token =
     c.kgh_admin;
@@ -486,12 +777,11 @@ function authorizedAdmin(req) {
   return true;
 }
 
-/* =========================================================
-   AUTHORIZED EVENT TEAM
-========================================================= */
-
-async function authorizedEventTeam(req) {
-  const c = cookies(req);
+async function authorizedEventTeam(
+  req
+) {
+  const c =
+    cookies(req);
 
   const token =
     c.kgh_event_token;
@@ -499,7 +789,10 @@ async function authorizedEventTeam(req) {
   const teamId =
     c.kgh_event_team;
 
-  if (!token || !teamId) {
+  if (
+    !token ||
+    !teamId
+  ) {
     return null;
   }
 
@@ -552,116 +845,12 @@ async function authorizedEventTeam(req) {
 }
 
 /* =========================================================
-   ORGANIZER HEAD
-========================================================= */
-
-function isOrganizerHead(
-  organizer
-) {
-  if (!organizer) {
-    return false;
-  }
-
-  return (
-    String(
-      organizer.email || ''
-    )
-      .toLowerCase() ===
-    MAIN_ORGANIZER_EMAIL
-  );
-}
-
-/* =========================================================
-   ENSURE ORGANIZER HEAD PASSWORD
-========================================================= */
-
-/*
-   If the Organizer Head exists but password_hash is NULL,
-   this function creates a secure hash from the Render
-   environment password and saves it to Supabase.
-
-   This means NO Render Shell is required.
-*/
-
-async function ensureOrganizerHeadPassword(
-  organizer
-) {
-  if (
-    !isOrganizerHead(
-      organizer
-    )
-  ) {
-    return organizer;
-  }
-
-  if (
-    organizer.password_hash &&
-    verifyPassword(
-      MAIN_ORGANIZER_PASSWORD,
-      organizer.password_hash
-    )
-  ) {
-    return organizer;
-  }
-
-  const passwordHash =
-    hashPassword(
-      MAIN_ORGANIZER_PASSWORD
-    );
-
-  const response =
-    await fetch(
-      `${ORGANIZERS_URL}?id=eq.${encodeURIComponent(
-        organizer.id
-      )}`,
-      {
-        method: 'PATCH',
-
-        headers:
-          supabaseHeaders({
-            Prefer:
-              'return=representation'
-          }),
-
-        body:
-          JSON.stringify({
-            password_hash:
-              passwordHash
-          })
-      }
-    );
-
-  if (!response.ok) {
-    const errorText =
-      await response.text();
-
-    console.error(
-      'Organizer Head password update:',
-      errorText
-    );
-
-    throw new Error(
-      'Could not initialize Organizer Head password.'
-    );
-  }
-
-  const rows =
-    await response.json();
-
-  return (
-    rows[0] || {
-      ...organizer,
-      password_hash:
-        passwordHash
-    }
-  );
-}
-
-/* =========================================================
    STATIC FILE HELPERS
 ========================================================= */
 
-function contentType(file) {
+function contentType(
+  file
+) {
   const ext =
     path
       .extname(file)
@@ -708,10 +897,6 @@ function contentType(file) {
   );
 }
 
-/* =========================================================
-   SERVE STATIC FILE
-========================================================= */
-
 function serve(
   res,
   relativePath
@@ -721,7 +906,7 @@ function serve(
       path
         .normalize(relativePath)
         .replace(
-          /^(\.\.(\/|\\|$))+/, 
+          /^(\.\.(\/|\\|$))+/,
           ''
         );
 
@@ -784,47 +969,6 @@ function randomTeamId() {
       .toString()
       .padStart(4, '0')}`
   );
-}
-
-/* =========================================================
-   GET ORGANIZER
-========================================================= */
-
-async function getOrganizer(
-  email
-) {
-  const url =
-    `${ORGANIZERS_URL}` +
-    `?select=*` +
-    `&email=eq.${encodeURIComponent(
-      email
-    )}` +
-    `&limit=1`;
-
-  const response =
-    await fetch(
-      url,
-      {
-        headers:
-          supabaseHeaders()
-      }
-    );
-
-  if (!response.ok) {
-    console.error(
-      'Organizer lookup:',
-      await response.text()
-    );
-
-    throw new Error(
-      'Could not check organizer account.'
-    );
-  }
-
-  const rows =
-    await response.json();
-
-  return rows[0] || null;
 }
 
 /* =========================================================
@@ -985,16 +1129,22 @@ async function createTeam(
 
   const members = [
     {
-      name: member2Name,
-      regNo: member2RegNo
+      name:
+        member2Name,
+      regNo:
+        member2RegNo
     },
     {
-      name: member3Name,
-      regNo: member3RegNo
+      name:
+        member3Name,
+      regNo:
+        member3RegNo
     },
     {
-      name: member4Name,
-      regNo: member4RegNo
+      name:
+        member4Name,
+      regNo:
+        member4RegNo
     }
   ];
 
@@ -1046,7 +1196,9 @@ async function createTeam(
       await check.json();
 
     if (!existing.length) {
-      teamId = candidate;
+      teamId =
+        candidate;
+
       break;
     }
   }
@@ -1290,7 +1442,8 @@ async function requestOrganizer(
   }
 
   if (
-    email === MAIN_ORGANIZER_EMAIL
+    email ===
+    MAIN_ORGANIZER_EMAIL
   ) {
     throw {
       status: 409,
@@ -1300,10 +1453,14 @@ async function requestOrganizer(
   }
 
   const existing =
-    await getOrganizer(email);
+    await getOrganizer(
+      email
+    );
 
   const passwordHash =
-    hashPassword(password);
+    hashPassword(
+      password
+    );
 
   if (existing) {
     if (
@@ -1465,7 +1622,34 @@ async function organizerLogin(
     };
   }
 
-  let organizer =
+  /*
+     If the Organizer Head is logging in,
+     make absolutely sure its account exists
+     and its password hash is correct.
+  */
+
+  if (
+    email ===
+    MAIN_ORGANIZER_EMAIL
+  ) {
+    const organizer =
+      await getOrganizer(
+        email
+      );
+
+    if (
+      !organizer ||
+      !organizer.password_hash ||
+      !verifyPassword(
+        MAIN_ORGANIZER_PASSWORD,
+        organizer.password_hash
+      )
+    ) {
+      await ensureMainOrganizer();
+    }
+  }
+
+  const organizer =
     await getOrganizer(
       email
     );
@@ -1478,37 +1662,9 @@ async function organizerLogin(
     };
   }
 
-  const head =
-    isOrganizerHead(
-      organizer
-    );
-
-  /* =======================================================
-     ORGANIZER HEAD PASSWORD BOOTSTRAP
-
-     If the Organizer Head password_hash is NULL,
-     initialize it from MAIN_ORGANIZER_PASSWORD.
-  ======================================================= */
-
   if (
-    head &&
     !organizer.password_hash
   ) {
-    organizer =
-      await ensureOrganizerHeadPassword(
-        organizer
-      );
-  }
-
-  /*
-     If the Organizer Head has an existing hash but it
-     does not match the Render environment password, we
-     DO NOT overwrite it automatically.
-
-     This protects an already-established password.
-  */
-
-  if (!organizer.password_hash) {
     throw {
       status: 401,
       message:
@@ -1529,6 +1685,11 @@ async function organizerLogin(
     };
   }
 
+  const head =
+    isOrganizerHead(
+      organizer
+    );
+
   if (
     !head &&
     organizer.approval_status !==
@@ -1545,7 +1706,9 @@ async function organizerLogin(
     organizer,
 
     token:
-      organizerToken(email)
+      organizerToken(
+        email
+      )
   };
 }
 
@@ -1675,7 +1838,8 @@ async function updateOrganizer(
   }
 
   const now =
-    new Date().toISOString();
+    new Date()
+      .toISOString();
 
   const approved =
     action === 'approve';
@@ -1712,9 +1876,7 @@ async function updateOrganizer(
           }),
 
         body:
-          JSON.stringify(
-            update
-          )
+          JSON.stringify(update)
       }
     );
 
@@ -1745,7 +1907,10 @@ async function updateOrganizer(
 
 const server =
   createServer(
-    async (req, res) => {
+    async (
+      req,
+      res
+    ) => {
       try {
         const url =
           new URL(
@@ -1949,7 +2114,9 @@ const server =
           const c =
             cookies(req);
 
-          if (c.kgh_organizer) {
+          if (
+            c.kgh_organizer
+          ) {
             organizerSessions.delete(
               c.kgh_organizer
             );
@@ -2072,7 +2239,9 @@ const server =
           const c =
             cookies(req);
 
-          if (c.kgh_event_token) {
+          if (
+            c.kgh_event_token
+          ) {
             eventSessions.delete(
               c.kgh_event_token
             );
@@ -2148,7 +2317,9 @@ const server =
         ================================================= */
 
         if (
-          p.startsWith('/api/admin/')
+          p.startsWith(
+            '/api/admin/'
+          )
         ) {
           const organizer =
             await authorizedOrganizer(
@@ -2156,7 +2327,9 @@ const server =
             );
 
           const admin =
-            authorizedAdmin(req);
+            authorizedAdmin(
+              req
+            );
 
           if (
             !organizer &&
@@ -2398,7 +2571,9 @@ const server =
               }
             );
 
-            return res.end(csv);
+            return res.end(
+              csv
+            );
           }
         }
 
@@ -2409,21 +2584,27 @@ const server =
         if (
           req.method === 'GET'
         ) {
-          if (p === '/') {
+          if (
+            p === '/'
+          ) {
             return serve(
               res,
               'index.html'
             );
           }
 
-          if (p === '/admin') {
+          if (
+            p === '/admin'
+          ) {
             return serve(
               res,
               'admin.html'
             );
           }
 
-          if (p === '/organizer') {
+          if (
+            p === '/organizer'
+          ) {
             return serve(
               res,
               'organizer.html'
@@ -2439,35 +2620,45 @@ const server =
             );
           }
 
-          if (p === '/event') {
+          if (
+            p === '/event'
+          ) {
             return serve(
               res,
               'event.html'
             );
           }
 
-          if (p === '/round') {
+          if (
+            p === '/round'
+          ) {
             return serve(
               res,
               'round.html'
             );
           }
 
-          if (p === '/result') {
+          if (
+            p === '/result'
+          ) {
             return serve(
               res,
               'result.html'
             );
           }
 
-          if (p === '/final') {
+          if (
+            p === '/final'
+          ) {
             return serve(
               res,
               'final.html'
             );
           }
 
-          if (p === '/projector') {
+          if (
+            p === '/projector'
+          ) {
             return serve(
               res,
               'projector.html'
@@ -2487,7 +2678,9 @@ const server =
 
         return res
           .writeHead(404)
-          .end('Not found');
+          .end(
+            'Not found'
+          );
 
       } catch (error) {
         console.error(
@@ -2495,7 +2688,9 @@ const server =
           error
         );
 
-        if (error?.status) {
+        if (
+          error?.status
+        ) {
           return json(
             res,
             error.status,
@@ -2522,12 +2717,35 @@ const server =
    START SERVER
 ========================================================= */
 
-server.listen(
-  PORT,
-  '0.0.0.0',
-  () => {
-    console.log(
-      `KGH registration running on port ${PORT}`
+async function startServer() {
+  /*
+     Repair/create the Organizer Head BEFORE
+     accepting requests.
+  */
+
+  await ensureMainOrganizer();
+
+  server.listen(
+    PORT,
+    '0.0.0.0',
+    () => {
+      console.log(
+        `KGH registration running on port ${PORT}`
+      );
+
+      console.log(
+        `Organizer Head: ${MAIN_ORGANIZER_EMAIL}`
+      );
+    }
+  );
+}
+
+startServer()
+  .catch(error => {
+    console.error(
+      'STARTUP ERROR:',
+      error
     );
-  }
-);
+
+    process.exit(1);
+  });
