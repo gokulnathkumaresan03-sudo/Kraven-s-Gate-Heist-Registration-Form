@@ -17,72 +17,2229 @@
 
   <meta
     name="description"
-    content="Kraven's Gate Heist — Team Registration"
+    content="Kraven's Gate Heist — Student Event Access"
   >
 
-  <title>KGH // Registration</title>
+  <title>KGH // Event Access</title>
 
   <link
     rel="stylesheet"
     href="/styles.css"
   >
 
+  <style>
+
+    /* =====================================================
+       KGH EVENT // GRAND CINEMATIC UPGRADE
+    ====================================================== */
+
+    :root {
+      --kgh-black: #05060a;
+      --kgh-dark: #090b12;
+      --kgh-panel: rgba(12, 15, 24, .86);
+      --kgh-red: #e32635;
+      --kgh-red-bright: #ff3344;
+      --kgh-cyan: #51d9ff;
+      --kgh-green: #57f287;
+      --kgh-white: #f5f5f7;
+      --kgh-muted: #9da3b2;
+      --kgh-line: rgba(255,255,255,.10);
+    }
+
+
+    /* =====================================================
+       PAGE
+    ====================================================== */
+
+    body {
+      background:
+        radial-gradient(
+          circle at 75% 20%,
+          rgba(227,38,53,.12),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 20% 70%,
+          rgba(81,217,255,.07),
+          transparent 30%
+        ),
+        #05060a;
+      overflow-x: hidden;
+    }
+
+
+    body.event-grand-page {
+      min-height: 100vh;
+    }
+
+
+    body.event-grand-page::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9990;
+
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,.018) 0,
+          rgba(255,255,255,.018) 1px,
+          transparent 1px,
+          transparent 4px
+        );
+
+      opacity: .25;
+      mix-blend-mode: screen;
+    }
+
+
+    /* =====================================================
+       CINEMATIC BACKGROUND
+    ====================================================== */
+
+    .event-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -20;
+      overflow: hidden;
+      background:
+        radial-gradient(
+          ellipse at 50% 90%,
+          rgba(227,38,53,.18),
+          transparent 48%
+        ),
+        linear-gradient(
+          180deg,
+          #030408 0%,
+          #070910 55%,
+          #030408 100%
+        );
+    }
+
+
+    .event-bg::before {
+      content: "";
+      position: absolute;
+      inset: -20%;
+
+      background:
+        linear-gradient(
+          115deg,
+          transparent 35%,
+          rgba(227,38,53,.08) 50%,
+          transparent 65%
+        );
+
+      animation: bgSweep 8s linear infinite;
+    }
+
+
+    .event-bg-grid {
+      position: absolute;
+      inset: 0;
+
+      background-image:
+        linear-gradient(
+          rgba(255,255,255,.035) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.035) 1px,
+          transparent 1px
+        );
+
+      background-size: 70px 70px;
+      transform: perspective(700px) rotateX(55deg) scale(1.8);
+      transform-origin: center bottom;
+      opacity: .22;
+      animation: gridDrift 14s linear infinite;
+    }
+
+
+    .event-bg-glow {
+      position: absolute;
+      width: 60vw;
+      height: 60vw;
+      max-width: 900px;
+      max-height: 900px;
+      left: 50%;
+      top: 42%;
+      transform: translate(-50%, -50%);
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(227,38,53,.16),
+          rgba(227,38,53,.04) 35%,
+          transparent 68%
+        );
+
+      filter: blur(8px);
+      animation: glowPulse 5s ease-in-out infinite;
+    }
+
+
+    .event-bg-lines {
+      position: absolute;
+      inset: 0;
+      opacity: .28;
+    }
+
+
+    .event-bg-lines span {
+      position: absolute;
+      display: block;
+      width: 1px;
+      height: 130%;
+      top: -15%;
+      background:
+        linear-gradient(
+          transparent,
+          rgba(227,38,53,.4),
+          transparent
+        );
+      transform-origin: center;
+    }
+
+
+    .event-bg-lines span:nth-child(1) {
+      left: 12%;
+      transform: rotate(18deg);
+    }
+
+    .event-bg-lines span:nth-child(2) {
+      left: 31%;
+      transform: rotate(18deg);
+      opacity: .4;
+    }
+
+    .event-bg-lines span:nth-child(3) {
+      right: 27%;
+      transform: rotate(-18deg);
+      opacity: .5;
+    }
+
+    .event-bg-lines span:nth-child(4) {
+      right: 9%;
+      transform: rotate(-18deg);
+    }
+
+
+    /* =====================================================
+       FLOATING PARTICLES
+    ====================================================== */
+
+    .event-particles {
+      position: fixed;
+      inset: 0;
+      z-index: -5;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+
+    .event-particles span {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.65);
+      box-shadow: 0 0 12px rgba(255,255,255,.45);
+      animation: particleFloat linear infinite;
+    }
+
+
+    .event-particles span:nth-child(1) {
+      left: 8%;
+      top: 85%;
+      animation-duration: 11s;
+    }
+
+    .event-particles span:nth-child(2) {
+      left: 18%;
+      top: 60%;
+      animation-duration: 15s;
+      animation-delay: -4s;
+    }
+
+    .event-particles span:nth-child(3) {
+      left: 37%;
+      top: 90%;
+      animation-duration: 13s;
+      animation-delay: -7s;
+    }
+
+    .event-particles span:nth-child(4) {
+      left: 57%;
+      top: 72%;
+      animation-duration: 18s;
+      animation-delay: -2s;
+    }
+
+    .event-particles span:nth-child(5) {
+      left: 72%;
+      top: 88%;
+      animation-duration: 12s;
+      animation-delay: -8s;
+    }
+
+    .event-particles span:nth-child(6) {
+      left: 88%;
+      top: 65%;
+      animation-duration: 16s;
+      animation-delay: -5s;
+    }
+
+    .event-particles span:nth-child(7) {
+      left: 47%;
+      top: 45%;
+      animation-duration: 14s;
+      animation-delay: -10s;
+    }
+
+    .event-particles span:nth-child(8) {
+      left: 94%;
+      top: 35%;
+      animation-duration: 17s;
+      animation-delay: -3s;
+    }
+
+
+    /* =====================================================
+       NAVIGATION
+    ====================================================== */
+
+    .event-grand-nav {
+      position: relative;
+      z-index: 50;
+      width: min(1400px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 26px 0;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+
+    .event-grand-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: .08em;
+      font-size: 13px;
+    }
+
+
+    .event-grand-brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+
+      border: 1px solid rgba(255,255,255,.2);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(227,38,53,.35),
+          rgba(10,12,18,.8)
+        );
+
+      box-shadow:
+        0 0 30px rgba(227,38,53,.16),
+        inset 0 0 20px rgba(255,255,255,.04);
+
+      font-size: 13px;
+    }
+
+
+    .event-live-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+
+      padding: 9px 14px;
+
+      border: 1px solid rgba(87,242,135,.22);
+      background: rgba(87,242,135,.04);
+
+      color: #b8ffc9;
+      font-size: 10px;
+      letter-spacing: .14em;
+      font-weight: 800;
+    }
+
+
+    .event-live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--kgh-green);
+      box-shadow: 0 0 12px var(--kgh-green);
+      animation: statusPulse 1.5s ease-in-out infinite;
+    }
+
+
+    /* =====================================================
+       MAIN WRAPPER
+    ====================================================== */
+
+    .event-page-wrap {
+      position: relative;
+      width: min(1400px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 20px 0 80px;
+    }
+
+
+    /* =====================================================
+       LOGIN CARD
+    ====================================================== */
+
+    .event-cinematic-card {
+      position: relative;
+      min-height: 720px;
+
+      display: grid;
+      grid-template-columns: 46% 54%;
+
+      overflow: hidden;
+
+      border: 1px solid rgba(255,255,255,.12);
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(18,21,31,.94),
+          rgba(5,7,12,.97)
+        );
+
+      box-shadow:
+        0 40px 120px rgba(0,0,0,.7),
+        0 0 80px rgba(227,38,53,.07);
+
+      animation: cardEnter 1s cubic-bezier(.16,1,.3,1) both;
+    }
+
+
+    .event-cinematic-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+
+      border: 1px solid rgba(255,255,255,.04);
+    }
+
+
+    .event-cinematic-card::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 2px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          var(--kgh-red),
+          var(--kgh-cyan),
+          transparent
+        );
+
+      animation: topScanner 4s linear infinite;
+    }
+
+
+    /* =====================================================
+       ART SIDE
+    ====================================================== */
+
+    .event-art {
+      position: relative;
+      min-height: 720px;
+      overflow: hidden;
+
+      background:
+        radial-gradient(
+          ellipse at 50% 55%,
+          rgba(227,38,53,.22),
+          transparent 38%
+        ),
+        linear-gradient(
+          145deg,
+          #080a11,
+          #030409
+        );
+    }
+
+
+    .event-art::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(227,38,53,.05),
+          transparent
+        );
+
+      animation: artScan 5s linear infinite;
+    }
+
+
+    .event-art-grid {
+      position: absolute;
+      inset: 0;
+
+      background-image:
+        linear-gradient(
+          rgba(255,255,255,.035) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.035) 1px,
+          transparent 1px
+        );
+
+      background-size: 45px 45px;
+      opacity: .3;
+      mask-image:
+        linear-gradient(
+          to bottom,
+          transparent,
+          black 20%,
+          black 80%,
+          transparent
+        );
+    }
+
+
+    /* =====================================================
+       RINGS
+    ====================================================== */
+
+    .event-art-rings {
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+    }
+
+
+    .event-art-rings span {
+      position: absolute;
+      inset: 0;
+
+      border-radius: 50%;
+      border: 1px solid rgba(227,38,53,.22);
+
+      animation: ringRotate 16s linear infinite;
+    }
+
+
+    .event-art-rings span:nth-child(1) {
+      inset: 0;
+      border-color: rgba(227,38,53,.35);
+    }
+
+
+    .event-art-rings span:nth-child(2) {
+      inset: 55px;
+      border-color: rgba(81,217,255,.18);
+      animation-duration: 11s;
+      animation-direction: reverse;
+    }
+
+
+    .event-art-rings span:nth-child(3) {
+      inset: 115px;
+      border-style: dashed;
+      border-color: rgba(255,255,255,.16);
+      animation-duration: 8s;
+    }
+
+
+    /* =====================================================
+       GATE
+    ====================================================== */
+
+    .event-gate {
+      position: absolute;
+      width: 330px;
+      height: 450px;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+
+      filter:
+        drop-shadow(0 0 25px rgba(227,38,53,.2));
+    }
+
+
+    .event-gate::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      border: 10px solid rgba(210,214,222,.09);
+      border-bottom: 0;
+
+      border-radius: 170px 170px 0 0;
+
+      box-shadow:
+        inset 0 0 40px rgba(255,255,255,.04),
+        0 0 50px rgba(0,0,0,.6);
+    }
+
+
+    .event-gate::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 20px;
+      bottom: 0;
+      width: 1px;
+
+      background:
+        linear-gradient(
+          transparent,
+          rgba(227,38,53,.6),
+          transparent
+        );
+
+      box-shadow: 0 0 20px rgba(227,38,53,.7);
+    }
+
+
+    .event-gate-left,
+    .event-gate-right {
+      position: absolute;
+      top: 30px;
+      bottom: 0;
+      width: 50%;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.02),
+          rgba(227,38,53,.08)
+        );
+
+      border-top: 1px solid rgba(255,255,255,.12);
+    }
+
+
+    .event-gate-left {
+      left: 0;
+      clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
+    }
+
+
+    .event-gate-right {
+      right: 0;
+      background:
+        linear-gradient(
+          270deg,
+          rgba(255,255,255,.02),
+          rgba(227,38,53,.08)
+        );
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 12% 100%);
+    }
+
+
+    .event-gate-core {
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%, -50%);
+
+      width: 105px;
+      height: 105px;
+
+      display: grid;
+      place-items: center;
+
+      border: 1px solid rgba(227,38,53,.55);
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(227,38,53,.3),
+          rgba(8,10,15,.95) 60%
+        );
+
+      color: #fff;
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: .04em;
+
+      box-shadow:
+        0 0 35px rgba(227,38,53,.25),
+        inset 0 0 30px rgba(227,38,53,.12);
+
+      animation: corePulse 2.8s ease-in-out infinite;
+    }
+
+
+    .event-gate-core::before,
+    .event-gate-core::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(227,38,53,.28);
+    }
+
+
+    .event-gate-core::before {
+      inset: -16px;
+    }
+
+
+    .event-gate-core::after {
+      inset: -30px;
+      border-style: dashed;
+      animation: ringRotate 9s linear infinite reverse;
+    }
+
+
+    /* =====================================================
+       SILHOUETTE
+    ====================================================== */
+
+    .event-silhouette {
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      transform: translateX(-50%);
+      width: 180px;
+      height: 390px;
+      z-index: 5;
+
+      filter:
+        drop-shadow(
+          0 0 25px rgba(0,0,0,.95)
+        );
+    }
+
+
+    .event-figure-head {
+      position: absolute;
+      width: 62px;
+      height: 68px;
+      left: 59px;
+      top: 15px;
+
+      border-radius: 50% 50% 46% 46%;
+
+      background:
+        linear-gradient(
+          145deg,
+          #171a21,
+          #010204
+        );
+
+      box-shadow:
+        inset -8px -4px 10px rgba(0,0,0,.8);
+    }
+
+
+    .event-figure-head::after {
+      content: "";
+      position: absolute;
+      left: 9px;
+      right: 9px;
+      top: 31px;
+      height: 3px;
+
+      background: var(--kgh-red);
+      box-shadow: 0 0 10px var(--kgh-red);
+      opacity: .8;
+    }
+
+
+    .event-figure-body {
+      position: absolute;
+      left: 42px;
+      top: 78px;
+      width: 98px;
+      height: 220px;
+
+      clip-path: polygon(
+        27% 0,
+        73% 0,
+        92% 18%,
+        100% 100%,
+        0 100%,
+        8% 18%
+      );
+
+      background:
+        linear-gradient(
+          100deg,
+          #020305,
+          #14171d 48%,
+          #020305
+        );
+    }
+
+
+    .event-figure-coat {
+      position: absolute;
+      left: 20px;
+      top: 170px;
+      width: 140px;
+      height: 215px;
+
+      clip-path: polygon(
+        28% 0,
+        72% 0,
+        100% 100%,
+        0 100%
+      );
+
+      background:
+        linear-gradient(
+          90deg,
+          #020304,
+          #0d1015 45%,
+          #020304
+        );
+
+      opacity: .92;
+    }
+
+
+    .event-figure-weapon {
+      position: absolute;
+      right: -10px;
+      top: 145px;
+      width: 14px;
+      height: 180px;
+
+      background:
+        linear-gradient(
+          #30343d,
+          #050608
+        );
+
+      transform: rotate(-17deg);
+      box-shadow: 0 0 8px rgba(255,255,255,.12);
+    }
+
+
+    /* =====================================================
+       ART TEXT
+    ====================================================== */
+
+    .event-art-code {
+      position: absolute;
+      z-index: 10;
+
+      color: rgba(255,255,255,.42);
+      font-family: monospace;
+      font-size: 9px;
+      letter-spacing: .18em;
+    }
+
+
+    .code-one {
+      left: 28px;
+      top: 28px;
+    }
+
+
+    .code-two {
+      right: 28px;
+      top: 28px;
+      color: rgba(81,217,255,.55);
+    }
+
+
+    .event-art-word {
+      position: absolute;
+      left: 25px;
+      bottom: 28px;
+
+      font-size: clamp(50px, 8vw, 105px);
+      line-height: .8;
+      font-weight: 1000;
+      letter-spacing: -.06em;
+
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,.10);
+
+      user-select: none;
+    }
+
+
+    .event-art-word::after {
+      content: "GATE";
+      position: absolute;
+      left: 8px;
+      top: 70%;
+      color: rgba(227,38,53,.10);
+      -webkit-text-stroke: 0;
+    }
+
+
+    /* =====================================================
+       LOGIN CONTENT
+    ====================================================== */
+
+    .event-login-content {
+      position: relative;
+      z-index: 20;
+
+      padding: clamp(35px, 5vw, 75px);
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+
+    .event-kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      margin-bottom: 18px;
+
+      color: rgba(255,255,255,.52);
+      font-family: monospace;
+      font-size: 10px;
+      letter-spacing: .16em;
+    }
+
+
+    .event-kicker span {
+      padding: 5px 8px;
+
+      color: #fff;
+      background: var(--kgh-red);
+
+      font-weight: 900;
+    }
+
+
+    .event-classified {
+      margin-bottom: 15px;
+
+      color: var(--kgh-red);
+      font-family: monospace;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .2em;
+    }
+
+
+    .event-main-title {
+      margin: 0;
+
+      color: #fff;
+
+      font-size: clamp(54px, 6vw, 92px);
+      line-height: .86;
+      letter-spacing: -.055em;
+      font-weight: 1000;
+
+      text-shadow:
+        0 10px 40px rgba(0,0,0,.6);
+
+      animation: titleReveal 1s .15s cubic-bezier(.16,1,.3,1) both;
+    }
+
+
+    .event-main-title em {
+      display: block;
+
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,.75);
+
+      font-style: normal;
+    }
+
+
+    .event-main-copy {
+      max-width: 610px;
+      margin: 25px 0;
+
+      color: #aeb3c0;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+
+    /* =====================================================
+       WARNING
+    ====================================================== */
+
+    .event-warning {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+
+      padding: 16px;
+      margin-bottom: 25px;
+
+      border: 1px solid rgba(227,38,53,.24);
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(227,38,53,.08),
+          rgba(227,38,53,.025)
+        );
+
+      box-shadow:
+        inset 3px 0 0 var(--kgh-red);
+
+      animation: warningEnter .7s .3s both;
+    }
+
+
+    .event-warning-icon {
+      width: 34px;
+      height: 34px;
+
+      display: grid;
+      place-items: center;
+
+      border: 1px solid rgba(227,38,53,.5);
+
+      color: var(--kgh-red-bright);
+      font-weight: 1000;
+
+      animation: warningPulse 2s ease-in-out infinite;
+    }
+
+
+    .event-warning strong {
+      display: block;
+      margin-bottom: 5px;
+
+      color: #fff;
+      font-size: 10px;
+      letter-spacing: .14em;
+    }
+
+
+    .event-warning p {
+      margin: 0;
+
+      color: #858b99;
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+
+    /* =====================================================
+       FORM
+    ====================================================== */
+
+    #eventForm {
+      display: flex;
+      flex-direction: column;
+      gap: 17px;
+    }
+
+
+    .event-field label {
+      display: block;
+      margin-bottom: 7px;
+
+      color: #8f95a4;
+      font-family: monospace;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .16em;
+    }
+
+
+    .event-input-wrap {
+      display: flex;
+      align-items: center;
+
+      height: 58px;
+
+      border: 1px solid rgba(255,255,255,.12);
+
+      background:
+        rgba(2,4,8,.7);
+
+      transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease;
+    }
+
+
+    .event-input-wrap:hover {
+      border-color: rgba(255,255,255,.22);
+    }
+
+
+    .event-input-wrap:focus-within {
+      border-color: rgba(227,38,53,.7);
+
+      box-shadow:
+        0 0 0 3px rgba(227,38,53,.07),
+        0 0 30px rgba(227,38,53,.08);
+
+      transform: translateY(-1px);
+    }
+
+
+    .event-input-wrap > span {
+      width: 48px;
+      text-align: center;
+
+      color: var(--kgh-red);
+      font-family: monospace;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+
+    .event-input-wrap input {
+      width: 100%;
+      height: 100%;
+
+      border: 0;
+      outline: 0;
+
+      background: transparent;
+      color: #fff;
+
+      font-size: 14px;
+      letter-spacing: .03em;
+    }
+
+
+    .event-input-wrap input::placeholder {
+      color: #555b68;
+    }
+
+
+    .event-enter-btn {
+      position: relative;
+      overflow: hidden;
+
+      min-height: 60px;
+      margin-top: 5px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 22px;
+
+      border: 1px solid var(--kgh-red);
+
+      background:
+        linear-gradient(
+          100deg,
+          rgba(227,38,53,.92),
+          rgba(177,22,36,.92)
+        );
+
+      color: #fff;
+
+      font-size: 11px;
+      font-weight: 1000;
+      letter-spacing: .15em;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 12px 35px rgba(227,38,53,.15);
+
+      transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        filter .25s ease;
+    }
+
+
+    .event-enter-btn::before {
+      content: "";
+
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255,255,255,.25),
+          transparent
+        );
+
+      transform: skewX(-20deg);
+
+      animation: buttonSweep 3.5s infinite;
+    }
+
+
+    .event-enter-btn:hover {
+      transform: translateY(-3px);
+
+      box-shadow:
+        0 18px 45px rgba(227,38,53,.28);
+
+      filter: brightness(1.1);
+    }
+
+
+    .event-enter-btn:active {
+      transform: translateY(0);
+    }
+
+
+    .event-enter-btn:disabled {
+      opacity: .6;
+      cursor: wait;
+      transform: none;
+    }
+
+
+    .event-enter-btn b {
+      font-size: 22px;
+      font-weight: 400;
+    }
+
+
+    /* =====================================================
+       MESSAGE
+    ====================================================== */
+
+    .message {
+      min-height: 20px;
+      margin-top: 8px;
+
+      font-family: monospace;
+      font-size: 10px;
+      letter-spacing: .04em;
+    }
+
+
+    .message.error {
+      color: #ff6875;
+    }
+
+
+    .message.success {
+      color: var(--kgh-green);
+    }
+
+
+    .message.loading {
+      color: var(--kgh-cyan);
+    }
+
+
+    /* =====================================================
+       INSTRUCTIONS
+    ====================================================== */
+
+    .event-instructions {
+      margin-top: 28px;
+
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding-top: 18px;
+    }
+
+
+    .instructions-heading {
+      display: flex;
+      justify-content: space-between;
+
+      margin-bottom: 13px;
+
+      color: #737987;
+      font-family: monospace;
+      font-size: 8px;
+      letter-spacing: .16em;
+    }
+
+
+    .instruction-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 20px;
+    }
+
+
+    .instruction-list > div {
+      display: grid;
+      grid-template-columns: 25px 1fr;
+      gap: 7px;
+
+      color: #777e8d;
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+
+    .instruction-list b {
+      color: var(--kgh-red);
+      font-family: monospace;
+    }
+
+
+    .event-back-link {
+      display: inline-block;
+      margin-top: 22px;
+
+      color: #777d89;
+      text-decoration: none;
+
+      font-family: monospace;
+      font-size: 9px;
+      letter-spacing: .12em;
+
+      transition: color .2s ease;
+    }
+
+
+    .event-back-link:hover {
+      color: #fff;
+    }
+
+
+    /* =====================================================
+       FOOTER STRIP
+    ====================================================== */
+
+    .event-footer-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+
+      margin-top: 16px;
+
+      border: 1px solid rgba(255,255,255,.09);
+
+      background:
+        rgba(8,10,16,.85);
+
+      animation: cardEnter 1s .15s both;
+    }
+
+
+    .event-footer-strip > div {
+      padding: 20px 24px;
+      border-right: 1px solid rgba(255,255,255,.07);
+    }
+
+
+    .event-footer-strip > div:last-child {
+      border-right: 0;
+    }
+
+
+    .event-footer-strip small {
+      display: block;
+      margin-bottom: 5px;
+
+      color: #656b78;
+      font-family: monospace;
+      font-size: 8px;
+      letter-spacing: .15em;
+    }
+
+
+    .event-footer-strip strong {
+      color: #c7cad2;
+      font-size: 10px;
+      letter-spacing: .08em;
+    }
+
+
+    .green-status {
+      color: var(--kgh-green) !important;
+    }
+
+
+    /* =====================================================
+       AUTHENTICATED CARD
+    ====================================================== */
+
+    .event-authenticated-card {
+      position: relative;
+      display: none;
+
+      grid-template-columns: 38% 62%;
+
+      overflow: hidden;
+
+      margin-top: 30px;
+
+      border: 1px solid rgba(87,242,135,.18);
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(11,20,17,.96),
+          rgba(5,8,10,.98)
+        );
+
+      box-shadow:
+        0 40px 120px rgba(0,0,0,.65),
+        0 0 80px rgba(87,242,135,.05);
+    }
+
+
+    .event-authenticated-card.open {
+      display: grid;
+      animation: authenticatedEnter 1s cubic-bezier(.16,1,.3,1) both;
+    }
+
+
+    /* =====================================================
+       VERIFIED ART
+    ====================================================== */
+
+    .authenticated-art {
+      position: relative;
+      min-height: 620px;
+      overflow: hidden;
+
+      display: grid;
+      place-items: center;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(87,242,135,.14),
+          transparent 42%
+        ),
+        #050908;
+    }
+
+
+    .authenticated-art::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background-image:
+        linear-gradient(
+          rgba(87,242,135,.035) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(87,242,135,.035) 1px,
+          transparent 1px
+        );
+
+      background-size: 45px 45px;
+    }
+
+
+    .authenticated-ring {
+      position: absolute;
+
+      left: 50%;
+      top: 50%;
+
+      transform: translate(-50%, -50%);
+
+      border-radius: 50%;
+      border: 1px solid rgba(87,242,135,.2);
+    }
+
+
+    .ring-a {
+      width: 330px;
+      height: 330px;
+      animation: ringRotate 12s linear infinite;
+    }
+
+
+    .ring-b {
+      width: 460px;
+      height: 460px;
+
+      border-style: dashed;
+      animation: ringRotate 18s linear infinite reverse;
+    }
+
+
+    .authenticated-mark {
+      position: relative;
+      z-index: 3;
+
+      width: 120px;
+      height: 120px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+      border: 1px solid rgba(87,242,135,.65);
+
+      color: var(--kgh-green);
+      font-size: 50px;
+      font-weight: 300;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(87,242,135,.18),
+          rgba(3,8,6,.96) 70%
+        );
+
+      box-shadow:
+        0 0 50px rgba(87,242,135,.14),
+        inset 0 0 35px rgba(87,242,135,.08);
+
+      animation: verifiedPulse 2.5s ease-in-out infinite;
+    }
+
+
+    .authenticated-word {
+      position: absolute;
+      bottom: 35px;
+      left: 35px;
+
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(87,242,135,.16);
+
+      font-size: 75px;
+      font-weight: 1000;
+      letter-spacing: -.06em;
+    }
+
+
+    /* =====================================================
+       AUTHENTICATED CONTENT
+    ====================================================== */
+
+    .authenticated-content {
+      padding: clamp(35px, 5vw, 75px);
+    }
+
+
+    .authenticated-status {
+      color: var(--kgh-green);
+      font-family: monospace;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .16em;
+    }
+
+
+    .authenticated-title {
+      margin: 18px 0 8px;
+
+      color: #fff;
+      font-size: clamp(50px, 5vw, 80px);
+      line-height: .9;
+      letter-spacing: -.05em;
+    }
+
+
+    .authenticated-title em {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,.75);
+      font-style: normal;
+    }
+
+
+    .authenticated-team-name {
+      margin-top: 22px;
+
+      color: #fff;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+
+    .authenticated-team-id {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 7px 11px;
+
+      border: 1px solid rgba(87,242,135,.2);
+      background: rgba(87,242,135,.05);
+
+      color: var(--kgh-green);
+      font-family: monospace;
+      font-size: 12px;
+      letter-spacing: .12em;
+    }
+
+
+    .team-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+
+      margin-top: 28px;
+    }
+
+
+    .team-detail-box {
+      min-height: 74px;
+      padding: 14px;
+
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.025);
+    }
+
+
+    .team-detail-wide {
+      grid-column: 1 / -1;
+    }
+
+
+    .team-detail-box span {
+      display: block;
+      margin-bottom: 7px;
+
+      color: #666d79;
+      font-family: monospace;
+      font-size: 8px;
+      letter-spacing: .13em;
+    }
+
+
+    .team-detail-box strong {
+      color: #d7dae1;
+      font-size: 12px;
+    }
+
+
+    .authenticated-message {
+      margin-top: 20px;
+
+      color: #858c98;
+      font-size: 11px;
+    }
+
+
+    .continue-btn {
+      position: relative;
+      overflow: hidden;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      min-height: 62px;
+
+      margin-top: 25px;
+      padding: 0 22px;
+
+      color: #031007;
+      background: var(--kgh-green);
+
+      border: 1px solid var(--kgh-green);
+      text-decoration: none;
+
+      font-size: 11px;
+      font-weight: 1000;
+      letter-spacing: .15em;
+
+      box-shadow:
+        0 12px 40px rgba(87,242,135,.12);
+
+      transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+    }
+
+
+    .continue-btn:hover {
+      transform: translateY(-3px);
+
+      box-shadow:
+        0 18px 50px rgba(87,242,135,.2);
+    }
+
+
+    .continue-btn b {
+      font-size: 22px;
+      font-weight: 400;
+    }
+
+
+    .event-logout-btn {
+      margin-top: 13px;
+
+      padding: 11px 0;
+
+      border: 0;
+      background: transparent;
+
+      color: #686f7b;
+
+      font-family: monospace;
+      font-size: 9px;
+      letter-spacing: .12em;
+
+      cursor: pointer;
+    }
+
+
+    .event-logout-btn:hover {
+      color: #ff6875;
+    }
+
+
+    /* =====================================================
+       ENTRY / LOADING OVERLAY
+    ====================================================== */
+
+    .kgh-access-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+
+      display: none;
+      place-items: center;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(227,38,53,.16),
+          rgba(2,3,6,.97) 55%
+        );
+
+      backdrop-filter: blur(12px);
+    }
+
+
+    .kgh-access-overlay.open {
+      display: grid;
+    }
+
+
+    .kgh-access-overlay::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0,
+          transparent 4px,
+          rgba(255,255,255,.03) 5px
+        );
+
+      animation: overlayScan 2s linear infinite;
+    }
+
+
+    .access-overlay-card {
+      position: relative;
+      width: min(520px, calc(100% - 40px));
+
+      padding: 45px 35px;
+
+      text-align: center;
+
+      border: 1px solid rgba(227,38,53,.4);
+
+      background:
+        rgba(5,7,11,.94);
+
+      box-shadow:
+        0 30px 100px rgba(0,0,0,.8),
+        0 0 60px rgba(227,38,53,.12);
+
+      animation: overlayCardEnter .6s cubic-bezier(.16,1,.3,1);
+    }
+
+
+    .access-overlay-icon {
+      width: 70px;
+      height: 70px;
+
+      margin: 0 auto 22px;
+
+      display: grid;
+      place-items: center;
+
+      border: 1px solid var(--kgh-red);
+      border-radius: 50%;
+
+      color: var(--kgh-red);
+      font-size: 28px;
+
+      animation: corePulse 1.5s ease-in-out infinite;
+    }
+
+
+    .access-overlay-kicker {
+      color: var(--kgh-red);
+      font-family: monospace;
+      font-size: 9px;
+      letter-spacing: .18em;
+    }
+
+
+    .access-overlay-title {
+      margin: 12px 0;
+
+      color: #fff;
+      font-size: 30px;
+      letter-spacing: -.03em;
+    }
+
+
+    .access-overlay-status {
+      color: #888f9d;
+      font-family: monospace;
+      font-size: 10px;
+      letter-spacing: .08em;
+    }
+
+
+    /* =====================================================
+       ANIMATIONS
+    ====================================================== */
+
+    @keyframes bgSweep {
+      from {
+        transform: translateX(-50%) rotate(0deg);
+      }
+      to {
+        transform: translateX(50%) rotate(0deg);
+      }
+    }
+
+
+    @keyframes gridDrift {
+      from {
+        background-position: 0 0;
+      }
+      to {
+        background-position: 70px 70px;
+      }
+    }
+
+
+    @keyframes glowPulse {
+      0%,100% {
+        opacity: .55;
+        transform: translate(-50%,-50%) scale(.95);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(-50%,-50%) scale(1.08);
+      }
+    }
+
+
+    @keyframes particleFloat {
+      0% {
+        transform: translateY(0);
+        opacity: 0;
+      }
+      15% {
+        opacity: .7;
+      }
+      100% {
+        transform: translateY(-110vh);
+        opacity: 0;
+      }
+    }
+
+
+    @keyframes statusPulse {
+      0%,100% {
+        opacity: .5;
+        transform: scale(.8);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.25);
+      }
+    }
+
+
+    @keyframes cardEnter {
+      from {
+        opacity: 0;
+        transform: translateY(35px) scale(.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+
+    @keyframes titleReveal {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+        clip-path: inset(100% 0 0 0);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        clip-path: inset(0);
+      }
+    }
+
+
+    @keyframes warningEnter {
+      from {
+        opacity: 0;
+        transform: translateX(-15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+
+    @keyframes warningPulse {
+      0%,100% {
+        box-shadow: 0 0 0 rgba(227,38,53,0);
+      }
+      50% {
+        box-shadow: 0 0 22px rgba(227,38,53,.18);
+      }
+    }
+
+
+    @keyframes ringRotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+
+    @keyframes corePulse {
+      0%,100% {
+        transform: translate(-50%,-50%) scale(1);
+        box-shadow:
+          0 0 35px rgba(227,38,53,.2),
+          inset 0 0 30px rgba(227,38,53,.08);
+      }
+      50% {
+        transform: translate(-50%,-50%) scale(1.06);
+        box-shadow:
+          0 0 60px rgba(227,38,53,.35),
+          inset 0 0 40px rgba(227,38,53,.15);
+      }
+    }
+
+
+    @keyframes artScan {
+      from {
+        transform: translateX(-100%);
+      }
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+
+    @keyframes topScanner {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+
+    @keyframes buttonSweep {
+      0% {
+        left: -100%;
+      }
+      45%,100% {
+        left: 150%;
+      }
+    }
+
+
+    @keyframes authenticatedEnter {
+      from {
+        opacity: 0;
+        transform: translateY(40px) scale(.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+
+    @keyframes verifiedPulse {
+      0%,100% {
+        transform: scale(1);
+        box-shadow:
+          0 0 50px rgba(87,242,135,.12),
+          inset 0 0 35px rgba(87,242,135,.06);
+      }
+      50% {
+        transform: scale(1.06);
+        box-shadow:
+          0 0 80px rgba(87,242,135,.22),
+          inset 0 0 50px rgba(87,242,135,.12);
+      }
+    }
+
+
+    @keyframes overlayScan {
+      from {
+        background-position: 0 0;
+      }
+      to {
+        background-position: 0 20px;
+      }
+    }
+
+
+    @keyframes overlayCardEnter {
+      from {
+        opacity: 0;
+        transform: scale(.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ====================================================== */
+
+    @media (max-width: 950px) {
+
+      .event-cinematic-card {
+        grid-template-columns: 1fr;
+      }
+
+
+      .event-art {
+        min-height: 430px;
+      }
+
+
+      .event-gate {
+        transform:
+          translate(-50%, -50%)
+          scale(.75);
+      }
+
+
+      .event-silhouette {
+        transform:
+          translateX(-50%)
+          scale(.75);
+        transform-origin: bottom center;
+      }
+
+
+      .event-art-rings {
+        transform:
+          translate(-50%, -50%)
+          scale(.75);
+      }
+
+
+      .event-authenticated-card.open {
+        grid-template-columns: 1fr;
+      }
+
+
+      .authenticated-art {
+        min-height: 390px;
+      }
+
+    }
+
+
+    @media (max-width: 650px) {
+
+      .event-grand-nav,
+      .event-page-wrap {
+        width: min(100% - 22px, 1400px);
+      }
+
+
+      .event-grand-nav {
+        padding: 18px 0;
+      }
+
+
+      .event-grand-brand > span:last-child {
+        display: none;
+      }
+
+
+      .event-art {
+        min-height: 350px;
+      }
+
+
+      .event-art-rings {
+        transform:
+          translate(-50%, -50%)
+          scale(.58);
+      }
+
+
+      .event-gate {
+        transform:
+          translate(-50%, -50%)
+          scale(.58);
+      }
+
+
+      .event-silhouette {
+        transform:
+          translateX(-50%)
+          scale(.58);
+      }
+
+
+      .event-login-content,
+      .authenticated-content {
+        padding: 30px 22px;
+      }
+
+
+      .event-main-title {
+        font-size: 54px;
+      }
+
+
+      .instruction-list {
+        grid-template-columns: 1fr;
+      }
+
+
+      .event-footer-strip {
+        grid-template-columns: 1fr;
+      }
+
+
+      .event-footer-strip > div {
+        border-right: 0;
+        border-bottom: 1px solid rgba(255,255,255,.07);
+      }
+
+
+      .event-footer-strip > div:last-child {
+        border-bottom: 0;
+      }
+
+
+      .team-details-grid {
+        grid-template-columns: 1fr;
+      }
+
+
+      .team-detail-wide {
+        grid-column: auto;
+      }
+
+
+      .authenticated-art {
+        min-height: 320px;
+      }
+
+
+      .authenticated-word {
+        font-size: 50px;
+      }
+
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+
+    }
+
+  </style>
+
 </head>
 
 
-<body class="home-page">
+<body class="event-grand-page">
 
   <!-- =====================================================
-       BACKGROUND
+       CINEMATIC BACKGROUND
   ====================================================== -->
 
-  <div class="noise"></div>
-  <div class="web-pattern"></div>
+  <div class="event-bg" aria-hidden="true">
 
-  <div class="comic-halftone"></div>
-  <div class="red-wash"></div>
+    <div class="event-bg-grid"></div>
 
+    <div class="event-bg-glow"></div>
 
-  <!-- =====================================================
-       CINEMATIC PRELOADER
-  ====================================================== -->
-
-  <div
-    id="preloader"
-    class="preloader"
-    aria-hidden="true"
-  >
-
-    <div class="preloader-grid"></div>
-
-    <div class="preloader-lines"></div>
-
-    <div class="preloader-center">
-
-      <div class="preloader-code">
-        KGH // SECURE CHANNEL
-      </div>
-
-      <div class="gate-loader">
-
-        <div class="gate-loader-left"></div>
-        <div class="gate-loader-right"></div>
-
-        <div class="gate-loader-lock">
-          ◆
-        </div>
-
-      </div>
-
-      <div class="preloader-status">
-        BREACHING THE REGISTRATION GATE
-      </div>
-
-      <div class="preloader-progress">
-        <span></span>
-      </div>
-
+    <div class="event-bg-lines">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       FLOATING PARTICLES
+  ====================================================== -->
+
+  <div class="event-particles" aria-hidden="true">
+
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
 
   </div>
 
@@ -91,15 +2248,15 @@
        NAVIGATION
   ====================================================== -->
 
-  <header class="home-nav shell">
+  <header class="event-grand-nav">
 
     <a
       href="/"
-      class="home-brand"
+      class="event-grand-brand"
       aria-label="Kraven's Gate Heist"
     >
 
-      <span class="home-brand-mark">
+      <span class="event-grand-brand-mark">
         KGH
       </span>
 
@@ -110,1222 +2267,631 @@
     </a>
 
 
-    <div class="home-nav-actions">
+    <div class="event-live-chip">
 
-      <a
-        href="/event"
-        class="nav-chip home-event-link"
-      >
-        EVENT ACCESS
-        <span>↗</span>
-      </a>
+      <span class="event-live-dot"></span>
+
+      GATE ONLINE
 
     </div>
 
   </header>
 
 
-  <main>
+  <!-- =====================================================
+       MAIN
+  ====================================================== -->
 
+  <main class="event-page-wrap">
 
-    <!-- ===================================================
-         HERO
-    ==================================================== -->
 
-    <section class="comic-hero">
-
-      <div class="hero-red-panel"></div>
-
-      <div class="hero-scan"></div>
-
-      <div class="shell comic-hero-inner">
-
-
-        <!-- LEFT -->
-        <div class="comic-copy">
-
-          <div class="comic-kicker">
-
-            <span class="comic-number">
-              001
-            </span>
-
-            CLASSIFIED EVENT // REGISTRATION
-
-          </div>
-
-
-          <div class="comic-label">
-            THE GATE IS OPEN
-          </div>
-
-
-          <h1 class="comic-title">
-
-            KRAVEN'S
-
-            <span>
-              GATE
-            </span>
-
-            <small>
-              HEIST
-            </small>
-
-          </h1>
-
-
-          <div class="comic-tagline">
-            ONE FINAL HEIST.
-            <strong>A WORLD BEYOND AWAITS.</strong>
-          </div>
-
-
-          <p class="comic-intro">
-
-            Assemble your crew.
-            Enter the gate.
-            Solve the impossible.
-            Make it to the final extraction.
-
-          </p>
-
-
-          <div class="hero-buttons">
-
-            <a
-              href="#registration"
-              class="hero-enter-btn"
-            >
-
-              <span>
-                START YOUR HEIST
-              </span>
-
-              <b>
-                →
-              </b>
-
-            </a>
-
-
-            <a
-              href="/event"
-              class="hero-secondary-btn"
-            >
-              ALREADY REGISTERED?
-            </a>
-
-          </div>
-
-
-          <div class="hero-micro">
-
-            <span>NO HARDWARE</span>
-            <i></i>
-            <span>BROWSER BASED</span>
-            <i></i>
-            <span>TEAM EVENT</span>
-
-          </div>
-
-        </div>
-
-
-        <!-- RIGHT : ORIGINAL CSS / SVG-STYLE ARTWORK -->
-        <div class="comic-art">
-
-          <div class="art-coordinate art-coordinate-a">
-            13° 04' // GATE SECTOR
-          </div>
-
-          <div class="art-coordinate art-coordinate-b">
-            ACCESS // 001
-          </div>
-
-
-          <div class="art-rings">
-
-            <div class="art-ring ring-one"></div>
-            <div class="art-ring ring-two"></div>
-            <div class="art-ring ring-three"></div>
-
-          </div>
-
-
-          <div class="comic-city">
-
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-
-          </div>
-
-
-          <div class="comic-gate">
-
-            <div class="gate-frame"></div>
-
-            <div class="gate-inner">
-
-              <div class="gate-glow"></div>
-
-              <div class="gate-door left"></div>
-              <div class="gate-door right"></div>
-
-              <div class="gate-core">
-                K
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <!-- SILHOUETTE -->
-          <div class="heist-figure">
-
-            <div class="figure-shadow"></div>
-
-            <div class="figure-head"></div>
-
-            <div class="figure-body"></div>
-
-            <div class="figure-coat"></div>
-
-            <div class="figure-arm"></div>
-
-            <div class="figure-weapon"></div>
-
-            <div class="figure-light"></div>
-
-          </div>
-
-
-          <div class="comic-spider">
-            ✦
-          </div>
-
-
-          <div class="comic-key">
-            ⚿
-          </div>
-
-
-          <div class="art-caption">
-
-            <span>
-              TARGET
-            </span>
-
-            <strong>
-              THE UNKNOWN
-            </strong>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="hero-bottom-line"></div>
-
-    </section>
-
-
-    <!-- ===================================================
-         EVENT STRIP
-    ==================================================== -->
-
-    <section class="shell event-strip-section">
-
-      <div class="event-strip">
-
-        <div>
-
-          <small>
-            MISSION
-          </small>
-
-          <strong>
-            KRAVEN'S GATE HEIST
-          </strong>
-
-        </div>
-
-
-        <div>
-
-          <small>
-            FORMAT
-          </small>
-
-          <strong>
-            TECHNICAL HEIST
-          </strong>
-
-        </div>
-
-
-        <div>
-
-          <small>
-            ACCESS
-          </small>
-
-          <strong class="green-status">
-            OPEN
-          </strong>
-
-        </div>
-
-
-        <div>
-
-          <small>
-            CREW
-          </small>
-
-          <strong>
-            01 — 04 OPERATIVES
-          </strong>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ===================================================
-         BRIEFING
-    ==================================================== -->
-
-    <section class="briefing shell">
-
-      <div class="comic-section-heading">
-
-        <div class="section-index">
-          02
-        </div>
-
-        <div>
-
-          <span>
-            MISSION BRIEF
-          </span>
-
-          <h2>
-            ENTER THE
-            <em>WORLD.</em>
-          </h2>
-
-        </div>
-
-      </div>
-
-
-      <div class="briefing-grid">
-
-
-        <article class="brief-panel brief-main">
-
-          <div class="panel-top">
-            FILE // KGH-001
-          </div>
-
-          <h3>
-            THE GATE
-            <span>HAS OPENED.</span>
-          </h3>
-
-          <p>
-
-            This is not a normal technical symposium.
-
-            Kraven's Gate Heist turns your team into
-            investigators, strategists and problem-solvers.
-
-            Your crew enters together.
-            Your decisions matter.
-            Your mission begins here.
-
-          </p>
-
-          <div class="panel-stamp">
-            CLASSIFIED
-          </div>
-
-        </article>
-
-
-        <article class="brief-panel">
-
-          <div class="panel-top">
-            01 // ASSEMBLE
-          </div>
-
-          <div class="brief-icon">
-            ◇
-          </div>
-
-          <h3>
-            BUILD YOUR CREW
-          </h3>
-
-          <p>
-            Register your team and prepare your operatives.
-          </p>
-
-        </article>
-
-
-        <article class="brief-panel accent-red">
-
-          <div class="panel-top">
-            02 // BREACH
-          </div>
-
-          <div class="brief-icon">
-            ×
-          </div>
-
-          <h3>
-            BREAK THE GATE
-          </h3>
-
-          <p>
-            Enter the event and face the challenges.
-          </p>
-
-        </article>
-
-
-        <article class="brief-panel accent-cyan">
-
-          <div class="panel-top">
-            03 // EXTRACT
-          </div>
-
-          <div class="brief-icon">
-            →
-          </div>
-
-          <h3>
-            REACH THE END
-          </h3>
-
-          <p>
-            Survive every stage and reach the final.
-          </p>
-
-        </article>
-
-
-      </div>
-
-    </section>
-
-
-    <!-- ===================================================
-         REGISTRATION
-    ==================================================== -->
+    <!-- =================================================
+         LOGIN CARD
+    ================================================== -->
 
     <section
-      id="registration"
-      class="registration-section shell"
+      id="loginCard"
+      class="event-cinematic-card"
     >
 
-      <div class="registration-heading">
 
-        <div>
+      <!-- ===============================================
+           CINEMATIC ART
+      ================================================ -->
 
-          <div class="comic-kicker">
+      <div class="event-art">
 
-            <span class="comic-number">
-              03
-            </span>
+        <div class="event-art-grid"></div>
 
-            SECURE REGISTRATION
 
-          </div>
+        <div class="event-art-rings">
 
-          <h2>
-            BUILD YOUR
-            <em>CREW.</em>
-          </h2>
-
-          <p>
-            Register your team to receive your unique
-            KGH Team ID.
-          </p>
+          <span></span>
+          <span></span>
+          <span></span>
 
         </div>
 
 
-        <div class="gate-status">
+        <div class="code-one event-art-code">
+          13° 04' // GATE SECTOR
+        </div>
 
-          <span class="status-dot"></span>
 
-          REGISTRATION GATE ONLINE
+        <div class="code-two event-art-code">
+          ACCESS // 001
+        </div>
+
+
+        <div class="event-art-word">
+          HEIST
+        </div>
+
+
+        <div class="event-gate">
+
+          <div class="event-gate-left"></div>
+
+          <div class="event-gate-right"></div>
+
+          <div class="event-gate-core">
+            K
+          </div>
+
+        </div>
+
+
+        <div class="event-silhouette">
+
+          <div class="event-figure-head"></div>
+
+          <div class="event-figure-body"></div>
+
+          <div class="event-figure-coat"></div>
+
+          <div class="event-figure-weapon"></div>
 
         </div>
 
       </div>
 
 
-      <!-- =================================================
-           REGISTRATION FORM
-      ================================================== -->
+      <!-- ===============================================
+           LOGIN CONTENT
+      ================================================ -->
 
-      <form
-        id="registrationForm"
-        class="registration-form"
-        novalidate
-      >
+      <div class="event-login-content">
 
 
-        <!-- ===============================================
-             SECTION 01
-        ================================================ -->
+        <div class="event-kicker">
 
-        <section class="registration-card">
+          <span>
+            HQ
+          </span>
 
-          <div class="form-section-header">
+          KRAVEN'S GATE HEIST // STUDENT ACCESS
 
-            <div class="form-number">
-              01
-            </div>
+        </div>
 
-            <div>
 
-              <span>
-                CREW IDENTITY
-              </span>
+        <div class="event-classified">
+          00 // EVENT ACCESS
+        </div>
 
-              <h3>
-                YOUR TEAM
-              </h3>
 
-            </div>
+        <h1 class="event-main-title">
 
-            <div class="form-file">
-              FILE // TEAM
-            </div>
+          THE HEIST
 
+          <em>BEGINS.</em>
+
+        </h1>
+
+
+        <p class="event-main-copy">
+
+          Welcome to Kraven's Gate Heist.
+
+          Enter the Team ID and registered leader
+          email used during team registration to
+          unlock your event access.
+
+        </p>
+
+
+        <!-- =============================================
+             WARNING
+        ============================================== -->
+
+        <div class="event-warning">
+
+          <div class="event-warning-icon">
+            !
           </div>
-
-
-          <div class="fields">
-
-            <label>
-
-              <span>
-                TEAM NAME <sup>*</sup>
-              </span>
-
-              <input
-                id="teamName"
-                name="teamName"
-                type="text"
-                maxlength="80"
-                autocomplete="organization"
-                placeholder="Enter your crew name"
-                required
-              >
-
-            </label>
-
-
-            <label>
-
-              <span>
-                COLLEGE / INSTITUTION <sup>*</sup>
-              </span>
-
-              <input
-                id="college"
-                name="college"
-                type="text"
-                maxlength="160"
-                autocomplete="organization"
-                placeholder="Enter your college name"
-                required
-              >
-
-            </label>
-
-          </div>
-
-        </section>
-
-
-        <!-- ===============================================
-             SECTION 02
-        ================================================ -->
-
-        <section class="registration-card">
-
-          <div class="form-section-header">
-
-            <div class="form-number">
-              02
-            </div>
-
-            <div>
-
-              <span>
-                ACADEMIC PROFILE
-              </span>
-
-              <h3>
-                OPERATIVE DATA
-              </h3>
-
-            </div>
-
-            <div class="form-file">
-              FILE // PROFILE
-            </div>
-
-          </div>
-
-
-          <div class="fields two">
-
-
-            <label>
-
-              <span>
-                PROGRAM <sup>*</sup>
-              </span>
-
-              <select
-                id="program"
-                name="program"
-                required
-              >
-
-                <option value="">
-                  Select program
-                </option>
-
-                <option value="B.E.">
-                  B.E.
-                </option>
-
-                <option value="B.Tech.">
-                  B.Tech.
-                </option>
-
-                <option value="B.Sc.">
-                  B.Sc.
-                </option>
-
-                <option value="BCA">
-                  BCA
-                </option>
-
-                <option value="MCA">
-                  MCA
-                </option>
-
-                <option value="MBA">
-                  MBA
-                </option>
-
-                <option value="M.E.">
-                  M.E.
-                </option>
-
-                <option value="M.Tech.">
-                  M.Tech.
-                </option>
-
-                <option value="M.Sc.">
-                  M.Sc.
-                </option>
-
-                <option value="Other">
-                  Other
-                </option>
-
-              </select>
-
-            </label>
-
-
-            <label>
-
-              <span>
-                DEPARTMENT <sup>*</sup>
-              </span>
-
-              <input
-                id="department"
-                name="department"
-                type="text"
-                maxlength="100"
-                placeholder="Enter department"
-                required
-              >
-
-            </label>
-
-
-            <label>
-
-              <span>
-                YEAR <sup>*</sup>
-              </span>
-
-              <select
-                id="yearLevel"
-                name="yearLevel"
-                required
-              >
-
-                <option value="">
-                  Select year
-                </option>
-
-                <option value="1st Year">
-                  1st Year
-                </option>
-
-                <option value="2nd Year">
-                  2nd Year
-                </option>
-
-                <option value="3rd Year">
-                  3rd Year
-                </option>
-
-                <option value="4th Year">
-                  4th Year
-                </option>
-
-                <option value="Final Year">
-                  Final Year
-                </option>
-
-                <option value="Postgraduate — 1st Year">
-                  Postgraduate — 1st Year
-                </option>
-
-                <option value="Postgraduate — 2nd Year">
-                  Postgraduate — 2nd Year
-                </option>
-
-                <option value="Other">
-                  Other
-                </option>
-
-              </select>
-
-            </label>
-
-          </div>
-
-        </section>
-
-
-        <!-- ===============================================
-             SECTION 03
-        ================================================ -->
-
-        <section class="registration-card">
-
-          <div class="form-section-header">
-
-            <div class="form-number">
-              03
-            </div>
-
-            <div>
-
-              <span>
-                LEAD OPERATIVE
-              </span>
-
-              <h3>
-                TEAM LEADER
-              </h3>
-
-            </div>
-
-            <div class="form-file">
-              FILE // LEADER
-            </div>
-
-          </div>
-
-
-          <div class="fields two">
-
-
-            <label>
-
-              <span>
-                FULL NAME <sup>*</sup>
-              </span>
-
-              <input
-                id="leaderName"
-                name="leaderName"
-                type="text"
-                maxlength="100"
-                autocomplete="name"
-                placeholder="Leader full name"
-                required
-              >
-
-            </label>
-
-
-            <label>
-
-              <span>
-                REGISTER NUMBER <sup>*</sup>
-              </span>
-
-              <input
-                id="leaderRegNo"
-                name="leaderRegNo"
-                type="text"
-                maxlength="60"
-                placeholder="College ID / Register No."
-                required
-              >
-
-            </label>
-
-
-            <label>
-
-              <span>
-                EMAIL <sup>*</sup>
-              </span>
-
-              <input
-                id="leaderEmail"
-                name="leaderEmail"
-                type="email"
-                maxlength="160"
-                autocomplete="email"
-                placeholder="Leader email"
-                required
-              >
-
-            </label>
-
-
-            <label>
-
-              <span>
-                MOBILE NUMBER <sup>*</sup>
-              </span>
-
-              <input
-                id="leaderPhone"
-                name="leaderPhone"
-                type="tel"
-                maxlength="25"
-                autocomplete="tel"
-                placeholder="Leader mobile number"
-                required
-              >
-
-            </label>
-
-
-          </div>
-
-        </section>
-
-
-        <!-- ===============================================
-             SECTION 04
-        ================================================ -->
-
-        <section class="registration-card">
-
-          <div class="form-section-header">
-
-            <div class="form-number">
-              04
-            </div>
-
-            <div>
-
-              <span>
-                CREW MEMBERS
-              </span>
-
-              <h3>
-                ADD YOUR OPERATIVES
-              </h3>
-
-            </div>
-
-            <div class="form-file">
-              OPTIONAL // 02–04
-            </div>
-
-          </div>
-
-
-          <div class="member-grid">
-
-
-            <div class="member-row">
-
-              <div class="member-badge">
-                02
-              </div>
-
-              <label>
-
-                <span>
-                  NAME
-                </span>
-
-                <input
-                  id="member2Name"
-                  name="member2Name"
-                  type="text"
-                  maxlength="100"
-                  placeholder="Member 2 name"
-                >
-
-              </label>
-
-              <label>
-
-                <span>
-                  REGISTER NUMBER
-                </span>
-
-                <input
-                  id="member2RegNo"
-                  name="member2RegNo"
-                  type="text"
-                  maxlength="60"
-                  placeholder="Register number"
-                >
-
-              </label>
-
-            </div>
-
-
-            <div class="member-row">
-
-              <div class="member-badge">
-                03
-              </div>
-
-              <label>
-
-                <span>
-                  NAME
-                </span>
-
-                <input
-                  id="member3Name"
-                  name="member3Name"
-                  type="text"
-                  maxlength="100"
-                  placeholder="Member 3 name"
-                >
-
-              </label>
-
-              <label>
-
-                <span>
-                  REGISTER NUMBER
-                </span>
-
-                <input
-                  id="member3RegNo"
-                  name="member3RegNo"
-                  type="text"
-                  maxlength="60"
-                  placeholder="Register number"
-                >
-
-              </label>
-
-            </div>
-
-
-            <div class="member-row">
-
-              <div class="member-badge">
-                04
-              </div>
-
-              <label>
-
-                <span>
-                  NAME
-                </span>
-
-                <input
-                  id="member4Name"
-                  name="member4Name"
-                  type="text"
-                  maxlength="100"
-                  placeholder="Member 4 name"
-                >
-
-              </label>
-
-              <label>
-
-                <span>
-                  REGISTER NUMBER
-                </span>
-
-                <input
-                  id="member4RegNo"
-                  name="member4RegNo"
-                  type="text"
-                  maxlength="60"
-                  placeholder="Register number"
-                >
-
-              </label>
-
-            </div>
-
-
-          </div>
-
-        </section>
-
-
-        <!-- ===============================================
-             DECLARATION
-        ================================================ -->
-
-        <section class="declaration-card">
-
-
-          <div class="declaration-header">
-
-            <span>
-              05
-            </span>
-
-            <div>
-
-              <small>
-                FINAL CONFIRMATION
-              </small>
-
-              <strong>
-                MISSION DECLARATION
-              </strong>
-
-            </div>
-
-          </div>
-
-
-          <label class="check">
-
-            <input
-              id="consent"
-              name="consent"
-              type="checkbox"
-              required
-            >
-
-            <span></span>
-
-            <p>
-
-              I confirm that the information provided
-              above is accurate and that our team agrees
-              to participate in Kraven's Gate Heist and
-              follow the instructions given by the event
-              organizers.
-
-            </p>
-
-          </label>
-
-
-        </section>
-
-
-        <!-- ===============================================
-             SUBMIT
-        ================================================ -->
-
-        <div class="submit-row">
 
           <div>
 
-            <div
-              id="formMessage"
-              class="form-message"
-              role="status"
-              aria-live="polite"
-            ></div>
+            <strong>
+              SYMPOSIUM EVENT ACCESS
+            </strong>
 
-            <div class="submit-note">
-              YOUR TEAM ID WILL BE GENERATED AFTER
-              SUCCESSFUL REGISTRATION.
+            <p>
+              Your Team ID connects you to your
+              registered team. Your progress will be
+              saved automatically during the event.
+              Do not share your Team ID with another team.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- =============================================
+             LOGIN FORM
+        ============================================== -->
+
+        <form
+          id="eventForm"
+          novalidate
+        >
+
+
+          <div class="event-field">
+
+            <label for="teamId">
+              TEAM ID
+            </label>
+
+
+            <div class="event-input-wrap">
+
+              <span>
+                #
+              </span>
+
+              <input
+                id="teamId"
+                name="teamId"
+                type="text"
+                placeholder="Example: KGH-4821"
+                autocomplete="off"
+                autocapitalize="characters"
+                spellcheck="false"
+                maxlength="30"
+                required
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="event-field">
+
+            <label for="email">
+              REGISTERED LEADER EMAIL
+            </label>
+
+
+            <div class="event-input-wrap">
+
+              <span>
+                @
+              </span>
+
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Enter registered leader email"
+                autocomplete="email"
+                maxlength="160"
+                required
+              >
+
             </div>
 
           </div>
 
 
           <button
-            id="submitBtn"
-            class="primary-btn submit-btn"
+            id="enterBtn"
+            class="event-enter-btn"
             type="submit"
           >
 
             <span>
-              BREACH THE GATE
+              ENTER THE HEIST
             </span>
 
             <b>
-              ↗
+              →
             </b>
 
           </button>
 
+
+        </form>
+
+
+        <div
+          id="loginMessage"
+          class="message"
+          role="status"
+          aria-live="polite"
+        ></div>
+
+
+        <!-- =============================================
+             INSTRUCTIONS
+        ============================================== -->
+
+        <div class="event-instructions">
+
+          <div class="instructions-heading">
+
+            <span>
+              BEFORE YOU ENTER
+            </span>
+
+            <span>
+              KGH // PROTOCOL
+            </span>
+
+          </div>
+
+
+          <div class="instruction-list">
+
+            <div>
+
+              <b>
+                01
+              </b>
+
+              <span>
+                Enter the exact Team ID given after registration.
+              </span>
+
+            </div>
+
+
+            <div>
+
+              <b>
+                02
+              </b>
+
+              <span>
+                Use the registered team leader's email address.
+              </span>
+
+            </div>
+
+
+            <div>
+
+              <b>
+                03
+              </b>
+
+              <span>
+                Your answers and progress will be saved automatically.
+              </span>
+
+            </div>
+
+
+            <div>
+
+              <b>
+                04
+              </b>
+
+              <span>
+                Do not refresh repeatedly while submitting an answer.
+              </span>
+
+            </div>
+
+
+            <div>
+
+              <b>
+                05
+              </b>
+
+              <span>
+                Follow the instructions shown during each round.
+              </span>
+
+            </div>
+
+          </div>
+
         </div>
 
 
-      </form>
+        <a
+          href="/"
+          class="event-back-link"
+        >
+          ← BACK TO REGISTRATION
+        </a>
 
-    </section>
-
-
-    <!-- ===================================================
-         AFTERCARE
-    ==================================================== -->
-
-    <section class="shell aftercare">
-
-      <div class="after-card">
-
-        <div class="tiny-icon">
-          ⚿
-        </div>
-
-        <div>
-
-          <b>
-            KEEP YOUR TEAM ID SAFE
-          </b>
-
-          <p>
-            You will need your Team ID and registered
-            leader email to enter the event.
-          </p>
-
-        </div>
-
-        <strong>
-          KGH // ACCESS
-        </strong>
 
       </div>
 
     </section>
 
+
+    <!-- =================================================
+         FOOTER STRIP
+    ================================================== -->
+
+    <div class="event-footer-strip">
+
+      <div>
+
+        <small>
+          MISSION
+        </small>
+
+        <strong>
+          KRAVEN'S GATE HEIST
+        </strong>
+
+      </div>
+
+
+      <div>
+
+        <small>
+          ACCESS
+        </small>
+
+        <strong>
+          TEAM AUTHENTICATION
+        </strong>
+
+      </div>
+
+
+      <div>
+
+        <small>
+          STATUS
+        </small>
+
+        <strong class="green-status">
+          GATE ONLINE
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+         AUTHENTICATED TEAM
+    ================================================== -->
+
+    <section
+      id="alreadyIn"
+      class="event-authenticated-card"
+    >
+
+
+      <!-- ===============================================
+           AUTHENTICATED ART
+      ================================================ -->
+
+      <div class="authenticated-art">
+
+        <div class="authenticated-ring ring-a"></div>
+
+        <div class="authenticated-ring ring-b"></div>
+
+
+        <div class="authenticated-mark">
+          ✓
+        </div>
+
+
+        <div class="authenticated-word">
+          VERIFIED
+        </div>
+
+      </div>
+
+
+      <!-- ===============================================
+           AUTHENTICATED CONTENT
+      ================================================ -->
+
+      <div class="authenticated-content">
+
+
+        <div class="authenticated-status">
+          ACCESS GRANTED // TEAM AUTHENTICATED
+        </div>
+
+
+        <h2 class="authenticated-title">
+
+          WELCOME,
+
+          <em>TEAM.</em>
+
+        </h2>
+
+
+        <div
+          id="teamName"
+          class="authenticated-team-name"
+        >
+          —
+        </div>
+
+
+        <div
+          id="teamIdDisplay"
+          class="authenticated-team-id"
+        >
+          —
+        </div>
+
+
+        <div class="team-details-grid">
+
+
+          <div class="team-detail-box">
+
+            <span>
+              COLLEGE
+            </span>
+
+            <strong id="collegeDisplay">
+              —
+            </strong>
+
+          </div>
+
+
+          <div class="team-detail-box">
+
+            <span>
+              DEPARTMENT
+            </span>
+
+            <strong id="departmentDisplay">
+              —
+            </strong>
+
+          </div>
+
+
+          <div class="team-detail-box">
+
+            <span>
+              PROGRAM
+            </span>
+
+            <strong id="programDisplay">
+              —
+            </strong>
+
+          </div>
+
+
+          <div class="team-detail-box">
+
+            <span>
+              YEAR
+            </span>
+
+            <strong id="yearDisplay">
+              —
+            </strong>
+
+          </div>
+
+
+          <div class="team-detail-box team-detail-wide">
+
+            <span>
+              TEAM LEADER
+            </span>
+
+            <strong id="leaderDisplay">
+              —
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+        <div
+          id="sessionMessage"
+          class="authenticated-message"
+        >
+          Your team has been authenticated.
+        </div>
+
+
+        <a
+          href="/round"
+          class="continue-btn"
+        >
+
+          <span>
+            CONTINUE TO EVENT
+          </span>
+
+          <b>
+            →
+          </b>
+
+        </a>
+
+
+        <button
+          id="logoutBtn"
+          class="event-logout-btn"
+          type="button"
+        >
+          LOG OUT OF EVENT
+        </button>
+
+
+        <a
+          href="/"
+          class="event-back-link"
+        >
+          ← REGISTRATION
+        </a>
+
+
+      </div>
+
+    </section>
 
   </main>
 
 
   <!-- =====================================================
-       SUCCESS OVERLAY
+       ACCESS OVERLAY
   ====================================================== -->
 
   <div
-    id="successOverlay"
-    class="success-overlay"
+    id="accessOverlay"
+    class="kgh-access-overlay"
     aria-hidden="true"
   >
 
-    <div class="success-grid"></div>
+    <div class="access-overlay-card">
 
-    <div class="success-card">
-
-      <div class="unlock">
+      <div class="access-overlay-icon">
         ◆
       </div>
 
-      <div class="success-kicker">
-        ACCESS GRANTED // REGISTRATION COMPLETE
+      <div class="access-overlay-kicker">
+        KGH // SECURE CHANNEL
       </div>
 
-      <h2>
-        CREW
-        <em>REGISTERED.</em>
+      <h2 class="access-overlay-title">
+        BREACHING THE GATE
       </h2>
 
-      <p>
-        Your team has successfully entered
-        Kraven's Gate Heist.
-      </p>
-
-
-      <div class="team-id-label">
-        YOUR TEAM ID
-      </div>
-
       <div
-        id="teamIdResult"
-        class="success-team-id"
+        id="accessOverlayStatus"
+        class="access-overlay-status"
       >
-        KGH-----
+        VERIFYING CREW CREDENTIALS...
       </div>
-
-
-      <div class="save-note">
-        SAVE THIS ID — YOU WILL NEED IT TO ENTER THE EVENT.
-      </div>
-
-
-      <div class="success-actions">
-
-        <button
-          id="copyTeamId"
-          class="secondary-btn"
-          type="button"
-        >
-          COPY TEAM ID
-        </button>
-
-        <a
-          href="/event"
-          class="primary-btn"
-        >
-          ENTER EVENT
-          <b>→</b>
-        </a>
-
-      </div>
-
-
-      <div
-        id="copyMessage"
-        class="copy-message"
-      ></div>
 
     </div>
 
@@ -1333,7 +2899,9 @@
 
 
   <!-- =====================================================
-       REGISTRATION JAVASCRIPT
+       EVENT AUTHENTICATION
+       IMPORTANT:
+       This restores the event functionality.
   ====================================================== -->
 
   <script>
@@ -1349,123 +2917,480 @@
       document.getElementById(id);
 
 
-    function showMessage(
+    function setMessage(
       text,
       type = ''
     ) {
 
-      const element =
-        $('formMessage');
+      const message =
+        $('loginMessage');
 
-      element.textContent =
+      if (!message) {
+        return;
+      }
+
+      message.textContent =
         text || '';
 
-      element.className =
+      message.className =
         type
-          ? `form-message ${type}`
-          : 'form-message';
+          ? `message ${type}`
+          : 'message';
 
     }
 
 
-    /* =====================================================
-       CINEMATIC INTRO
-    ====================================================== */
+    function showOverlay(
+      status =
+        'VERIFYING CREW CREDENTIALS...'
+    ) {
 
-    window.addEventListener(
-      'load',
-      () => {
+      const overlay =
+        $('accessOverlay');
 
-        const preloader =
-          $('preloader');
+      const statusElement =
+        $('accessOverlayStatus');
 
-        if (!preloader) {
-          return;
-        }
+      if (statusElement) {
+        statusElement.textContent =
+          status;
+      }
 
-        window.setTimeout(
-          () => {
+      if (overlay) {
 
-            preloader.classList.add(
-              'preloader-hidden'
-            );
+        overlay.classList.add(
+          'open'
+        );
 
-          },
-          2550
+        overlay.setAttribute(
+          'aria-hidden',
+          'false'
         );
 
       }
-    );
+
+    }
 
 
-    /* =====================================================
-       SCROLL REVEAL
-    ====================================================== */
+    function hideOverlay() {
 
-    const revealItems =
-      document.querySelectorAll(
-        '.brief-panel, .registration-card, .declaration-card, .after-card'
+      const overlay =
+        $('accessOverlay');
+
+      if (!overlay) {
+        return;
+      }
+
+      overlay.classList.remove(
+        'open'
       );
 
-
-    if (
-      'IntersectionObserver'
-      in window
-    ) {
-
-      const observer =
-        new IntersectionObserver(
-          entries => {
-
-            entries.forEach(
-              entry => {
-
-                if (
-                  entry.isIntersecting
-                ) {
-
-                  entry.target.classList.add(
-                    'revealed'
-                  );
-
-                  observer.unobserve(
-                    entry.target
-                  );
-
-                }
-
-              }
-            );
-
-          },
-          {
-            threshold: 0.08
-          }
-        );
-
-
-      revealItems.forEach(
-        element =>
-          observer.observe(element)
-      );
-
-    } else {
-
-      revealItems.forEach(
-        element =>
-          element.classList.add(
-            'revealed'
-          )
+      overlay.setAttribute(
+        'aria-hidden',
+        'true'
       );
 
     }
 
 
+    function setText(
+      id,
+      value
+    ) {
+
+      const element =
+        $(id);
+
+      if (!element) {
+        return;
+      }
+
+      element.textContent =
+        value == null ||
+        value === ''
+          ? '—'
+          : String(value);
+
+    }
+
+
     /* =====================================================
-       FORM
+       NORMALIZE API RESPONSE
     ====================================================== */
 
-    $('registrationForm')
+    function extractTeam(
+      data
+    ) {
+
+      if (!data) {
+        return null;
+      }
+
+      /*
+       * Supports the common response structures:
+       *
+       * {
+       *   team: {...}
+       * }
+       *
+       * or
+       *
+       * {
+       *   team: {...},
+       *   authenticated: true
+       * }
+       *
+       * or direct team data.
+       */
+
+      const source =
+        data.team ||
+        data.registration ||
+        data.user ||
+        data;
+
+
+      if (!source) {
+        return null;
+      }
+
+
+      return {
+
+        teamName:
+          source.teamName ??
+          source.name ??
+          '',
+
+        teamId:
+          source.teamId ??
+          source.id ??
+          '',
+
+        college:
+          source.college ??
+          source.institution ??
+          '',
+
+        department:
+          source.department ??
+          '',
+
+        program:
+          source.program ??
+          '',
+
+        yearLevel:
+          source.yearLevel ??
+          source.year ??
+          '',
+
+        leaderName:
+          source.leaderName ??
+          source.leader ??
+          source.teamLeader ??
+          '',
+
+        leaderEmail:
+          source.leaderEmail ??
+          source.email ??
+          ''
+
+      };
+
+    }
+
+
+    /* =====================================================
+       DISPLAY AUTHENTICATED TEAM
+    ====================================================== */
+
+    function displayAuthenticatedTeam(
+      data
+    ) {
+
+      const team =
+        extractTeam(data);
+
+      if (!team) {
+        return false;
+      }
+
+
+      setText(
+        'teamName',
+        team.teamName
+      );
+
+      setText(
+        'teamIdDisplay',
+        team.teamId
+      );
+
+      setText(
+        'collegeDisplay',
+        team.college
+      );
+
+      setText(
+        'departmentDisplay',
+        team.department
+      );
+
+      setText(
+        'programDisplay',
+        team.program
+      );
+
+      setText(
+        'yearDisplay',
+        team.yearLevel
+      );
+
+      setText(
+        'leaderDisplay',
+        team.leaderName
+      );
+
+
+      if (
+        team.leaderEmail
+      ) {
+
+        $('sessionMessage').textContent =
+          `Team authenticated for ${team.leaderEmail}.`;
+
+      } else {
+
+        $('sessionMessage').textContent =
+          'Your team has been authenticated.';
+
+      }
+
+
+      const loginCard =
+        $('loginCard');
+
+      const footer =
+        document.querySelector(
+          '.event-footer-strip'
+        );
+
+      const authenticated =
+        $('alreadyIn');
+
+
+      if (loginCard) {
+
+        loginCard.style.display =
+          'none';
+
+      }
+
+
+      if (footer) {
+
+        footer.style.display =
+          'none';
+
+      }
+
+
+      if (authenticated) {
+
+        authenticated.classList.add(
+          'open'
+        );
+
+      }
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+
+
+      return true;
+
+    }
+
+
+    /* =====================================================
+       RESET LOGIN VIEW
+    ====================================================== */
+
+    function showLoginView() {
+
+      const loginCard =
+        $('loginCard');
+
+      const footer =
+        document.querySelector(
+          '.event-footer-strip'
+        );
+
+      const authenticated =
+        $('alreadyIn');
+
+
+      if (loginCard) {
+
+        loginCard.style.display =
+          '';
+
+      }
+
+
+      if (footer) {
+
+        footer.style.display =
+          '';
+
+      }
+
+
+      if (authenticated) {
+
+        authenticated.classList.remove(
+          'open'
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       CHECK EXISTING SESSION
+       GET /api/event/me
+    ====================================================== */
+
+    async function checkEventSession() {
+
+      try {
+
+        const response =
+          await fetch(
+            '/api/event/me',
+            {
+              method: 'GET',
+
+              headers: {
+                'Accept':
+                  'application/json'
+              },
+
+              credentials:
+                'same-origin',
+
+              cache:
+                'no-store'
+            }
+          );
+
+
+        /*
+         * A 401/403 simply means that
+         * no event session exists yet.
+         *
+         * That is NOT treated as an error.
+         */
+
+        if (
+          response.status === 401 ||
+          response.status === 403
+        ) {
+
+          showLoginView();
+
+          return;
+
+        }
+
+
+        if (
+          !response.ok
+        ) {
+
+          showLoginView();
+
+          return;
+
+        }
+
+
+        let data = {};
+
+        try {
+
+          data =
+            await response.json();
+
+        } catch {
+
+          data = {};
+
+        }
+
+
+        /*
+         * Some backends return:
+         *
+         * { authenticated: false }
+         *
+         * when there is no active session.
+         */
+
+        if (
+          data &&
+          data.authenticated === false
+        ) {
+
+          showLoginView();
+
+          return;
+
+        }
+
+
+        const displayed =
+          displayAuthenticatedTeam(
+            data
+          );
+
+
+        if (!displayed) {
+
+          showLoginView();
+
+        }
+
+      } catch (error) {
+
+        /*
+         * Network errors should not prevent
+         * the login page from appearing.
+         */
+
+        console.warn(
+          'Event session check:',
+          error
+        );
+
+        showLoginView();
+
+      }
+
+    }
+
+
+    /* =====================================================
+       LOGIN
+       POST /api/event/login
+    ====================================================== */
+
+    $('eventForm')
       .addEventListener(
         'submit',
         async event => {
@@ -1474,15 +3399,11 @@
 
 
           const form =
-            $('registrationForm');
+            $('eventForm');
 
           const button =
-            $('submitBtn');
+            $('enterBtn');
 
-
-          /* -----------------------------------------------
-             CLIENT VALIDATION
-          ------------------------------------------------ */
 
           if (
             !form.checkValidity()
@@ -1490,8 +3411,8 @@
 
             form.reportValidity();
 
-            showMessage(
-              'Please complete all required registration fields.',
+            setMessage(
+              'ENTER YOUR TEAM ID AND REGISTERED LEADER EMAIL.',
               'error'
             );
 
@@ -1500,143 +3421,74 @@
           }
 
 
-          const consent =
-            $('consent').checked;
+          const teamId =
+            $('teamId')
+              .value
+              .trim()
+              .toUpperCase();
 
 
-          if (!consent) {
+          const email =
+            $('email')
+              .value
+              .trim()
+              .toLowerCase();
 
-            showMessage(
-              'Please confirm the mission declaration.',
+
+          if (!teamId) {
+
+            setMessage(
+              'TEAM ID IS REQUIRED.',
               'error'
             );
 
-            $('consent').focus();
+            $('teamId').focus();
 
             return;
 
           }
 
 
-          const payload = {
+          if (!email) {
 
-            teamName:
-              $('teamName').value.trim(),
+            setMessage(
+              'REGISTERED LEADER EMAIL IS REQUIRED.',
+              'error'
+            );
 
-            college:
-              $('college').value.trim(),
+            $('email').focus();
 
-            program:
-              $('program').value,
-
-            department:
-              $('department').value.trim(),
-
-            yearLevel:
-              $('yearLevel').value,
-
-            leaderName:
-              $('leaderName').value.trim(),
-
-            leaderRegNo:
-              $('leaderRegNo').value.trim(),
-
-            leaderEmail:
-              $('leaderEmail').value.trim().toLowerCase(),
-
-            leaderPhone:
-              $('leaderPhone').value.trim(),
-
-            member2Name:
-              $('member2Name').value.trim(),
-
-            member2RegNo:
-              $('member2RegNo').value.trim(),
-
-            member3Name:
-              $('member3Name').value.trim(),
-
-            member3RegNo:
-              $('member3RegNo').value.trim(),
-
-            member4Name:
-              $('member4Name').value.trim(),
-
-            member4RegNo:
-              $('member4RegNo').value.trim(),
-
-            consent: true
-
-          };
-
-
-          /* -----------------------------------------------
-             MEMBER VALIDATION
-          ------------------------------------------------ */
-
-          const members = [
-            [
-              payload.member2Name,
-              payload.member2RegNo
-            ],
-            [
-              payload.member3Name,
-              payload.member3RegNo
-            ],
-            [
-              payload.member4Name,
-              payload.member4RegNo
-            ]
-          ];
-
-
-          for (
-            let index = 0;
-            index < members.length;
-            index++
-          ) {
-
-            const [
-              name,
-              reg
-            ] = members[index];
-
-
-            if (
-              (name && !reg) ||
-              (!name && reg)
-            ) {
-
-              showMessage(
-                `Member ${index + 2}: please provide both name and register number, or leave both blank.`,
-                'error'
-              );
-
-              return;
-
-            }
+            return;
 
           }
 
 
-          /* -----------------------------------------------
-             SUBMIT
-          ------------------------------------------------ */
+          button.disabled =
+            true;
 
-          button.disabled = true;
 
-          button.classList.add(
-            'is-loading'
+          const buttonText =
+            button.querySelector(
+              'span'
+            );
+
+
+          if (buttonText) {
+
+            buttonText.textContent =
+              'AUTHENTICATING...';
+
+          }
+
+
+          setMessage(
+            'SECURING CREW CHANNEL...',
+            'loading'
           );
 
-          button.querySelector(
-            'span'
-          ).textContent =
-            'BREACHING...';
 
-
-          showMessage(
-            'Securing your crew registration...'
+          showOverlay(
+            'VERIFYING TEAM ID + LEADER EMAIL...'
           );
 
 
@@ -1644,7 +3496,7 @@
 
             const response =
               await fetch(
-                '/api/register',
+                '/api/event/login',
                 {
                   method: 'POST',
 
@@ -1663,9 +3515,10 @@
                     'no-store',
 
                   body:
-                    JSON.stringify(
-                      payload
-                    )
+                    JSON.stringify({
+                      teamId,
+                      email
+                    })
                 }
               );
 
@@ -1690,86 +3543,148 @@
 
               throw new Error(
                 data.error ||
-                'Registration could not be completed. Please try again.'
+                data.message ||
+                'Team authentication failed. Check your Team ID and registered leader email.'
               );
 
             }
 
 
-            if (
-              !data.teamId
-            ) {
+            /*
+             * Backend may return authenticated:true,
+             * or simply return the authenticated team.
+             */
 
-              throw new Error(
-                'Registration completed, but no Team ID was returned.'
+            const displayed =
+              displayAuthenticatedTeam(
+                data
               );
+
+
+            if (!displayed) {
+
+              /*
+               * If the login endpoint succeeds but
+               * does not return the team object,
+               * immediately ask /me for the session.
+               */
+
+              const meResponse =
+                await fetch(
+                  '/api/event/me',
+                  {
+                    method: 'GET',
+
+                    headers: {
+                      'Accept':
+                        'application/json'
+                    },
+
+                    credentials:
+                      'same-origin',
+
+                    cache:
+                      'no-store'
+                  }
+                );
+
+
+              if (
+                !meResponse.ok
+              ) {
+
+                throw new Error(
+                  'Authentication succeeded, but the team session could not be loaded.'
+                );
+
+              }
+
+
+              const meData =
+                await meResponse.json();
+
+
+              if (
+                !displayAuthenticatedTeam(
+                  meData
+                )
+              ) {
+
+                throw new Error(
+                  'Authentication succeeded, but no team information was returned.'
+                );
+
+              }
 
             }
 
 
-            showMessage(
-              'Registration successful.',
+            setMessage(
+              'ACCESS GRANTED // TEAM AUTHENTICATED.',
               'success'
             );
 
 
-            $('teamIdResult')
-              .textContent =
-              data.teamId;
+            const overlayStatus =
+              $('accessOverlayStatus');
+
+            if (overlayStatus) {
+
+              overlayStatus.textContent =
+                'ACCESS GRANTED // WELCOME TO THE HEIST.';
+
+            }
 
 
-            $('successOverlay')
-              .classList.add(
-                'open'
-              );
+            /*
+             * Give the cinematic overlay a short
+             * moment before removing it.
+             */
 
-
-            $('successOverlay')
-              .setAttribute(
-                'aria-hidden',
-                'false'
-              );
-
-
-            document.body.classList.add(
-              'modal-open'
+            await new Promise(
+              resolve =>
+                setTimeout(
+                  resolve,
+                  650
+                )
             );
 
 
-            /* Keep generated ID available only
-               for the copy button. */
-
-            $('copyTeamId')
-              .dataset.teamId =
-              data.teamId;
+            hideOverlay();
 
 
           } catch (error) {
 
             console.error(
-              'Registration error:',
+              'Event authentication error:',
               error
             );
 
 
-            showMessage(
+            hideOverlay();
+
+
+            showLoginView();
+
+
+            setMessage(
               error.message ||
-              'Could not connect to the registration server.',
+              'Could not connect to the event authentication server.',
               'error'
             );
 
           } finally {
 
-            button.disabled = false;
+            button.disabled =
+              false;
 
-            button.classList.remove(
-              'is-loading'
-            );
 
-            button.querySelector(
-              'span'
-            ).textContent =
-              'BREACH THE GATE';
+            if (buttonText) {
+
+              buttonText.textContent =
+                'ENTER THE HEIST';
+
+            }
 
           }
 
@@ -1778,69 +3693,161 @@
 
 
     /* =====================================================
-       COPY TEAM ID
+       LOGOUT
+       POST /api/event/logout
     ====================================================== */
 
-    $('copyTeamId')
+    $('logoutBtn')
       .addEventListener(
         'click',
         async () => {
 
-          const teamId =
-            $('copyTeamId')
-              .dataset
-              .teamId ||
-            $('teamIdResult')
-              .textContent;
+          const button =
+            $('logoutBtn');
 
 
-          if (!teamId) {
-            return;
-          }
+          button.disabled =
+            true;
+
+
+          button.textContent =
+            'LOGGING OUT...';
 
 
           try {
 
-            await navigator.clipboard.writeText(
-              teamId
+            const response =
+              await fetch(
+                '/api/event/logout',
+                {
+                  method: 'POST',
+
+                  headers: {
+                    'Accept':
+                      'application/json'
+                  },
+
+                  credentials:
+                    'same-origin',
+
+                  cache:
+                    'no-store'
+                }
+              );
+
+
+            /*
+             * Even if the server returns an
+             * unexpected status, reset the UI.
+             */
+
+            if (
+              !response.ok
+            ) {
+
+              console.warn(
+                'Logout returned:',
+                response.status
+              );
+
+            }
+
+          } catch (error) {
+
+            console.warn(
+              'Logout error:',
+              error
             );
 
-
-            $('copyMessage')
-              .textContent =
-              'TEAM ID COPIED.';
-
-
-          } catch {
-
-            $('copyMessage')
-              .textContent =
-              'Please copy the Team ID manually.';
-
           }
+
+
+          showLoginView();
+
+
+          $('teamId').value =
+            '';
+
+          $('email').value =
+            '';
+
+
+          setMessage(
+            'EVENT SESSION CLOSED. YOU MAY AUTHENTICATE AGAIN.'
+          );
+
+
+          button.disabled =
+            false;
+
+
+          button.textContent =
+            'LOG OUT OF EVENT';
+
+
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
 
         }
       );
 
 
     /* =====================================================
-       PREVENT MODAL BACKGROUND SCROLL
+       TEAM ID INPUT
+       Automatically uppercase the ID.
+    ====================================================== */
+
+    $('teamId')
+      .addEventListener(
+        'input',
+        event => {
+
+          event.target.value =
+            event.target.value
+              .toUpperCase();
+
+        }
+      );
+
+
+    /* =====================================================
+       EMAIL INPUT
+       Automatically trim spaces.
+    ====================================================== */
+
+    $('email')
+      .addEventListener(
+        'blur',
+        event => {
+
+          event.target.value =
+            event.target.value
+              .trim()
+              .toLowerCase();
+
+        }
+      );
+
+
+    /* =====================================================
+       INITIALIZE
     ====================================================== */
 
     window.addEventListener(
-      'keydown',
-      event => {
+      'DOMContentLoaded',
+      () => {
 
-        if (
-          event.key === 'Escape' &&
-          $('successOverlay')
-            .classList
-            .contains('open')
-        ) {
+        /*
+         * Start with the login card visible.
+         * /api/event/me will replace it with the
+         * authenticated screen when a session exists.
+         */
 
-          event.preventDefault();
+        showLoginView();
 
-        }
+        checkEventSession();
 
       }
     );
