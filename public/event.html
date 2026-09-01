@@ -1,679 +1,1340 @@
 <!doctype html>
-
 <html lang="en">
 
 <head>
 
   <meta charset="utf-8">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1"
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
 
->
+  <meta
+    name="theme-color"
+    content="#07080d"
+  >
 
-  <title>KGH // Student Event</title>
+  <meta
+    name="description"
+    content="Kraven's Gate Heist — Team Registration"
+  >
+
+  <title>KGH // Registration</title>
 
   <link
     rel="stylesheet"
     href="/styles.css"
   >
 
-  <style>
-
-    body {
-      min-height: 100vh;
-    }
-
-    .event-wrap {
-      max-width: 620px;
-      margin: 0 auto;
-      padding: 70px 20px 100px;
-    }
-
-    .event-card {
-      background: #101725;
-      border: 1px solid #28364d;
-      padding: 34px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
-    }
-
-    .event-kicker {
-      color: #8e9cb1;
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      margin-bottom: 28px;
-    }
-
-    .event-kicker span {
-      color: #ff7a00;
-    }
-
-    .event-number {
-      color: #ff7a00;
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-    }
-
-    .event-title {
-      margin: 8px 0;
-      color: #eef2f7;
-      font-size: 32px;
-      font-weight: 900;
-      letter-spacing: 0.04em;
-      line-height: 1.15;
-    }
-
-    .event-subtitle {
-      color: #718096;
-      font-size: 12px;
-      line-height: 1.7;
-      margin-bottom: 30px;
-    }
-
-    .heist-message {
-      border: 1px solid #28364d;
-      background: #0b111d;
-      padding: 18px;
-      margin-bottom: 25px;
-    }
-
-    .heist-message strong {
-      display: block;
-      color: #ff7a00;
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      margin-bottom: 7px;
-    }
-
-    .heist-message p {
-      margin: 0;
-      color: #aeb9c8;
-      font-size: 11px;
-      line-height: 1.6;
-    }
-
-    .field {
-      margin-bottom: 18px;
-    }
-
-    .field label {
-      display: block;
-      color: #c6cfdb;
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      margin-bottom: 8px;
-    }
-
-    .field input {
-      width: 100%;
-      box-sizing: border-box;
-      background: #090e18;
-      border: 1px solid #2a364d;
-      color: #eef2f7;
-      padding: 14px;
-      outline: none;
-      font-size: 14px;
-    }
-
-    .field input:focus {
-      border-color: #ff7a00;
-    }
-
-    .field input::placeholder {
-      color: #536176;
-    }
-
-    .event-btn {
-      width: 100%;
-      border: 0;
-      cursor: pointer;
-      background: #ff7a00;
-      color: #080b10;
-      padding: 15px;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      margin-top: 5px;
-    }
-
-    .event-btn:hover {
-      opacity: 0.9;
-    }
-
-    .event-btn:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
-
-    .message {
-      margin-top: 15px;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    .message.error {
-      color: #ff6b6b;
-    }
-
-    .message.success {
-      color: #65d48a;
-    }
-
-    .instructions {
-      margin-top: 28px;
-      padding-top: 22px;
-      border-top: 1px solid #28364d;
-    }
-
-    .instructions-title {
-      color: #c6cfdb;
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      margin-bottom: 12px;
-    }
-
-    .instructions ul {
-      margin: 0;
-      padding-left: 18px;
-      color: #718096;
-      font-size: 11px;
-      line-height: 1.9;
-    }
-
-    .back-link {
-      display: inline-block;
-      margin-top: 25px;
-      color: #8e9cb1;
-      text-decoration: none;
-      font-size: 11px;
-    }
-
-    .back-link:hover {
-      color: #ff7a00;
-    }
-
-    .already-in {
-      display: none;
-      text-align: center;
-    }
-
-    .team-name {
-      color: #eef2f7;
-      font-size: 24px;
-      font-weight: 900;
-      margin: 10px 0;
-    }
-
-    .team-id {
-      color: #ff7a00;
-      font-size: 13px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-    }
-
-    .team-details {
-      margin-top: 25px;
-      border-top: 1px solid #28364d;
-      border-bottom: 1px solid #28364d;
-      padding: 18px 0;
-      text-align: left;
-    }
-
-    .team-detail {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 7px 0;
-      font-size: 11px;
-    }
-
-    .team-detail-label {
-      color: #718096;
-      font-weight: 700;
-    }
-
-    .team-detail-value {
-      color: #c6cfdb;
-      text-align: right;
-    }
-
-    .continue-btn {
-      display: block;
-      width: 100%;
-      box-sizing: border-box;
-      text-align: center;
-      text-decoration: none;
-      background: #ff7a00;
-      color: #080b10;
-      padding: 15px;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      margin-top: 25px;
-    }
-
-    .continue-btn:hover {
-      opacity: 0.9;
-    }
-
-    .logout-btn {
-      width: 100%;
-      background: transparent;
-      border: 1px solid #28364d;
-      color: #8e9cb1;
-      padding: 13px;
-      margin-top: 12px;
-      cursor: pointer;
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-    }
-
-    .logout-btn:hover {
-      border-color: #ff7a00;
-      color: #ff7a00;
-    }
-
-    @media (max-width: 600px) {
-
-      .event-wrap {
-        padding-top: 35px;
-      }
-
-      .event-card {
-        padding: 22px;
-      }
-
-      .event-title {
-        font-size: 26px;
-      }
-
-      .team-detail {
-        flex-direction: column;
-        gap: 3px;
-      }
-
-      .team-detail-value {
-        text-align: left;
-      }
-
-    }
-
-  </style>
-
 </head>
 
-<body>
+
+<body class="home-page">
+
+  <!-- =====================================================
+       BACKGROUND
+  ====================================================== -->
 
   <div class="noise"></div>
-
   <div class="web-pattern"></div>
 
-  <main class="event-wrap">
-
-```
-<!-- =====================================================
-     STUDENT EVENT LOGIN
-====================================================== -->
-
-<section
-  id="loginCard"
-  class="event-card"
->
-
-  <div class="event-kicker">
-    <span>HQ</span>
-    KRAVEN'S GATE HEIST // STUDENT EVENT
-  </div>
+  <div class="comic-halftone"></div>
+  <div class="red-wash"></div>
 
 
-  <div class="event-number">
-    00 // EVENT ACCESS
-  </div>
+  <!-- =====================================================
+       CINEMATIC PRELOADER
+  ====================================================== -->
 
+  <div
+    id="preloader"
+    class="preloader"
+    aria-hidden="true"
+  >
 
-  <h1 class="event-title">
-    THE HEIST BEGINS
-  </h1>
+    <div class="preloader-grid"></div>
 
+    <div class="preloader-lines"></div>
 
-  <div class="event-subtitle">
+    <div class="preloader-center">
 
-    Welcome to Kraven's Gate Heist.
+      <div class="preloader-code">
+        KGH // SECURE CHANNEL
+      </div>
 
-    Enter the Team ID and registered leader
-    email used during team registration to
-    enter the event.
+      <div class="gate-loader">
 
-  </div>
+        <div class="gate-loader-left"></div>
+        <div class="gate-loader-right"></div>
 
+        <div class="gate-loader-lock">
+          ◆
+        </div>
 
-  <!-- EVENT MESSAGE -->
+      </div>
 
-  <div class="heist-message">
+      <div class="preloader-status">
+        BREACHING THE REGISTRATION GATE
+      </div>
 
-    <strong>
-      SYMPOSIUM EVENT ACCESS
-    </strong>
-
-    <p>
-
-      Your Team ID connects you to your
-      registered team.
-
-      Your progress will be saved automatically
-      during the event.
-
-      Do not share your Team ID with another team.
-
-    </p>
-
-  </div>
-
-
-  <!-- LOGIN FORM -->
-
-  <form id="eventForm">
-
-
-    <div class="field">
-
-      <label for="teamId">
-        TEAM ID
-      </label>
-
-      <input
-        id="teamId"
-        name="teamId"
-        type="text"
-        placeholder="Example: KGH-4821"
-        autocomplete="off"
-        autocapitalize="characters"
-        spellcheck="false"
-        maxlength="30"
-        required
-      >
+      <div class="preloader-progress">
+        <span></span>
+      </div>
 
     </div>
 
-
-    <div class="field">
-
-      <label for="email">
-        REGISTERED LEADER EMAIL
-      </label>
-
-      <input
-        id="email"
-        name="email"
-        type="email"
-        placeholder="Enter registered leader email"
-        autocomplete="email"
-        maxlength="160"
-        required
-      >
-
-    </div>
+  </div>
 
 
-    <button
-      id="enterBtn"
-      class="event-btn"
-      type="submit"
+  <!-- =====================================================
+       NAVIGATION
+  ====================================================== -->
+
+  <header class="home-nav shell">
+
+    <a
+      href="/"
+      class="home-brand"
+      aria-label="Kraven's Gate Heist"
     >
 
-      ENTER THE HEIST →
-
-    </button>
-
-
-  </form>
-
-
-  <div
-    id="loginMessage"
-    class="message"
-    aria-live="polite"
-  ></div>
-
-
-  <!-- INSTRUCTIONS -->
-
-  <div class="instructions">
-
-    <div class="instructions-title">
-      BEFORE YOU ENTER
-    </div>
-
-    <ul>
-
-      <li>
-        Enter the exact Team ID given after registration.
-      </li>
-
-      <li>
-        Use the registered team leader's email address.
-      </li>
-
-      <li>
-        Your answers and progress will be saved automatically.
-      </li>
-
-      <li>
-        Do not refresh repeatedly while submitting an answer.
-      </li>
-
-      <li>
-        Follow the instructions shown during each round.
-      </li>
-
-    </ul>
-
-  </div>
-
-
-  <a
-    href="/"
-    class="back-link"
-  >
-
-    ← Back to registration
-
-  </a>
-
-</section>
-
-
-
-<!-- =====================================================
-     AUTHENTICATED TEAM
-====================================================== -->
-
-<section
-  id="alreadyIn"
-  class="event-card already-in"
->
-
-
-  <div class="event-kicker">
-
-    <span>HQ</span>
-
-    KRAVEN'S GATE HEIST // EVENT
-
-  </div>
-
-
-  <div class="event-number">
-
-    01 // TEAM AUTHENTICATED
-
-  </div>
-
-
-  <h1 class="event-title">
-
-    WELCOME, TEAM
-
-  </h1>
-
-
-  <div
-    id="teamName"
-    class="team-name"
-  >
-
-    —
-
-  </div>
-
-
-  <div
-    id="teamIdDisplay"
-    class="team-id"
-  >
-
-    —
-
-  </div>
-
-
-  <div class="team-details">
-
-
-    <div class="team-detail">
-
-      <span class="team-detail-label">
-        COLLEGE
+      <span class="home-brand-mark">
+        KGH
       </span>
 
-      <span
-        id="collegeDisplay"
-        class="team-detail-value"
+      <span>
+        KRAVEN'S GATE HEIST
+      </span>
+
+    </a>
+
+
+    <div class="home-nav-actions">
+
+      <a
+        href="/event"
+        class="nav-chip home-event-link"
       >
-        —
-      </span>
+        EVENT ACCESS
+        <span>↗</span>
+      </a>
 
     </div>
 
+  </header>
 
-    <div class="team-detail">
 
-      <span class="team-detail-label">
-        DEPARTMENT
-      </span>
+  <main>
 
-      <span
-        id="departmentDisplay"
-        class="team-detail-value"
+
+    <!-- ===================================================
+         HERO
+    ==================================================== -->
+
+    <section class="comic-hero">
+
+      <div class="hero-red-panel"></div>
+
+      <div class="hero-scan"></div>
+
+      <div class="shell comic-hero-inner">
+
+
+        <!-- LEFT -->
+        <div class="comic-copy">
+
+          <div class="comic-kicker">
+
+            <span class="comic-number">
+              001
+            </span>
+
+            CLASSIFIED EVENT // REGISTRATION
+
+          </div>
+
+
+          <div class="comic-label">
+            THE GATE IS OPEN
+          </div>
+
+
+          <h1 class="comic-title">
+
+            KRAVEN'S
+
+            <span>
+              GATE
+            </span>
+
+            <small>
+              HEIST
+            </small>
+
+          </h1>
+
+
+          <div class="comic-tagline">
+            ONE FINAL HEIST.
+            <strong>A WORLD BEYOND AWAITS.</strong>
+          </div>
+
+
+          <p class="comic-intro">
+
+            Assemble your crew.
+            Enter the gate.
+            Solve the impossible.
+            Make it to the final extraction.
+
+          </p>
+
+
+          <div class="hero-buttons">
+
+            <a
+              href="#registration"
+              class="hero-enter-btn"
+            >
+
+              <span>
+                START YOUR HEIST
+              </span>
+
+              <b>
+                →
+              </b>
+
+            </a>
+
+
+            <a
+              href="/event"
+              class="hero-secondary-btn"
+            >
+              ALREADY REGISTERED?
+            </a>
+
+          </div>
+
+
+          <div class="hero-micro">
+
+            <span>NO HARDWARE</span>
+            <i></i>
+            <span>BROWSER BASED</span>
+            <i></i>
+            <span>TEAM EVENT</span>
+
+          </div>
+
+        </div>
+
+
+        <!-- RIGHT : ORIGINAL CSS / SVG-STYLE ARTWORK -->
+        <div class="comic-art">
+
+          <div class="art-coordinate art-coordinate-a">
+            13° 04' // GATE SECTOR
+          </div>
+
+          <div class="art-coordinate art-coordinate-b">
+            ACCESS // 001
+          </div>
+
+
+          <div class="art-rings">
+
+            <div class="art-ring ring-one"></div>
+            <div class="art-ring ring-two"></div>
+            <div class="art-ring ring-three"></div>
+
+          </div>
+
+
+          <div class="comic-city">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+          </div>
+
+
+          <div class="comic-gate">
+
+            <div class="gate-frame"></div>
+
+            <div class="gate-inner">
+
+              <div class="gate-glow"></div>
+
+              <div class="gate-door left"></div>
+              <div class="gate-door right"></div>
+
+              <div class="gate-core">
+                K
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- SILHOUETTE -->
+          <div class="heist-figure">
+
+            <div class="figure-shadow"></div>
+
+            <div class="figure-head"></div>
+
+            <div class="figure-body"></div>
+
+            <div class="figure-coat"></div>
+
+            <div class="figure-arm"></div>
+
+            <div class="figure-weapon"></div>
+
+            <div class="figure-light"></div>
+
+          </div>
+
+
+          <div class="comic-spider">
+            ✦
+          </div>
+
+
+          <div class="comic-key">
+            ⚿
+          </div>
+
+
+          <div class="art-caption">
+
+            <span>
+              TARGET
+            </span>
+
+            <strong>
+              THE UNKNOWN
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="hero-bottom-line"></div>
+
+    </section>
+
+
+    <!-- ===================================================
+         EVENT STRIP
+    ==================================================== -->
+
+    <section class="shell event-strip-section">
+
+      <div class="event-strip">
+
+        <div>
+
+          <small>
+            MISSION
+          </small>
+
+          <strong>
+            KRAVEN'S GATE HEIST
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <small>
+            FORMAT
+          </small>
+
+          <strong>
+            TECHNICAL HEIST
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <small>
+            ACCESS
+          </small>
+
+          <strong class="green-status">
+            OPEN
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <small>
+            CREW
+          </small>
+
+          <strong>
+            01 — 04 OPERATIVES
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         BRIEFING
+    ==================================================== -->
+
+    <section class="briefing shell">
+
+      <div class="comic-section-heading">
+
+        <div class="section-index">
+          02
+        </div>
+
+        <div>
+
+          <span>
+            MISSION BRIEF
+          </span>
+
+          <h2>
+            ENTER THE
+            <em>WORLD.</em>
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="briefing-grid">
+
+
+        <article class="brief-panel brief-main">
+
+          <div class="panel-top">
+            FILE // KGH-001
+          </div>
+
+          <h3>
+            THE GATE
+            <span>HAS OPENED.</span>
+          </h3>
+
+          <p>
+
+            This is not a normal technical symposium.
+
+            Kraven's Gate Heist turns your team into
+            investigators, strategists and problem-solvers.
+
+            Your crew enters together.
+            Your decisions matter.
+            Your mission begins here.
+
+          </p>
+
+          <div class="panel-stamp">
+            CLASSIFIED
+          </div>
+
+        </article>
+
+
+        <article class="brief-panel">
+
+          <div class="panel-top">
+            01 // ASSEMBLE
+          </div>
+
+          <div class="brief-icon">
+            ◇
+          </div>
+
+          <h3>
+            BUILD YOUR CREW
+          </h3>
+
+          <p>
+            Register your team and prepare your operatives.
+          </p>
+
+        </article>
+
+
+        <article class="brief-panel accent-red">
+
+          <div class="panel-top">
+            02 // BREACH
+          </div>
+
+          <div class="brief-icon">
+            ×
+          </div>
+
+          <h3>
+            BREAK THE GATE
+          </h3>
+
+          <p>
+            Enter the event and face the challenges.
+          </p>
+
+        </article>
+
+
+        <article class="brief-panel accent-cyan">
+
+          <div class="panel-top">
+            03 // EXTRACT
+          </div>
+
+          <div class="brief-icon">
+            →
+          </div>
+
+          <h3>
+            REACH THE END
+          </h3>
+
+          <p>
+            Survive every stage and reach the final.
+          </p>
+
+        </article>
+
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         REGISTRATION
+    ==================================================== -->
+
+    <section
+      id="registration"
+      class="registration-section shell"
+    >
+
+      <div class="registration-heading">
+
+        <div>
+
+          <div class="comic-kicker">
+
+            <span class="comic-number">
+              03
+            </span>
+
+            SECURE REGISTRATION
+
+          </div>
+
+          <h2>
+            BUILD YOUR
+            <em>CREW.</em>
+          </h2>
+
+          <p>
+            Register your team to receive your unique
+            KGH Team ID.
+          </p>
+
+        </div>
+
+
+        <div class="gate-status">
+
+          <span class="status-dot"></span>
+
+          REGISTRATION GATE ONLINE
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           REGISTRATION FORM
+      ================================================== -->
+
+      <form
+        id="registrationForm"
+        class="registration-form"
+        novalidate
       >
-        —
-      </span>
-
-    </div>
 
 
-    <div class="team-detail">
+        <!-- ===============================================
+             SECTION 01
+        ================================================ -->
 
-      <span class="team-detail-label">
-        PROGRAM
-      </span>
+        <section class="registration-card">
 
-      <span
-        id="programDisplay"
-        class="team-detail-value"
-      >
-        —
-      </span>
+          <div class="form-section-header">
 
-    </div>
+            <div class="form-number">
+              01
+            </div>
 
+            <div>
 
-    <div class="team-detail">
+              <span>
+                CREW IDENTITY
+              </span>
 
-      <span class="team-detail-label">
-        YEAR
-      </span>
+              <h3>
+                YOUR TEAM
+              </h3>
 
-      <span
-        id="yearDisplay"
-        class="team-detail-value"
-      >
-        —
-      </span>
+            </div>
 
-    </div>
+            <div class="form-file">
+              FILE // TEAM
+            </div>
 
-
-    <div class="team-detail">
-
-      <span class="team-detail-label">
-        TEAM LEADER
-      </span>
-
-      <span
-        id="leaderDisplay"
-        class="team-detail-value"
-      >
-        —
-      </span>
-
-    </div>
+          </div>
 
 
-  </div>
+          <div class="fields">
+
+            <label>
+
+              <span>
+                TEAM NAME <sup>*</sup>
+              </span>
+
+              <input
+                id="teamName"
+                name="teamName"
+                type="text"
+                maxlength="80"
+                autocomplete="organization"
+                placeholder="Enter your crew name"
+                required
+              >
+
+            </label>
 
 
-  <div
-    id="sessionMessage"
-    class="message success"
-  >
+            <label>
 
-    Your team has been authenticated.
+              <span>
+                COLLEGE / INSTITUTION <sup>*</sup>
+              </span>
 
-  </div>
+              <input
+                id="college"
+                name="college"
+                type="text"
+                maxlength="160"
+                autocomplete="organization"
+                placeholder="Enter your college name"
+                required
+              >
 
+            </label>
 
-  <a
-    href="/round"
-    class="continue-btn"
-  >
+          </div>
 
-    CONTINUE TO EVENT →
-
-  </a>
-
-
-  <button
-    id="logoutBtn"
-    class="logout-btn"
-    type="button"
-  >
-
-    LOG OUT OF EVENT
-
-  </button>
+        </section>
 
 
-  <a
-    href="/"
-    class="back-link"
-  >
+        <!-- ===============================================
+             SECTION 02
+        ================================================ -->
 
-    ← Registration
+        <section class="registration-card">
 
-  </a>
+          <div class="form-section-header">
+
+            <div class="form-number">
+              02
+            </div>
+
+            <div>
+
+              <span>
+                ACADEMIC PROFILE
+              </span>
+
+              <h3>
+                OPERATIVE DATA
+              </h3>
+
+            </div>
+
+            <div class="form-file">
+              FILE // PROFILE
+            </div>
+
+          </div>
 
 
-</section>
-```
+          <div class="fields two">
+
+
+            <label>
+
+              <span>
+                PROGRAM <sup>*</sup>
+              </span>
+
+              <select
+                id="program"
+                name="program"
+                required
+              >
+
+                <option value="">
+                  Select program
+                </option>
+
+                <option value="B.E.">
+                  B.E.
+                </option>
+
+                <option value="B.Tech.">
+                  B.Tech.
+                </option>
+
+                <option value="B.Sc.">
+                  B.Sc.
+                </option>
+
+                <option value="BCA">
+                  BCA
+                </option>
+
+                <option value="MCA">
+                  MCA
+                </option>
+
+                <option value="MBA">
+                  MBA
+                </option>
+
+                <option value="M.E.">
+                  M.E.
+                </option>
+
+                <option value="M.Tech.">
+                  M.Tech.
+                </option>
+
+                <option value="M.Sc.">
+                  M.Sc.
+                </option>
+
+                <option value="Other">
+                  Other
+                </option>
+
+              </select>
+
+            </label>
+
+
+            <label>
+
+              <span>
+                DEPARTMENT <sup>*</sup>
+              </span>
+
+              <input
+                id="department"
+                name="department"
+                type="text"
+                maxlength="100"
+                placeholder="Enter department"
+                required
+              >
+
+            </label>
+
+
+            <label>
+
+              <span>
+                YEAR <sup>*</sup>
+              </span>
+
+              <select
+                id="yearLevel"
+                name="yearLevel"
+                required
+              >
+
+                <option value="">
+                  Select year
+                </option>
+
+                <option value="1st Year">
+                  1st Year
+                </option>
+
+                <option value="2nd Year">
+                  2nd Year
+                </option>
+
+                <option value="3rd Year">
+                  3rd Year
+                </option>
+
+                <option value="4th Year">
+                  4th Year
+                </option>
+
+                <option value="Final Year">
+                  Final Year
+                </option>
+
+                <option value="Postgraduate — 1st Year">
+                  Postgraduate — 1st Year
+                </option>
+
+                <option value="Postgraduate — 2nd Year">
+                  Postgraduate — 2nd Year
+                </option>
+
+                <option value="Other">
+                  Other
+                </option>
+
+              </select>
+
+            </label>
+
+          </div>
+
+        </section>
+
+
+        <!-- ===============================================
+             SECTION 03
+        ================================================ -->
+
+        <section class="registration-card">
+
+          <div class="form-section-header">
+
+            <div class="form-number">
+              03
+            </div>
+
+            <div>
+
+              <span>
+                LEAD OPERATIVE
+              </span>
+
+              <h3>
+                TEAM LEADER
+              </h3>
+
+            </div>
+
+            <div class="form-file">
+              FILE // LEADER
+            </div>
+
+          </div>
+
+
+          <div class="fields two">
+
+
+            <label>
+
+              <span>
+                FULL NAME <sup>*</sup>
+              </span>
+
+              <input
+                id="leaderName"
+                name="leaderName"
+                type="text"
+                maxlength="100"
+                autocomplete="name"
+                placeholder="Leader full name"
+                required
+              >
+
+            </label>
+
+
+            <label>
+
+              <span>
+                REGISTER NUMBER <sup>*</sup>
+              </span>
+
+              <input
+                id="leaderRegNo"
+                name="leaderRegNo"
+                type="text"
+                maxlength="60"
+                placeholder="College ID / Register No."
+                required
+              >
+
+            </label>
+
+
+            <label>
+
+              <span>
+                EMAIL <sup>*</sup>
+              </span>
+
+              <input
+                id="leaderEmail"
+                name="leaderEmail"
+                type="email"
+                maxlength="160"
+                autocomplete="email"
+                placeholder="Leader email"
+                required
+              >
+
+            </label>
+
+
+            <label>
+
+              <span>
+                MOBILE NUMBER <sup>*</sup>
+              </span>
+
+              <input
+                id="leaderPhone"
+                name="leaderPhone"
+                type="tel"
+                maxlength="25"
+                autocomplete="tel"
+                placeholder="Leader mobile number"
+                required
+              >
+
+            </label>
+
+
+          </div>
+
+        </section>
+
+
+        <!-- ===============================================
+             SECTION 04
+        ================================================ -->
+
+        <section class="registration-card">
+
+          <div class="form-section-header">
+
+            <div class="form-number">
+              04
+            </div>
+
+            <div>
+
+              <span>
+                CREW MEMBERS
+              </span>
+
+              <h3>
+                ADD YOUR OPERATIVES
+              </h3>
+
+            </div>
+
+            <div class="form-file">
+              OPTIONAL // 02–04
+            </div>
+
+          </div>
+
+
+          <div class="member-grid">
+
+
+            <div class="member-row">
+
+              <div class="member-badge">
+                02
+              </div>
+
+              <label>
+
+                <span>
+                  NAME
+                </span>
+
+                <input
+                  id="member2Name"
+                  name="member2Name"
+                  type="text"
+                  maxlength="100"
+                  placeholder="Member 2 name"
+                >
+
+              </label>
+
+              <label>
+
+                <span>
+                  REGISTER NUMBER
+                </span>
+
+                <input
+                  id="member2RegNo"
+                  name="member2RegNo"
+                  type="text"
+                  maxlength="60"
+                  placeholder="Register number"
+                >
+
+              </label>
+
+            </div>
+
+
+            <div class="member-row">
+
+              <div class="member-badge">
+                03
+              </div>
+
+              <label>
+
+                <span>
+                  NAME
+                </span>
+
+                <input
+                  id="member3Name"
+                  name="member3Name"
+                  type="text"
+                  maxlength="100"
+                  placeholder="Member 3 name"
+                >
+
+              </label>
+
+              <label>
+
+                <span>
+                  REGISTER NUMBER
+                </span>
+
+                <input
+                  id="member3RegNo"
+                  name="member3RegNo"
+                  type="text"
+                  maxlength="60"
+                  placeholder="Register number"
+                >
+
+              </label>
+
+            </div>
+
+
+            <div class="member-row">
+
+              <div class="member-badge">
+                04
+              </div>
+
+              <label>
+
+                <span>
+                  NAME
+                </span>
+
+                <input
+                  id="member4Name"
+                  name="member4Name"
+                  type="text"
+                  maxlength="100"
+                  placeholder="Member 4 name"
+                >
+
+              </label>
+
+              <label>
+
+                <span>
+                  REGISTER NUMBER
+                </span>
+
+                <input
+                  id="member4RegNo"
+                  name="member4RegNo"
+                  type="text"
+                  maxlength="60"
+                  placeholder="Register number"
+                >
+
+              </label>
+
+            </div>
+
+
+          </div>
+
+        </section>
+
+
+        <!-- ===============================================
+             DECLARATION
+        ================================================ -->
+
+        <section class="declaration-card">
+
+
+          <div class="declaration-header">
+
+            <span>
+              05
+            </span>
+
+            <div>
+
+              <small>
+                FINAL CONFIRMATION
+              </small>
+
+              <strong>
+                MISSION DECLARATION
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <label class="check">
+
+            <input
+              id="consent"
+              name="consent"
+              type="checkbox"
+              required
+            >
+
+            <span></span>
+
+            <p>
+
+              I confirm that the information provided
+              above is accurate and that our team agrees
+              to participate in Kraven's Gate Heist and
+              follow the instructions given by the event
+              organizers.
+
+            </p>
+
+          </label>
+
+
+        </section>
+
+
+        <!-- ===============================================
+             SUBMIT
+        ================================================ -->
+
+        <div class="submit-row">
+
+          <div>
+
+            <div
+              id="formMessage"
+              class="form-message"
+              role="status"
+              aria-live="polite"
+            ></div>
+
+            <div class="submit-note">
+              YOUR TEAM ID WILL BE GENERATED AFTER
+              SUCCESSFUL REGISTRATION.
+            </div>
+
+          </div>
+
+
+          <button
+            id="submitBtn"
+            class="primary-btn submit-btn"
+            type="submit"
+          >
+
+            <span>
+              BREACH THE GATE
+            </span>
+
+            <b>
+              ↗
+            </b>
+
+          </button>
+
+        </div>
+
+
+      </form>
+
+    </section>
+
+
+    <!-- ===================================================
+         AFTERCARE
+    ==================================================== -->
+
+    <section class="shell aftercare">
+
+      <div class="after-card">
+
+        <div class="tiny-icon">
+          ⚿
+        </div>
+
+        <div>
+
+          <b>
+            KEEP YOUR TEAM ID SAFE
+          </b>
+
+          <p>
+            You will need your Team ID and registered
+            leader email to enter the event.
+          </p>
+
+        </div>
+
+        <strong>
+          KGH // ACCESS
+        </strong>
+
+      </div>
+
+    </section>
+
 
   </main>
+
+
+  <!-- =====================================================
+       SUCCESS OVERLAY
+  ====================================================== -->
+
+  <div
+    id="successOverlay"
+    class="success-overlay"
+    aria-hidden="true"
+  >
+
+    <div class="success-grid"></div>
+
+    <div class="success-card">
+
+      <div class="unlock">
+        ◆
+      </div>
+
+      <div class="success-kicker">
+        ACCESS GRANTED // REGISTRATION COMPLETE
+      </div>
+
+      <h2>
+        CREW
+        <em>REGISTERED.</em>
+      </h2>
+
+      <p>
+        Your team has successfully entered
+        Kraven's Gate Heist.
+      </p>
+
+
+      <div class="team-id-label">
+        YOUR TEAM ID
+      </div>
+
+      <div
+        id="teamIdResult"
+        class="success-team-id"
+      >
+        KGH-----
+      </div>
+
+
+      <div class="save-note">
+        SAVE THIS ID — YOU WILL NEED IT TO ENTER THE EVENT.
+      </div>
+
+
+      <div class="success-actions">
+
+        <button
+          id="copyTeamId"
+          class="secondary-btn"
+          type="button"
+        >
+          COPY TEAM ID
+        </button>
+
+        <a
+          href="/event"
+          class="primary-btn"
+        >
+          ENTER EVENT
+          <b>→</b>
+        </a>
+
+      </div>
+
+
+      <div
+        id="copyMessage"
+        class="copy-message"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       REGISTRATION JAVASCRIPT
+  ====================================================== -->
 
   <script>
 
@@ -681,424 +1342,508 @@ content="width=device-width, initial-scale=1"
 
 
     /* =====================================================
-       ELEMENT HELPER
+       HELPERS
     ====================================================== */
 
     const $ = id =>
       document.getElementById(id);
 
 
-
-    /* =====================================================
-       SHOW MESSAGE
-    ====================================================== */
-
     function showMessage(
-      element,
       text,
       type = ''
     ) {
 
-      element.textContent = text;
+      const element =
+        $('formMessage');
+
+      element.textContent =
+        text || '';
 
       element.className =
         type
-          ? `message ${type}`
-          : 'message';
+          ? `form-message ${type}`
+          : 'form-message';
 
     }
 
 
-
     /* =====================================================
-       SHOW AUTHENTICATED TEAM
+       CINEMATIC INTRO
     ====================================================== */
 
-    function showAuthenticatedTeam(team) {
+    window.addEventListener(
+      'load',
+      () => {
 
-      if (!team) {
-        return;
-      }
+        const preloader =
+          $('preloader');
 
-
-      $('loginCard').style.display =
-        'none';
-
-
-      $('alreadyIn').style.display =
-        'block';
-
-
-      $('teamName').textContent =
-        team.team_name ||
-        'REGISTERED TEAM';
-
-
-      $('teamIdDisplay').textContent =
-        team.team_id ||
-        '—';
-
-
-      $('collegeDisplay').textContent =
-        team.college ||
-        '—';
-
-
-      $('departmentDisplay').textContent =
-        team.department ||
-        '—';
-
-
-      $('programDisplay').textContent =
-        team.program ||
-        '—';
-
-
-      $('yearDisplay').textContent =
-        team.year_level ||
-        '—';
-
-
-      $('leaderDisplay').textContent =
-        team.leader_name ||
-        '—';
-
-    }
-
-
-
-    /* =====================================================
-       CHECK EXISTING EVENT SESSION
-    ====================================================== */
-
-    async function checkEventSession() {
-
-      try {
-
-        const response =
-          await fetch(
-            '/api/event/me',
-            {
-              method: 'GET',
-              credentials: 'same-origin',
-              cache: 'no-store',
-              headers: {
-                'Accept':
-                  'application/json'
-              }
-            }
-          );
-
-
-        if (!response.ok) {
-
+        if (!preloader) {
           return;
-
         }
 
+        window.setTimeout(
+          () => {
 
-        const data =
-          await response.json();
+            preloader.classList.add(
+              'preloader-hidden'
+            );
 
-
-        if (
-          data.ok &&
-          data.team
-        ) {
-
-          showAuthenticatedTeam(
-            data.team
-          );
-
-        }
-
-      } catch (error) {
-
-        console.error(
-          'Event session check failed:',
-          error
+          },
+          2550
         );
 
       }
-
-    }
-
+    );
 
 
     /* =====================================================
-       EVENT LOGIN
+       SCROLL REVEAL
     ====================================================== */
 
-    $('eventForm').addEventListener(
-      'submit',
-      async event => {
-
-        event.preventDefault();
-
-
-        const teamId =
-          $('teamId')
-            .value
-            .trim()
-            .toUpperCase();
+    const revealItems =
+      document.querySelectorAll(
+        '.brief-panel, .registration-card, .declaration-card, .after-card'
+      );
 
 
-        const email =
-          $('email')
-            .value
-            .trim()
-            .toLowerCase();
+    if (
+      'IntersectionObserver'
+      in window
+    ) {
 
+      const observer =
+        new IntersectionObserver(
+          entries => {
 
-        const message =
-          $('loginMessage');
+            entries.forEach(
+              entry => {
 
+                if (
+                  entry.isIntersecting
+                ) {
 
-        const button =
-          $('enterBtn');
+                  entry.target.classList.add(
+                    'revealed'
+                  );
 
+                  observer.unobserve(
+                    entry.target
+                  );
 
-        /* -----------------------------------------------
-           CLIENT VALIDATION
-        ------------------------------------------------ */
-
-        if (!teamId) {
-
-          showMessage(
-            message,
-            'Please enter your Team ID.',
-            'error'
-          );
-
-          $('teamId').focus();
-
-          return;
-
-        }
-
-
-        if (!email) {
-
-          showMessage(
-            message,
-            'Please enter the registered leader email.',
-            'error'
-          );
-
-          $('email').focus();
-
-          return;
-
-        }
-
-
-        /* -----------------------------------------------
-           START LOGIN
-        ------------------------------------------------ */
-
-        showMessage(
-          message,
-          'Verifying team...'
-        );
-
-
-        button.disabled = true;
-
-        button.textContent =
-          'VERIFYING TEAM...';
-
-
-        try {
-
-          const response =
-            await fetch(
-              '/api/event/login',
-              {
-                method: 'POST',
-
-                headers: {
-                  'Content-Type':
-                    'application/json',
-
-                  'Accept':
-                    'application/json'
-                },
-
-                credentials:
-                  'same-origin',
-
-                cache:
-                  'no-store',
-
-                body:
-                  JSON.stringify({
-                    teamId,
-                    email
-                  })
+                }
 
               }
             );
 
+          },
+          {
+            threshold: 0.08
+          }
+        );
 
-          let data = {};
+
+      revealItems.forEach(
+        element =>
+          observer.observe(element)
+      );
+
+    } else {
+
+      revealItems.forEach(
+        element =>
+          element.classList.add(
+            'revealed'
+          )
+      );
+
+    }
+
+
+    /* =====================================================
+       FORM
+    ====================================================== */
+
+    $('registrationForm')
+      .addEventListener(
+        'submit',
+        async event => {
+
+          event.preventDefault();
+
+
+          const form =
+            $('registrationForm');
+
+          const button =
+            $('submitBtn');
+
+
+          /* -----------------------------------------------
+             CLIENT VALIDATION
+          ------------------------------------------------ */
+
+          if (
+            !form.checkValidity()
+          ) {
+
+            form.reportValidity();
+
+            showMessage(
+              'Please complete all required registration fields.',
+              'error'
+            );
+
+            return;
+
+          }
+
+
+          const consent =
+            $('consent').checked;
+
+
+          if (!consent) {
+
+            showMessage(
+              'Please confirm the mission declaration.',
+              'error'
+            );
+
+            $('consent').focus();
+
+            return;
+
+          }
+
+
+          const payload = {
+
+            teamName:
+              $('teamName').value.trim(),
+
+            college:
+              $('college').value.trim(),
+
+            program:
+              $('program').value,
+
+            department:
+              $('department').value.trim(),
+
+            yearLevel:
+              $('yearLevel').value,
+
+            leaderName:
+              $('leaderName').value.trim(),
+
+            leaderRegNo:
+              $('leaderRegNo').value.trim(),
+
+            leaderEmail:
+              $('leaderEmail').value.trim().toLowerCase(),
+
+            leaderPhone:
+              $('leaderPhone').value.trim(),
+
+            member2Name:
+              $('member2Name').value.trim(),
+
+            member2RegNo:
+              $('member2RegNo').value.trim(),
+
+            member3Name:
+              $('member3Name').value.trim(),
+
+            member3RegNo:
+              $('member3RegNo').value.trim(),
+
+            member4Name:
+              $('member4Name').value.trim(),
+
+            member4RegNo:
+              $('member4RegNo').value.trim(),
+
+            consent: true
+
+          };
+
+
+          /* -----------------------------------------------
+             MEMBER VALIDATION
+          ------------------------------------------------ */
+
+          const members = [
+            [
+              payload.member2Name,
+              payload.member2RegNo
+            ],
+            [
+              payload.member3Name,
+              payload.member3RegNo
+            ],
+            [
+              payload.member4Name,
+              payload.member4RegNo
+            ]
+          ];
+
+
+          for (
+            let index = 0;
+            index < members.length;
+            index++
+          ) {
+
+            const [
+              name,
+              reg
+            ] = members[index];
+
+
+            if (
+              (name && !reg) ||
+              (!name && reg)
+            ) {
+
+              showMessage(
+                `Member ${index + 2}: please provide both name and register number, or leave both blank.`,
+                'error'
+              );
+
+              return;
+
+            }
+
+          }
+
+
+          /* -----------------------------------------------
+             SUBMIT
+          ------------------------------------------------ */
+
+          button.disabled = true;
+
+          button.classList.add(
+            'is-loading'
+          );
+
+          button.querySelector(
+            'span'
+          ).textContent =
+            'BREACHING...';
+
+
+          showMessage(
+            'Securing your crew registration...'
+          );
 
 
           try {
 
-            data =
-              await response.json();
+            const response =
+              await fetch(
+                '/api/register',
+                {
+                  method: 'POST',
+
+                  headers: {
+                    'Content-Type':
+                      'application/json',
+
+                    'Accept':
+                      'application/json'
+                  },
+
+                  credentials:
+                    'same-origin',
+
+                  cache:
+                    'no-store',
+
+                  body:
+                    JSON.stringify(
+                      payload
+                    )
+                }
+              );
+
+
+            let data = {};
+
+            try {
+
+              data =
+                await response.json();
+
+            } catch {
+
+              data = {};
+
+            }
+
+
+            if (
+              !response.ok
+            ) {
+
+              throw new Error(
+                data.error ||
+                'Registration could not be completed. Please try again.'
+              );
+
+            }
+
+
+            if (
+              !data.teamId
+            ) {
+
+              throw new Error(
+                'Registration completed, but no Team ID was returned.'
+              );
+
+            }
+
+
+            showMessage(
+              'Registration successful.',
+              'success'
+            );
+
+
+            $('teamIdResult')
+              .textContent =
+              data.teamId;
+
+
+            $('successOverlay')
+              .classList.add(
+                'open'
+              );
+
+
+            $('successOverlay')
+              .setAttribute(
+                'aria-hidden',
+                'false'
+              );
+
+
+            document.body.classList.add(
+              'modal-open'
+            );
+
+
+            /* Keep generated ID available only
+               for the copy button. */
+
+            $('copyTeamId')
+              .dataset.teamId =
+              data.teamId;
+
+
+          } catch (error) {
+
+            console.error(
+              'Registration error:',
+              error
+            );
+
+
+            showMessage(
+              error.message ||
+              'Could not connect to the registration server.',
+              'error'
+            );
+
+          } finally {
+
+            button.disabled = false;
+
+            button.classList.remove(
+              'is-loading'
+            );
+
+            button.querySelector(
+              'span'
+            ).textContent =
+              'BREACH THE GATE';
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       COPY TEAM ID
+    ====================================================== */
+
+    $('copyTeamId')
+      .addEventListener(
+        'click',
+        async () => {
+
+          const teamId =
+            $('copyTeamId')
+              .dataset
+              .teamId ||
+            $('teamIdResult')
+              .textContent;
+
+
+          if (!teamId) {
+            return;
+          }
+
+
+          try {
+
+            await navigator.clipboard.writeText(
+              teamId
+            );
+
+
+            $('copyMessage')
+              .textContent =
+              'TEAM ID COPIED.';
+
 
           } catch {
 
-            data = {};
+            $('copyMessage')
+              .textContent =
+              'Please copy the Team ID manually.';
 
           }
 
-
-          /* ---------------------------------------------
-             LOGIN FAILED
-          ---------------------------------------------- */
-
-          if (!response.ok) {
-
-            showMessage(
-              message,
-              data.error ||
-              'Team verification failed. Please check your Team ID and registered email.',
-              'error'
-            );
-
-            return;
-
-          }
+        }
+      );
 
 
-          /* ---------------------------------------------
-             LOGIN SUCCESS
-          ---------------------------------------------- */
+    /* =====================================================
+       PREVENT MODAL BACKGROUND SCROLL
+    ====================================================== */
 
-          if (
-            !data.ok ||
-            !data.team
-          ) {
+    window.addEventListener(
+      'keydown',
+      event => {
 
-            showMessage(
-              message,
-              'Invalid response from event server.',
-              'error'
-            );
+        if (
+          event.key === 'Escape' &&
+          $('successOverlay')
+            .classList
+            .contains('open')
+        ) {
 
-            return;
-
-          }
-
-
-          showMessage(
-            message,
-            'Team verified. Welcome to the heist.',
-            'success'
-          );
-
-
-          showAuthenticatedTeam(
-            data.team
-          );
-
-
-        } catch (error) {
-
-          console.error(
-            'Event login error:',
-            error
-          );
-
-
-          showMessage(
-            message,
-            'Could not connect to the event server. Please try again.',
-            'error'
-          );
-
-        } finally {
-
-          button.disabled = false;
-
-          button.textContent =
-            'ENTER THE HEIST →';
+          event.preventDefault();
 
         }
 
       }
     );
-
-
-
-    /* =====================================================
-       LOGOUT
-    ====================================================== */
-
-    $('logoutBtn').addEventListener(
-      'click',
-      async () => {
-
-        const button =
-          $('logoutBtn');
-
-
-        button.disabled = true;
-
-        button.textContent =
-          'LOGGING OUT...';
-
-
-        try {
-
-          const response =
-            await fetch(
-              '/api/event/logout',
-              {
-                method: 'POST',
-                credentials: 'same-origin',
-                cache: 'no-store',
-                headers: {
-                  'Accept':
-                    'application/json'
-                }
-              }
-            );
-
-
-          if (!response.ok) {
-
-            console.error(
-              'Event logout failed.'
-            );
-
-          }
-
-        } catch (error) {
-
-          console.error(
-            'Event logout error:',
-            error
-          );
-
-        }
-
-
-        window.location.href =
-          '/event';
-
-      }
-    );
-
-
-
-    /* =====================================================
-       START
-    ====================================================== */
-
-    checkEventSession();
 
   </script>
 
