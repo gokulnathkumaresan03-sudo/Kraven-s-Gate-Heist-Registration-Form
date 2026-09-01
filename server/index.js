@@ -60,11 +60,8 @@ const MAIN_ORGANIZER_EMAIL = (
    Organizer Head password.
 
    IMPORTANT:
-   This is intentionally server-side only.
+   This is server-side only.
    It is NEVER sent to the browser.
-
-   No MAIN_ORGANIZER_PASSWORD environment
-   variable is required anymore.
 */
 
 const MAIN_ORGANIZER_PASSWORD =
@@ -108,7 +105,8 @@ const ORGANIZERS_URL =
 
 function supabaseHeaders(extra = {}) {
   return {
-    apikey: SUPABASE_SECRET_KEY,
+    apikey:
+      SUPABASE_SECRET_KEY,
 
     Authorization:
       `Bearer ${SUPABASE_SECRET_KEY}`,
@@ -470,23 +468,6 @@ function isOrganizerHead(
    ENSURE ORGANIZER HEAD
 ========================================================= */
 
-/*
-   This is the important fix.
-
-   On every server start:
-
-   1. Look for the Organizer Head.
-   2. If the account does not exist,
-      create it.
-   3. If password_hash is null,
-      create a password hash.
-   4. If the stored password is different,
-      update it to the configured password.
-   5. Ensure the account is approved.
-
-   Therefore you do NOT need Render Shell.
-*/
-
 async function ensureMainOrganizer() {
   console.log(
     'Checking Organizer Head account...'
@@ -570,11 +551,6 @@ async function ensureMainOrganizer() {
     return;
   }
 
-  /*
-     Check whether the current stored password
-     matches the desired password.
-  */
-
   const passwordCorrect =
     existing.password_hash &&
     verifyPassword(
@@ -653,20 +629,20 @@ async function ensureMainOrganizer() {
           supabaseHeaders({
             Prefer:
               'return=representation'
-          }),
+            }),
 
         body:
           JSON.stringify(update)
       }
     );
 
-  if (!response.ok) {
-    const errorText =
-      await response.text();
+  const responseText =
+    await response.text();
 
+  if (!response.ok) {
     console.error(
       'Organizer Head update failed:',
-      errorText
+      responseText
     );
 
     throw new Error(
@@ -1622,12 +1598,6 @@ async function organizerLogin(
     };
   }
 
-  /*
-     If the Organizer Head is logging in,
-     make absolutely sure its account exists
-     and its password hash is correct.
-  */
-
   if (
     email ===
     MAIN_ORGANIZER_EMAIL
@@ -1793,10 +1763,25 @@ async function updateOrganizer(
     };
   }
 
+  const organizerId =
+    String(id).trim();
+
+  if (!organizerId) {
+    throw {
+      status: 400,
+      message:
+        'Invalid organizer ID.'
+    };
+  }
+
+  /* =======================================================
+     FIND TARGET ORGANIZER
+  ======================================================= */
+
   const existingResponse =
     await fetch(
       `${ORGANIZERS_URL}?id=eq.${encodeURIComponent(
-        id
+        organizerId
       )}&select=*`,
       {
         headers:
@@ -1805,6 +1790,14 @@ async function updateOrganizer(
     );
 
   if (!existingResponse.ok) {
+    const errorText =
+      await existingResponse.text();
+
+    console.error(
+      'Organizer lookup failed:',
+      errorText
+    );
+
     throw new Error(
       'Could not find organizer.'
     );
@@ -1824,10 +1817,15 @@ async function updateOrganizer(
     };
   }
 
+  /* =======================================================
+     NEVER MODIFY ORGANIZER HEAD
+  ======================================================= */
+
   if (
     String(
       target.email || ''
-    ).toLowerCase() ===
+    )
+      .toLowerCase() ===
     MAIN_ORGANIZER_EMAIL
   ) {
     throw {
@@ -1836,6 +1834,10 @@ async function updateOrganizer(
         'The Organizer Head account cannot be modified here.'
     };
   }
+
+  /* =======================================================
+     BUILD UPDATE
+  ======================================================= */
 
   const now =
     new Date()
@@ -1852,7 +1854,11 @@ async function updateOrganizer(
 
     approved_by:
       approved
-        ? approver.email
+        ? String(
+            approver?.email ||
+            MAIN_ORGANIZER_EMAIL
+          )
+            .toLowerCase()
         : null,
 
     approved_at:
@@ -1861,10 +1867,26 @@ async function updateOrganizer(
         : null
   };
 
+  console.log(
+    `Updating organizer ${organizerId}:`,
+    update
+  );
+
+  /* =======================================================
+     PATCH SUPABASE
+
+     IMPORTANT:
+     PostgREST requires:
+       ?id=eq.ID
+
+     NOT:
+       ?id=ID
+  ======================================================= */
+
   const response =
     await fetch(
-      `${ORGANIZERS_URL}?id=${encodeURIComponent(
-        id
+      `${ORGANIZERS_URL}?id=eq.${encodeURIComponent(
+        organizerId
       )}`,
       {
         method: 'PATCH',
@@ -1880,16 +1902,71 @@ async function updateOrganizer(
       }
     );
 
+  const responseText =
+    await response.text();
+
   if (!response.ok) {
     console.error(
-      'Organizer approval:',
-      await response.text()
+      'Organizer approval/rejection failed:',
+      response.status,
+      responseText
     );
 
     throw new Error(
-      `Could not ${action} organizer.`
+      `Could not ${action} organizer. Supabase: ${responseText}`
     );
   }
+
+  /* =======================================================
+     VERIFY DATABASE UPDATE
+  ======================================================= */
+
+  let updatedRows = [];
+
+  try {
+    updatedRows =
+      responseText
+        ? JSON.parse(responseText)
+        : [];
+  } catch {
+    updatedRows = [];
+  }
+
+  if (
+    !Array.isArray(updatedRows) ||
+    !updatedRows.length
+  ) {
+    console.error(
+      'Supabase returned no updated organizer row.'
+    );
+
+    throw new Error(
+      'Organizer update did not affect any database row.'
+    );
+  }
+
+  const updatedOrganizer =
+    updatedRows[0];
+
+  if (
+    String(
+      updatedOrganizer.approval_status
+    ).toLowerCase() !==
+    update.approval_status
+  ) {
+    console.error(
+      'Approval verification failed:',
+      updatedOrganizer
+    );
+
+    throw new Error(
+      'Database update was not applied correctly.'
+    );
+  }
+
+  console.log(
+    `Organizer ${organizerId} successfully changed to ${update.approval_status}.`
+  );
 
   return {
     ok: true,
@@ -2706,6 +2783,7 @@ const server =
           500,
           {
             error:
+              error?.message ||
               'Server error. Please try again.'
           }
         );
