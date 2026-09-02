@@ -711,54 +711,42 @@
 
           <div class="fields two">
 
-
             <label>
               <span>
-                BRANCH <sup>*</sup>
+                DEGREE / PROGRAM <sup>*</sup>
               </span>
               <select
                 id="program"
                 name="program"
                 required
               >
-                <option value="">Select branch</option>
-                <option value="B.E." data-branch="ECE">Electronics & Communication Engineering (ECE)</option>
-                <option value="B.E." data-branch="EEE">Electrical & Electronics Engineering (EEE)</option>
-                <option value="B.E." data-branch="CSE">Computer Science & Engineering (CSE)</option>
-                <option value="B.Tech." data-branch="IT">Information Technology (IT)</option>
-                <option value="B.Tech." data-branch="AI&DS">Artificial Intelligence & Data Science (AI&DS)</option>
-                <option value="B.Tech." data-branch="AI&ML">Artificial Intelligence & Machine Learning (AI&ML)</option>
-                <option value="B.E." data-branch="MECH">Mechanical Engineering (MECH)</option>
-                <option value="B.E." data-branch="CIVIL">Civil Engineering (CIVIL)</option>
-                <option value="B.Sc." data-branch="BSC">Bachelor of Science (B.Sc.)</option>
-                <option value="BCA" data-branch="BCA">Bachelor of Computer Applications (BCA)</option>
-                <option value="MCA" data-branch="MCA">Master of Computer Applications (MCA)</option>
-                <option value="MBA" data-branch="MBA">Master of Business Administration (MBA)</option>
-                <option value="M.E." data-branch="ME">Master of Engineering (M.E.)</option>
-                <option value="M.Tech." data-branch="MTECH">Master of Technology (M.Tech.)</option>
-                <option value="M.Sc." data-branch="MSC">Master of Science (M.Sc.)</option>
-                <option value="Other" data-branch="OTHER">Other</option>
+                <option value="">Select degree / program</option>
+                <option value="B.E.">B.E.</option>
+                <option value="B.Tech.">B.Tech.</option>
+                <option value="B.Sc.">B.Sc.</option>
+                <option value="BCA">BCA</option>
+                <option value="MCA">MCA</option>
+                <option value="MBA">MBA</option>
+                <option value="M.E.">M.E.</option>
+                <option value="M.Tech.">M.Tech.</option>
+                <option value="M.Sc.">M.Sc.</option>
+                <option value="Other">Other</option>
               </select>
             </label>
 
-
             <label>
-
               <span>
-                DEPARTMENT / SPECIALIZATION <sup>*</sup>
+                BRANCH / SPECIALIZATION <sup>*</sup>
               </span>
-
-              <input
+              <select
                 id="department"
                 name="department"
-                type="text"
-                maxlength="100"
-                placeholder="Enter department / specialization (optional details)"
                 required
+                disabled
               >
-
+                <option value="">Select degree first</option>
+              </select>
             </label>
-
 
             <label>
               <span>
@@ -768,18 +756,11 @@
                 id="yearLevel"
                 name="yearLevel"
                 required
+                disabled
               >
-                <option value="">Select year</option>
-                <option value="1st Year">1st Year</option>
-                <option value="2nd Year">2nd Year</option>
-                <option value="3rd Year">3rd Year</option>
-                <option value="4th Year">4th Year</option>
-                <option value="Final Year">Final Year</option>
-                <option value="Postgraduate — 1st Year">Postgraduate — 1st Year</option>
-                <option value="Postgraduate — 2nd Year">Postgraduate — 2nd Year</option>
-                <option value="Other">Other</option>
+                <option value="">Select degree first</option>
               </select>
-              <small id="yearHint" class="field-hint">Choose the year appropriate to your course.</small>
+              <small id="yearHint" class="field-hint">Choose your degree first.</small>
             </label>
 
           </div>
@@ -1796,40 +1777,151 @@
     );
 
   
-    /* Course-aware academic-year helper */
-    const branchSelect = $('program');
+    /* =====================================================
+       DEGREE → BRANCH → YEAR SELECTION
+    ====================================================== */
+    const degreeSelect = $('program');
+    const branchSelect = $('department');
     const yearSelect = $('yearLevel');
     const yearHint = $('yearHint');
-    const allYearOptions = Array.from(yearSelect.options).map(option => ({value: option.value, text: option.text}));
 
-    function refreshYearOptions(){
-      const branch = branchSelect.selectedOptions[0]?.dataset.branch || branchSelect.value;
-      const postgraduate = ['MCA','MBA','ME','MTECH','MSC'].includes(branch);
-      const threeYear = ['BCA','BSC'].includes(branch);
-      const options = postgraduate
-        ? [
-            {value:'1st Year', text:'1st Year'},
-            {value:'2nd Year', text:'2nd Year'},
-            {value:'Other', text:'Other'}
-          ]
-        : threeYear
-          ? [
-              {value:'1st Year', text:'1st Year'},
-              {value:'2nd Year', text:'2nd Year'},
-              {value:'3rd Year', text:'3rd Year'},
-              {value:'Final Year', text:'Final Year'},
-              {value:'Other', text:'Other'}
-            ]
-          : allYearOptions.filter(o => !['Postgraduate — 1st Year','Postgraduate — 2nd Year'].includes(o.value));
-      const current = yearSelect.value;
-      yearSelect.innerHTML = '<option value="">Select year</option>' + options.map(o => `<option value="${o.value.replaceAll('"','&quot;')}">${o.text}</option>`).join('');
-      if(options.some(o => o.value === current)) yearSelect.value = current;
-      yearHint.textContent = postgraduate
-        ? 'Postgraduate courses such as MCA, MBA, M.E., M.Tech. and M.Sc. use 1st or 2nd year.'
-        : threeYear ? 'Select the current year of your 3-year course.' : 'Select the current year of your undergraduate course.';
+    const branchOptions = {
+      'B.E.': [
+        ['ECE', 'Electronics & Communication Engineering (ECE)'],
+        ['EEE', 'Electrical & Electronics Engineering (EEE)'],
+        ['CSE', 'Computer Science & Engineering (CSE)'],
+        ['MECH', 'Mechanical Engineering (MECH)'],
+        ['CIVIL', 'Civil Engineering (CIVIL)']
+      ],
+      'B.Tech.': [
+        ['IT', 'Information Technology (IT)'],
+        ['AI&DS', 'Artificial Intelligence & Data Science (AI&DS)'],
+        ['AI&ML', 'Artificial Intelligence & Machine Learning (AI&ML)'],
+        ['CSE', 'Computer Science & Engineering (CSE)'],
+        ['Other', 'Other B.Tech. Branch']
+      ],
+      'B.Sc.': [
+        ['B.Sc. Computer Science', 'Computer Science'],
+        ['B.Sc. Mathematics', 'Mathematics'],
+        ['B.Sc. Physics', 'Physics'],
+        ['B.Sc. Chemistry', 'Chemistry'],
+        ['B.Sc. Other', 'Other B.Sc. Specialization']
+      ],
+      'BCA': [
+        ['BCA', 'Computer Applications']
+      ],
+      'MCA': [
+        ['MCA', 'Computer Applications']
+      ],
+      'MBA': [
+        ['MBA', 'Business Administration'],
+        ['MBA - Finance', 'Finance'],
+        ['MBA - HR', 'Human Resources'],
+        ['MBA - Marketing', 'Marketing'],
+        ['MBA - Other', 'Other Specialization']
+      ],
+      'M.E.': [
+        ['M.E. ECE', 'Electronics & Communication Engineering'],
+        ['M.E. CSE', 'Computer Science & Engineering'],
+        ['M.E. VLSI', 'VLSI Design'],
+        ['M.E. Other', 'Other Specialization']
+      ],
+      'M.Tech.': [
+        ['M.Tech. VLSI', 'VLSI Design'],
+        ['M.Tech. CSE', 'Computer Science & Engineering'],
+        ['M.Tech. Other', 'Other Specialization']
+      ],
+      'M.Sc.': [
+        ['M.Sc. Computer Science', 'Computer Science'],
+        ['M.Sc. Mathematics', 'Mathematics'],
+        ['M.Sc. Physics', 'Physics'],
+        ['M.Sc. Other', 'Other Specialization']
+      ],
+      'Other': [
+        ['Other', 'Other / Specify in branch or specialization']
+      ]
+    };
+
+    function setOptions(select, placeholder, options) {
+      select.innerHTML = '';
+      const first = document.createElement('option');
+      first.value = '';
+      first.textContent = placeholder;
+      select.appendChild(first);
+      options.forEach(([value, text]) => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = text;
+        select.appendChild(option);
+      });
     }
-    branchSelect.addEventListener('change', refreshYearOptions);
-    refreshYearOptions();
+
+    function refreshAcademicFields() {
+      const degree = degreeSelect.value;
+      const currentBranch = branchSelect.value;
+
+      if (!degree) {
+        setOptions(branchSelect, 'Select degree first', []);
+        branchSelect.disabled = true;
+        setOptions(yearSelect, 'Select degree first', []);
+        yearSelect.disabled = true;
+        yearHint.textContent = 'Choose your degree first.';
+        return;
+      }
+
+      setOptions(branchSelect, 'Select branch / specialization', branchOptions[degree] || [['Other', 'Other / Specify']]);
+      branchSelect.disabled = false;
+      if ([...branchSelect.options].some(o => o.value === currentBranch)) {
+        branchSelect.value = currentBranch;
+      }
+
+      const postgraduate = ['MCA', 'MBA', 'M.E.', 'M.Tech.', 'M.Sc.'].includes(degree);
+      const threeYear = ['BCA', 'B.Sc.'].includes(degree);
+      let years;
+
+      if (postgraduate) {
+        years = [
+          ['1st Year', '1st Year'],
+          ['2nd Year', '2nd Year'],
+          ['Other', 'Other']
+        ];
+        yearHint.textContent = 'Select the current year of your postgraduate course.';
+      } else if (threeYear) {
+        years = [
+          ['1st Year', '1st Year'],
+          ['2nd Year', '2nd Year'],
+          ['3rd Year', '3rd Year'],
+          ['Final Year', 'Final Year'],
+          ['Other', 'Other']
+        ];
+        yearHint.textContent = 'Select the current year of your 3-year course.';
+      } else {
+        years = [
+          ['1st Year', '1st Year'],
+          ['2nd Year', '2nd Year'],
+          ['3rd Year', '3rd Year'],
+          ['4th Year', '4th Year'],
+          ['Final Year', 'Final Year'],
+          ['Other', 'Other']
+        ];
+        yearHint.textContent = 'Select the current year of your undergraduate course.';
+      }
+
+      const currentYear = yearSelect.value;
+      setOptions(yearSelect, 'Select year', years);
+      yearSelect.disabled = false;
+      if ([...yearSelect.options].some(o => o.value === currentYear)) {
+        yearSelect.value = currentYear;
+      }
+    }
+
+    degreeSelect.addEventListener('change', () => {
+      branchSelect.value = '';
+      yearSelect.value = '';
+      refreshAcademicFields();
+    });
+
+    refreshAcademicFields();
 
     $('closeSuccess').addEventListener('click', () => {
       $('successOverlay').classList.remove('open');
