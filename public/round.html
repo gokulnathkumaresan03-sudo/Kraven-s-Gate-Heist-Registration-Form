@@ -1,0 +1,55 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KGH // Mission Control</title><style>
+:root{--bg:#05060a;--panel:#0b1019;--panel2:#0f1724;--line:#263247;--text:#eef2f7;--muted:#8290a5;--orange:#ff7a00;--cyan:#22d3ee;--gold:#ffc20a;--red:#ff3b30;--green:#42e695}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+body{overflow-x:hidden}.grid{position:fixed;inset:0;pointer-events:none;opacity:.42;background-image:linear-gradient(#fff1 1px,transparent 1px),linear-gradient(90deg,#fff1 1px,transparent 1px);background-size:44px 44px}
+.scan{position:fixed;left:0;right:0;top:-10%;height:20%;pointer-events:none;background:linear-gradient(transparent,#22d3ee12,transparent);animation:scan 7s linear infinite;z-index:0}
+.shell{position:relative;z-index:1;width:min(1180px,calc(100% - 32px));margin:auto;padding:26px 0 70px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px}.brand{font-size:11px;font-weight:900;letter-spacing:.18em;color:var(--orange)}
+.status{font-size:9px;letter-spacing:.12em;color:var(--cyan);border:1px solid #18556a;padding:9px 11px;background:#07131a}
+.panel{background:linear-gradient(145deg,#0f1724f2,#080c14f2);border:1px solid var(--line);box-shadow:0 20px 70px #0008}
+.eyebrow{font-size:10px;font-weight:900;letter-spacing:.25em;color:var(--cyan)}
+button{font:inherit}.btn{border:1px solid var(--orange);background:var(--orange);color:#080b10;padding:14px 18px;font-size:10px;font-weight:900;letter-spacing:.08em;cursor:pointer;transition:.2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 35px #ff7a0033}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}.btn.secondary{background:transparent;color:var(--text);border-color:var(--line)}
+.small{font-size:10px;color:var(--muted);line-height:1.65}.hidden{display:none!important}
+@keyframes scan{to{transform:translateY(600%)}}@keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}@keyframes pulse{50%{opacity:.45}}@keyframes spin{to{transform:rotate(360deg)}}
+
+.hero{padding:70px 0 34px;text-align:center;animation:rise .7s ease}.hero h1{font-size:clamp(48px,9vw,104px);line-height:.82;letter-spacing:-.065em;margin:18px 0 14px}.hero h1 span{color:var(--orange)}
+.copy{max-width:700px;margin:auto;color:var(--muted);font-size:13px;line-height:1.7}.identity{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:24px}.badge{padding:11px 14px;background:#0d111b;border:1px solid var(--line);font-size:10px;font-weight:900}.badge b{color:var(--gold)}
+.grid2{display:grid;grid-template-columns:1fr 320px;gap:18px;margin-top:22px}.challenge{padding:28px;min-height:470px;animation:rise .9s ease}.side{padding:22px;animation:rise 1s ease}
+.roundhead{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:20px}.roundno{font-size:12px;color:var(--orange);font-weight:900;letter-spacing:.16em}.timer{font-size:30px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}.timer.low{color:var(--red);animation:pulse .7s infinite}
+.question{font-size:clamp(22px,3vw,34px);line-height:1.2;margin:28px 0 24px}.options{display:grid;gap:11px}.option{display:flex;gap:13px;align-items:center;padding:16px;background:#0b1019;border:1px solid var(--line);cursor:pointer;transition:.2s}.option:hover,.option.selected{border-color:var(--orange);background:#15120e}.option input{accent-color:var(--orange)}.letter{color:var(--orange);font-weight:900}
+.answer{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap}.answer input{flex:1;min-width:220px;background:#070b12;border:1px solid var(--line);color:var(--text);padding:14px;outline:none}.answer input:focus{border-color:var(--cyan)}
+.feedback{margin-top:16px;padding:14px;border:1px solid var(--line);font-size:11px;line-height:1.6}.feedback.ok{border-color:#17683f;color:var(--green)}.feedback.bad{border-color:#6b201d;color:var(--red)}.feedback.warn{border-color:#6d5310;color:var(--gold)}
+.stats{display:grid;gap:10px;margin-top:20px}.stat{padding:15px;background:#0a0f18;border:1px solid var(--line)}.stat small{display:block;color:var(--muted);font-size:9px}.stat strong{display:block;margin-top:6px;font-size:20px;color:var(--gold)}
+.progress{height:7px;background:#17202f;margin-top:8px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--cyan));transition:width .5s}
+@media(max-width:850px){.grid2{grid-template-columns:1fr}.side{order:-1}}@media(max-width:600px){.hero{padding-top:40px}}
+</style></head><body>
+<div class="grid"></div><div class="scan"></div>
+<main class="shell">
+<header class="top"><div class="brand">KRAVEN'S GATE HEIST // MISSION CONTROL</div><div id="auth" class="status">● VERIFYING</div></header>
+<section class="hero"><div class="eyebrow">SECURE EVENT CHANNEL // TEAM ACCESS CONFIRMED</div><h1>BREACH THE <span>GATE.</span></h1>
+<p class="copy">Every challenge is a lock. Every correct answer is a key. Complete the active mission to unlock the next stage.</p>
+<div class="identity"><div class="badge">TEAM <b id="teamId">VERIFYING...</b></div><div class="badge" id="teamName">TEAM NAME</div></div></section>
+<section class="grid2">
+<article class="panel challenge"><div class="roundhead"><div><div class="roundno" id="roundLabel">ROUND 01 // PRIMARY GATE</div><div class="small" id="roundSub">Waiting for Mission Control...</div></div><div class="timer" id="timer">--:--</div></div>
+<div id="challengeArea"><div class="question">MISSION CHANNEL READY</div><p class="small">Waiting for the event backend to supply the active challenge.</p></div><div id="feedback" class="feedback hidden"></div></article>
+<aside class="panel side"><div class="eyebrow">TEAM STATUS</div><div class="stats">
+<div class="stat"><small>TOTAL SCORE</small><strong id="score">0</strong></div>
+<div class="stat"><small>ROUND PROGRESS</small><strong id="progressText">0 / 0</strong><div class="progress"><i id="progressBar"></i></div></div>
+<div class="stat"><small>ACCESS</small><strong id="access">CHECKING</strong></div></div>
+<div style="display:grid;gap:10px;margin-top:20px"><button class="btn secondary" id="refreshBtn">SYNC MISSION STATE</button><button class="btn secondary" id="logoutBtn">EXIT MISSION</button></div>
+<p class="small" style="margin-top:18px">The server is the source of truth for progression and scoring.</p></aside></section></main>
+<script>
+const $=id=>document.getElementById(id);let state=null,question=null,submitted=false,timerHandle=null;
+async function api(url,opt={}){return fetch(url,Object.assign({credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json'}},opt))}
+async function boot(){try{const r=await api('/api/event/me');if(!r.ok){location.replace('/event');return}const d=await r.json(),t=d.team||{};$('teamId').textContent=t.team_id||'UNKNOWN';$('teamName').textContent=t.team_name||'UNKNOWN';$('auth').textContent='● AUTHENTICATED';await loadState()}catch(e){$('auth').textContent='● CONNECTION ERROR'}}
+async function loadState(){try{let r=await api('/api/event/state');if(!r.ok)r=await api('/api/event/round');if(r.ok){state=await r.json();renderState()}else showWaiting()}catch(e){showWaiting()}}
+function renderState(){const s=state||{},round=s.round||s.currentRound||1;$('roundLabel').textContent='ROUND '+String(round).padStart(2,'0')+' // ACTIVE GATE';$('roundSub').textContent=s.roundName||s.title||'Mission challenge';$('score').textContent=Number(s.score||s.totalScore||0).toLocaleString();$('access').textContent=s.locked?'LOCKED':(s.qualified===false?'NOT QUALIFIED':'ACTIVE');if(s.totalQuestions){let p=Number(s.questionIndex||s.currentQuestion||0),tot=Number(s.totalQuestions);$('progressText').textContent=p+' / '+tot;$('progressBar').style.width=Math.min(100,p/tot*100)+'%'}question=s.question||s.challenge||null;if(question)renderQuestion(question);else showWaiting();if(s.deadline)startTimer(s.deadline)}
+function showWaiting(){$('challengeArea').innerHTML='<div class="question">MISSION CONTROL IS STANDBY</div><p class="small">No active challenge has been supplied by the event controller yet.</p>'}
+function renderQuestion(q){submitted=false;const type=(q.type||q.questionType||'mcq').toLowerCase();let html='<div class="question">'+esc(q.text||q.question||'Mission challenge')+'</div>';if(type==='mcq'||type==='choice'||Array.isArray(q.options)){html+='<div class="options">'+(q.options||[]).map((o,i)=>'<label class="option"><input type="radio" name="answer" value="'+escAttr(o.value??o)+'"><span class="letter">'+String.fromCharCode(65+i)+'</span><span>'+esc(o.label??o)+'</span></label>').join('')+'</div>'}else html+='<div class="answer"><input id="textAnswer" autocomplete="off" placeholder="'+(type==='code'?'ENTER ACCESS CODE':'ENTER YOUR ANSWER')+'"><button class="btn" id="submitBtn">SUBMIT ANSWER ↗</button></div>';if(type==='mcq'||type==='choice'||Array.isArray(q.options))html+='<div class="answer"><button class="btn" id="submitBtn">SUBMIT ANSWER ↗</button></div>';$('challengeArea').innerHTML=html;$('submitBtn').onclick=submitAnswer}
+async function submitAnswer(){if(submitted)return;let value='';const radio=document.querySelector('input[name="answer"]:checked');value=radio?radio.value:(document.querySelector('#textAnswer')?.value||'').trim();if(!value){showFeedback('ENTER AN ANSWER BEFORE SUBMITTING.','warn');return}submitted=true;$('submitBtn').disabled=true;try{const r=await api('/api/event/answer',{method:'POST',body:JSON.stringify({answer:value,questionId:question?.id||question?.questionId||null})});const d=await r.json().catch(()=>({}));if(r.ok){showFeedback(d.message||(d.correct?'ACCESS KEY ACCEPTED.':'ANSWER RECORDED.'),d.correct?'ok':'warn');setTimeout(()=>location.href='/result',900)}else{showFeedback(d.message||'ANSWER COULD NOT BE RECORDED.','bad');$('submitBtn').disabled=false;submitted=false}}catch(e){showFeedback('MISSION SERVER UNAVAILABLE.','bad');$('submitBtn').disabled=false;submitted=false}}
+function showFeedback(m,c){$('feedback').textContent=m;$('feedback').className='feedback '+c}
+function startTimer(deadline){clearInterval(timerHandle);function tick(){let sec=Math.max(0,Math.floor((new Date(deadline)-Date.now())/1000));$('timer').textContent=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');$('timer').className='timer '+(sec<=30?'low':'');if(sec===0)clearInterval(timerHandle)}tick();timerHandle=setInterval(tick,1000)}
+$('refreshBtn').onclick=loadState;$('logoutBtn').onclick=async()=>{await api('/api/event/logout',{method:'POST',body:'{}'});location.replace('/event')};
+function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function escAttr(v){return esc(v)}boot();
+</script></body></html>

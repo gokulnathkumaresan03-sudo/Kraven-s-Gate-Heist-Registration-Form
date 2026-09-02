@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KGH // Mission Result</title><style>
+:root{--bg:#05060a;--panel:#0b1019;--panel2:#0f1724;--line:#263247;--text:#eef2f7;--muted:#8290a5;--orange:#ff7a00;--cyan:#22d3ee;--gold:#ffc20a;--red:#ff3b30;--green:#42e695}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+body{overflow-x:hidden}.grid{position:fixed;inset:0;pointer-events:none;opacity:.42;background-image:linear-gradient(#fff1 1px,transparent 1px),linear-gradient(90deg,#fff1 1px,transparent 1px);background-size:44px 44px}
+.scan{position:fixed;left:0;right:0;top:-10%;height:20%;pointer-events:none;background:linear-gradient(transparent,#22d3ee12,transparent);animation:scan 7s linear infinite;z-index:0}
+.shell{position:relative;z-index:1;width:min(1180px,calc(100% - 32px));margin:auto;padding:26px 0 70px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px}.brand{font-size:11px;font-weight:900;letter-spacing:.18em;color:var(--orange)}
+.status{font-size:9px;letter-spacing:.12em;color:var(--cyan);border:1px solid #18556a;padding:9px 11px;background:#07131a}
+.panel{background:linear-gradient(145deg,#0f1724f2,#080c14f2);border:1px solid var(--line);box-shadow:0 20px 70px #0008}
+.eyebrow{font-size:10px;font-weight:900;letter-spacing:.25em;color:var(--cyan)}
+button{font:inherit}.btn{border:1px solid var(--orange);background:var(--orange);color:#080b10;padding:14px 18px;font-size:10px;font-weight:900;letter-spacing:.08em;cursor:pointer;transition:.2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 35px #ff7a0033}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}.btn.secondary{background:transparent;color:var(--text);border-color:var(--line)}
+.small{font-size:10px;color:var(--muted);line-height:1.65}.hidden{display:none!important}
+@keyframes scan{to{transform:translateY(600%)}}@keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}@keyframes pulse{50%{opacity:.45}}@keyframes spin{to{transform:rotate(360deg)}}
+
+body{display:grid;place-items:center;min-height:100vh;overflow:hidden}.rings{position:fixed;width:70vmin;height:70vmin;border:1px solid #ff7a0030;border-radius:50%;animation:spin 20s linear infinite;box-shadow:0 0 120px #ff7a0015,inset 0 0 90px #22d3ee0b}.rings:before,.rings:after{content:"";position:absolute;border-radius:50%;border:1px dashed #22d3ee35;inset:10%}.rings:after{inset:24%;border-color:#ffc20a30}
+.card{position:relative;width:min(820px,calc(100% - 30px));padding:42px;animation:rise .7s ease}.line{height:3px;background:linear-gradient(90deg,var(--red),var(--orange),var(--cyan));margin:-42px -42px 34px}
+h1{font-size:clamp(42px,8vw,82px);line-height:.85;margin:16px 0}h1 span{color:var(--orange)}.team{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0}.box{padding:17px;background:#0a0f18;border:1px solid var(--line)}.box small{display:block;color:var(--muted);font-size:9px}.box strong{display:block;margin-top:7px;font-size:18px}
+.result{padding:24px;border:1px dashed #3a465b}.result h2{margin:0 0 8px}.result p{color:var(--muted);font-size:12px;line-height:1.7}.score{font-size:48px;color:var(--gold);font-weight:900;margin:8px 0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+@media(max-width:600px){.card{padding:28px}.line{margin:-28px -28px 28px}.team{grid-template-columns:1fr}.btn{width:100%}}
+</style></head><body>
+<div class="grid"></div><div class="scan"></div><div class="rings"></div>
+<main class="panel card"><div class="line"></div><div class="eyebrow">MISSION CONTROL // DEBRIEF</div>
+<h1 id="heading">MISSION <span>RESULT</span></h1><p class="small" id="copy">Synchronizing the official round outcome...</p>
+<section class="team"><div class="box"><small>TEAM ID</small><strong id="teamId">VERIFYING...</strong></div><div class="box"><small>TEAM NAME</small><strong id="teamName">—</strong></div></section>
+<section class="result"><h2 id="roundTitle">ROUND STATUS</h2><div class="score" id="score">—</div><p id="message">Waiting for the server result.</p></section>
+<div class="actions"><button class="btn" id="nextBtn">CONTINUE ↗</button><button class="btn secondary" onclick="location.href='/round'">RETURN TO MISSION CONTROL</button></div></main>
+<script>
+const $=id=>document.getElementById(id);
+async function boot(){try{let me=await fetch('/api/event/me',{credentials:'same-origin',cache:'no-store'});if(!me.ok){location.replace('/event');return}let md=await me.json(),t=md.team||{};$('teamId').textContent=t.team_id||'UNKNOWN';$('teamName').textContent=t.team_name||'UNKNOWN';let r=await fetch('/api/event/result',{credentials:'same-origin',cache:'no-store'}),d=r.ok?await r.json():{roundName:'ROUND RESULT',score:md.score||md.totalScore||0,qualified:md.qualified};render(d||{})}catch(e){$('message').textContent='Could not synchronize the mission result.'}}
+function render(d){$('roundTitle').textContent=(d.roundName||d.round||'ROUND')+' // RESULT';$('score').textContent=Number(d.roundScore??d.score??d.points??0).toLocaleString();let q=d.qualified;if(q===true){$('heading').innerHTML='GATE <span>UNLOCKED.</span>';$('copy').textContent='Official result received. Your team has qualified for the next stage.';$('message').textContent=d.message||'Proceed to the next gate when Mission Control opens it.'}else if(q===false){$('heading').innerHTML='GATE <span>LOCKED.</span>';$('copy').textContent='The minimum qualifying score was not reached.';$('message').textContent=d.message||'Follow organizer instructions.';$('nextBtn').disabled=true}else{$('message').textContent=d.message||'Result is pending confirmation from Mission Control.'}let next=d.next||d.nextRound||null;$('nextBtn').textContent=next?(next==='final'?'ENTER FINAL GATE ↗':'ENTER '+String(next).toUpperCase()+' ↗'):'CONTINUE ↗';$('nextBtn').onclick=()=>location.href=next==='final'?'/final':'/round'}boot();
+</script></body></html>

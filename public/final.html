@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KGH // Final Gate</title><style>
+:root{--bg:#05060a;--panel:#0b1019;--panel2:#0f1724;--line:#263247;--text:#eef2f7;--muted:#8290a5;--orange:#ff7a00;--cyan:#22d3ee;--gold:#ffc20a;--red:#ff3b30;--green:#42e695}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+body{overflow-x:hidden}.grid{position:fixed;inset:0;pointer-events:none;opacity:.42;background-image:linear-gradient(#fff1 1px,transparent 1px),linear-gradient(90deg,#fff1 1px,transparent 1px);background-size:44px 44px}
+.scan{position:fixed;left:0;right:0;top:-10%;height:20%;pointer-events:none;background:linear-gradient(transparent,#22d3ee12,transparent);animation:scan 7s linear infinite;z-index:0}
+.shell{position:relative;z-index:1;width:min(1180px,calc(100% - 32px));margin:auto;padding:26px 0 70px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px}.brand{font-size:11px;font-weight:900;letter-spacing:.18em;color:var(--orange)}
+.status{font-size:9px;letter-spacing:.12em;color:var(--cyan);border:1px solid #18556a;padding:9px 11px;background:#07131a}
+.panel{background:linear-gradient(145deg,#0f1724f2,#080c14f2);border:1px solid var(--line);box-shadow:0 20px 70px #0008}
+.eyebrow{font-size:10px;font-weight:900;letter-spacing:.25em;color:var(--cyan)}
+button{font:inherit}.btn{border:1px solid var(--orange);background:var(--orange);color:#080b10;padding:14px 18px;font-size:10px;font-weight:900;letter-spacing:.08em;cursor:pointer;transition:.2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 35px #ff7a0033}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}.btn.secondary{background:transparent;color:var(--text);border-color:var(--line)}
+.small{font-size:10px;color:var(--muted);line-height:1.65}.hidden{display:none!important}
+@keyframes scan{to{transform:translateY(600%)}}@keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}@keyframes pulse{50%{opacity:.45}}@keyframes spin{to{transform:rotate(360deg)}}
+
+body{display:grid;place-items:center;min-height:100vh;overflow:hidden}.core{position:fixed;width:65vmin;height:65vmin;border:1px solid #ff7a0030;border-radius:50%;box-shadow:0 0 130px #ff7a0018,inset 0 0 100px #22d3ee0c;animation:spin 24s linear infinite}.core:before,.core:after{content:"";position:absolute;border:1px dashed #22d3ee35;border-radius:50%;inset:12%}.core:after{inset:27%;border-color:#ffc20a35}
+.card{position:relative;width:min(850px,calc(100% - 30px));padding:44px;text-align:center;animation:rise .8s ease}h1{font-size:clamp(54px,11vw,122px);line-height:.78;letter-spacing:-.07em;margin:20px 0}h1 span{color:var(--orange)}.copy{max-width:650px;margin:auto;color:var(--muted);font-size:13px;line-height:1.7}
+.identity{display:inline-flex;gap:10px;flex-wrap:wrap;margin:24px auto}.badge{padding:12px 15px;border:1px solid var(--line);background:#0b1019;font-size:10px;font-weight:900}.badge b{color:var(--gold)}.gate{margin-top:24px;padding:25px;border:1px dashed #3a465b;background:#090e16}.gate input{width:min(460px,100%);padding:16px;background:#05080e;border:1px solid var(--line);color:var(--text);text-align:center;font-size:16px;letter-spacing:.18em;outline:none}.gate input:focus{border-color:var(--orange);box-shadow:0 0 25px #ff7a0015}.actions{margin-top:17px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.message{margin-top:18px;padding:14px;border:1px solid var(--line);font-size:11px;line-height:1.6}.success{border-color:#17683f!important;color:var(--green)}.failure{border-color:#6b201d!important;color:var(--red)}@media(max-width:600px){.card{padding:28px}}
+</style></head><body>
+<div class="grid"></div><div class="scan"></div><div class="core"></div>
+<main class="panel card"><div class="eyebrow">KRAVEN'S GATE HEIST // FINAL ACCESS</div><h1>THE FINAL<br><span>GATE.</span></h1>
+<p class="copy" id="copy">All previous stages must be cleared before final access is granted.</p>
+<div class="identity"><div class="badge">TEAM <b id="teamId">VERIFYING...</b></div><div class="badge" id="teamName">TEAM NAME</div></div>
+<section class="gate"><div class="eyebrow" style="color:var(--gold)">FINAL ACCESS REQUIRED</div><p class="small">Enter the final access code. The secret is validated by the server.</p>
+<input id="code" autocomplete="off" placeholder="ENTER ACCESS CODE" maxlength="100"><div class="actions"><button class="btn" id="unlock">UNLOCK GATE ↗</button><button class="btn secondary" onclick="location.href='/round'">RETURN TO MISSION</button></div><div id="message" class="message hidden"></div></section></main>
+<script>
+const $=id=>document.getElementById(id);
+async function boot(){try{const r=await fetch('/api/event/me',{credentials:'same-origin',cache:'no-store'});if(!r.ok){location.replace('/event');return}const d=await r.json(),t=d.team||{};$('teamId').textContent=t.team_id||'UNKNOWN';$('teamName').textContent=t.team_name||'UNKNOWN'}catch(e){}}
+$('unlock').onclick=async()=>{const code=$('code').value.trim();if(!code){show('ENTER THE FINAL ACCESS CODE.','failure');return}$('unlock').disabled=true;try{const r=await fetch('/api/event/final/submit',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});const d=await r.json().catch(()=>({}));if(r.ok&&(d.success||d.correct||d.completed)){show('ACCESS GRANTED — KRAVEN’S GATE HAS BEEN BREACHED.','success');$('copy').textContent='MISSION COMPLETE. Await the official final result.';$('unlock').textContent='MISSION COMPLETE ✓'}else{show(d.message||'ACCESS DENIED. FINAL GATE REMAINS LOCKED.','failure');$('unlock').disabled=false}}catch(e){show('MISSION SERVER UNAVAILABLE.','failure');$('unlock').disabled=false}};function show(t,c){const m=$('message');m.textContent=t;m.className='message '+c}boot();
+</script></body></html>
